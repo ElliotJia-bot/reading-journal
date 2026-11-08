@@ -1,8 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#14422d"/>
-  <g stroke="#fdf9f3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M112 166 Q184 142 256 178 Q328 142 400 166 V349 Q328 325 256 361 Q184 325 112 349 Z" fill="none"/>
-    <path d="M256 178 V361 M144 205 Q186 196 220 211 M144 243 Q186 234 220 249 M144 281 Q186 272 220 287 M292 211 Q332 196 368 205 M292 249 Q332 234 368 243" fill="none"/>
-  </g>
-  <path d="M324 150 V221 L342 207 L360 221 V150" fill="#c7a471"/>
+  <image href="/icons/remarked-512.png" width="512" height="512"/>
 </svg>

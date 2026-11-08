@@ -8,6 +8,26 @@ export interface ShareCardImage {
   file: File;
   url: string;
 }
+let wordmarkPromise: Promise<HTMLImageElement | null> | undefined;
+function loadWordmark() {
+  return (wordmarkPromise ??= new Promise((resolve) => {
+    const image = new window.Image();
+    const fallback = () => {
+      clearTimeout(timeout);
+      image.onload = null;
+      image.onerror = null;
+      wordmarkPromise = undefined;
+      resolve(null);
+    };
+    const timeout = setTimeout(fallback, 3000);
+    image.onload = () => {
+      clearTimeout(timeout);
+      resolve(image);
+    };
+    image.onerror = fallback;
+    image.src = "/brand/remarked-wordmark.jpg";
+  }));
+}
 export async function createShareCards(
   content: ShareCardContent,
 ): Promise<ShareCardImage[]> {
@@ -16,6 +36,7 @@ export async function createShareCards(
   canvas.height = 1350;
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Image creation is not available in this browser.");
+  const wordmark = await loadWordmark();
   const serif = 'Georgia, "Times New Roman", "Songti SC", serif';
   const sans = 'Arial, "PingFang SC", sans-serif';
   const textWidth = 904,
@@ -129,7 +150,8 @@ export async function createShareCards(
         "#a99f89",
         sans,
       );
-      drawLines(["Remarked"], left, 1251, 22, 30, "#a99f89", sans);
+      if (wordmark) ctx.drawImage(wordmark, left - 16, 1220, 240, 80);
+      else drawLines(["Remarked."], left, 1251, 22, 30, "#a99f89", sans);
       if (layout.pages.length > 1) {
         ctx.textAlign = "right";
         drawLines(

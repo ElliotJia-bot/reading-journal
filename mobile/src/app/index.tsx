@@ -33,7 +33,7 @@ export default function Welcome() {
     }
   }
   return (
-    <Page>
+    <Page brand="hero">
       <View style={{ paddingVertical: 22, gap: 18 }}>
         <Text style={[styles.title, { fontSize: 43, lineHeight: 48 }]}>
           Find your{"\n"}reading rhythm.

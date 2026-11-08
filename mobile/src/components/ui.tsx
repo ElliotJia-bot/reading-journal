@@ -13,6 +13,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
+import { BrandMark, BrandWordmark } from "./brand";
 
 export const color = {
   paper: "#fdf9f3",
@@ -113,11 +114,13 @@ export function Page({
   title,
   back = false,
   onBack,
+  brand = "compact",
 }: {
   children?: React.ReactNode;
   title?: string;
   back?: boolean;
   onBack?: () => void;
+  brand?: "compact" | "hero";
 }) {
   return (
     <SafeAreaView
@@ -135,6 +138,7 @@ export function Page({
           paddingBottom: 44,
         }}
       >
+        {!back && <BrandWordmark hero={brand === "hero"} />}
         {back && (
           <View style={styles.between}>
             <View style={styles.row}>
@@ -153,7 +157,7 @@ export function Page({
                 </Pressable>
               )}
             </View>
-            <Feather name="book-open" size={22} color={color.green} />
+            <BrandMark />
           </View>
         )}
         {title && <Text style={styles.title}>{title}</Text>}
