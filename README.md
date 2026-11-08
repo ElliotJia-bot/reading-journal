@@ -4,7 +4,7 @@ Functional hackathon MVP based on the supplied Stitch prototype. Expo/React Nati
 
 ## Current release — V1.8
 
-Start with the [V1.8 developer handoff](docs/HANDOFF-V1.8.md). The working language is **English**. Current branch: `release/1.8`; release tag: `v1.8.0`. This handoff release carries forward the V1.7 palette and all existing features, aligns app/package/deployment version metadata, and adds a public `/release.json` identifier. It introduces no feature or layout changes. The sections below include historical implementation notes; use the handoff for the current starting point.
+Start with the [V1.8 developer handoff](docs/HANDOFF-V1.8.md). The working language is **English**. Current branch: `release/1.8`; release tag: `v1.8.0`. This handoff release carries forward the V1.7 palette and all existing features, aligns app/package/deployment version metadata, and adds a public `/release.json` identifier. The original tag introduced no feature or layout changes; subsequent branch commits add the USB smart bookmark and guest-demo onboarding. The sections below include historical implementation notes; use the handoff for the current starting point.
 
 ## Remarked 1.0
 
@@ -343,3 +343,14 @@ Decorative SVG linear gradients soften the page header, Home cards, primary butt
 The shared theme defines readable text and control colors. Browser hover, press, selection, focus and disabled rules change color properties only; the reader controls use the same values. Existing success/check, warning text, error messages, chart labels and direction symbols retain their meaning. No data or backend behavior changes are included.
 
 Validation: TypeScript, ESLint and web export pass. Before/after browser comparisons with identical account data cover 14 views at phone/desktop sizes and confirm identical geometry, typography, borders, radii, shadows and opacity for 2,661 visible elements. Color-state checks cover primary/secondary hover and press, input focus and disabled actions; logout still works. Normal text contrast is at least 4.5:1 across the theme's light surfaces. These are browser checks; no native binary was built.
+
+
+## Guest journals and protected deep links
+
+Unauthenticated business routes, including `/finish`, `/session`, book/reader pages, insights and community, return to the sign-in screen. `/`, `/sign-in` and `/install` remain public. The dedicated `/sign-in` URL avoids ambiguity with the Home tab’s root path. Root routing waits for Firebase authentication restoration, so refreshing a signed-in page does not briefly show a logged-out state.
+
+**Try with a guest journal** creates a Firebase anonymous identity and prepares an independent copy of the owner-authorized test journal before opening Home. The fixed private template contains 19 books, 362 sessions, 2,522 ebook page visits, existing insight reports, recommendation data and saved bookmark visit history (3,040 documents total at publication). It excludes credentials, device pairing, active timers, quotas, community identities, memberships and authored posts. Shared community content remains available normally; copied reading data is not automatically published to leaderboards.
+
+The template lives in admin-only `guestTemplates`. `scripts/publish_guest_template.mjs` deliberately snapshots only `test@remarked.example` using project-scoped admin credentials after a backend build. It publishes the version pointer only after all records have been stored; updating the template affects future guests only. Do not bundle user snapshots into static assets or Git. Runtime initialization is anonymous-only, derives ownership from the Firebase token, uses a lease and create-only writes, supports retry after a partial copy, and never reseeds an existing journal. A global daily cap bounds new anonymous copies. Guest edits remain isolated from the template, test account and other guests. Initialization failures offer a visible retry; returning guests retain their own data. Settings allows guests to create an account and keep the same journal, or leave the guest session.
+
+Validation: 90 backend tests, TypeScript and ESLint pass. Disposable-account integration verified every template record, concurrent initialization, create-only retry behavior, source isolation, preservation of existing guest journals and rejection for registered users. Browser checks cover unauthenticated deep links, failed setup with retry, populated Library/Insights/For You/Community, refresh and guest exit.

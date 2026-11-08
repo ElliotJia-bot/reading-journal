@@ -8,7 +8,7 @@ export default function TabsLayout() {
   const { user, loading } = useJournal();
   const insets = useSafeAreaInsets();
   if (loading) return <Page title="Opening your journal…" />;
-  if (!user) return <Redirect href="/" />;
+  if (!user) return <Redirect href="/sign-in" />;
   return (
     <Tabs
       screenOptions={{

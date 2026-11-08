@@ -11,7 +11,7 @@ export function LogOutButton() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
-  if (!user || user.isAnonymous) return null;
+  if (!user) return null;
 
   async function logOut() {
     if (busy) return;
@@ -27,7 +27,7 @@ export function LogOutButton() {
         });
       }
       await signOut(auth);
-      router.replace("/");
+      router.replace("/sign-in");
     } catch (e) {
       setError(message(e));
     } finally {
@@ -37,7 +37,8 @@ export function LogOutButton() {
 
   return (
     <View style={{ gap: 10 }}>
-      <Button title="Log out" secondary busy={busy} onPress={() => void logOut()} />
+      {user.isAnonymous && <Text style={styles.muted}>Create an account in Settings to keep this guest journal before leaving.</Text>}
+      <Button title={user.isAnonymous ? "Leave guest journal" : "Log out"} secondary busy={busy} onPress={() => void logOut()} />
       {!!error && <Text style={styles.error}>{error}</Text>}
     </View>
   );

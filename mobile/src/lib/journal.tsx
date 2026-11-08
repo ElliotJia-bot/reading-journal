@@ -56,6 +56,8 @@ interface JournalContext extends JournalData {
   loading: boolean;
   timer: Timer | null;
   error: string;
+  guestSetupError: string;
+  retryGuestSetup: () => Promise<void>;
   refresh: () => Promise<void>;
   start: (book: Book) => Promise<void>;
   updateTimer: (timer: Timer | null) => Promise<void>;
@@ -72,6 +74,7 @@ export function JournalProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState(empty);
   const [timer, setTimer] = useState<Timer | null>(null);
   const [error, setError] = useState("");
+  const [guestSetupError, setGuestSetupError] = useState("");
   const timerRef = useRef<Timer | null>(null);
   const timerRevision = useRef(0);
   const uid = useRef<string | null>(null);
@@ -122,8 +125,20 @@ export function JournalProvider({ children }: { children: React.ReactNode }) {
         timerRef.current = null;
         setTimer(null);
         setError("");
+        setGuestSetupError("");
         if (next) {
           try {
+            if (next.isAnonymous) {
+              try {
+                await api("/v1/guest/start", "POST", {});
+              } catch (error) {
+                if (uid.current === next.uid) {
+                  setGuestSetupError(error instanceof Error ? error.message : "Unable to prepare your guest journal.");
+                  setLoading(false);
+                }
+                return;
+              }
+            }
             const [cached, active] = await Promise.all([
               AsyncStorage.getItem(`journal:${next.uid}`),
               AsyncStorage.getItem(`timer:${next.uid}`),
@@ -137,7 +152,7 @@ export function JournalProvider({ children }: { children: React.ReactNode }) {
             setError("Unable to restore local records. Please refresh.");
           }
         }
-        setLoading(false);
+        if (uid.current === (next?.uid ?? null)) setLoading(false);
       }),
     [refresh],
   );
@@ -178,6 +193,22 @@ export function JournalProvider({ children }: { children: React.ReactNode }) {
     void syncBookmark();
     return () => { cancelled = true; if (timeout) clearTimeout(timeout); };
   }, [user, loading, timer?.bookmark?.id]);
+
+  async function retryGuestSetup() {
+    const owner = auth.currentUser?.uid;
+    if (!owner || !auth.currentUser?.isAnonymous) return;
+    setLoading(true);
+    try {
+      await api("/v1/guest/start", "POST", {});
+      if (uid.current !== owner) return;
+      setGuestSetupError("");
+      await refresh();
+    } catch (error) {
+      if (uid.current === owner) setGuestSetupError(error instanceof Error ? error.message : "Unable to prepare your guest journal.");
+    } finally {
+      if (uid.current === owner) setLoading(false);
+    }
+  }
 
   async function updateTimer(next: Timer | null) {
     if (!user) return;
@@ -222,6 +253,8 @@ export function JournalProvider({ children }: { children: React.ReactNode }) {
         loading,
         timer,
         error,
+        guestSetupError,
+        retryGuestSetup,
         refresh,
         start,
         updateTimer,

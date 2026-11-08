@@ -25,6 +25,7 @@ import { recommendations } from "./recommendations.js";
 import { catalog, publishedEbooks } from "./cloud-ebooks.js";
 import { matchingSharedEdition } from "../../shared/catalog.js";
 
+import { guest } from "./guest.js";
 import { bookmark, bookmarkBridge } from "./bookmark.js";
 import type { BookmarkState } from "../../shared/bookmark.js";
 
@@ -68,6 +69,7 @@ app.use("/v1", async (req, res, next) => {
   try {
     const decoded = await auth.verifyIdToken(token, true);
     res.locals.uid = decoded.uid;
+    res.locals.anonymous = decoded.firebase.sign_in_provider === "anonymous";
     next();
   } catch (error) {
     console.error(
@@ -82,6 +84,7 @@ app.use("/v1", async (req, res, next) => {
   }
 });
 
+app.use("/v1/guest", guest);
 app.use("/v1/community", community);
 app.use("/v1/reader", reader);
 app.use("/v1/discovery", discovery);

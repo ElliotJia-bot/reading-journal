@@ -124,3 +124,7 @@ V1.8 release checks passed: TypeScript, ESLint, web export, matching release met
 ## Post-release USB bookmark integration
 
 The `release/1.8` branch adds a Pico W V2 USB bridge after the immutable `v1.8.0` tag. See [hardware/README.md](../hardware/README.md) for setup, pairing, durable queues, timing semantics and limits. The existing manual reading screen retains its timer and gains six hardware statistics. Triple-click hands off to Finish & log. Saved bookmark sessions use device-confirmed time; session insights retain individual visits and rereads. The firmware runs unchanged in RAM with `--run-v2`, without overwriting Pico files. No additional cloud service or IAM role is required.
+
+## Post-release guest-demo onboarding
+
+The root navigator now protects every business screen, including direct `/finish` links. Guest entry prepares an isolated copy of the test journal using the private `guestTemplates` snapshot before displaying Home. Setup is retryable and create-only; existing guest and registered journals are not overwritten. See the README guest section and `scripts/publish_guest_template.mjs`. The snapshot excludes credentials, live device connections and community identities. Newly added private routes must be included in the root `Stack.Protected` group.
