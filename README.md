@@ -13,6 +13,8 @@ The 1.0 iteration lives on `release/1.0`. The installed app, browser title and s
 
 ### Insights presentation update
 
+Overall insights now groups the summary tiles at the top, shows the three leading places by cumulative reading time, and displays only the top author by time spent. Book insights uses a compact search dropdown; calendar dates have visible selectable controls. The reading-journey section has been removed. Reading coach automatically loads actionable suggestions for the latest 30 calendar days, with an empty state, retry on failure, in-flight request sharing and backend evidence caching. The coach does not use the Overview date filter.
+
 Session Insights uses tappable vertical time-per-page bars and compact stat tiles. Book Insights places “Where & why you slowed down” immediately after the calendar chart and replaces the session list with book-specific behavioral suggestions. Session history remains accessible through chart bars and dates. Reading coach evidence, full passages and detailed content dimensions expand on demand.
 
 Longer dwell is highlighted at 1.5× or more than the median of at least three other comparable pages (10+ seconds, over 100 characters). The comparison normalizes by character count and averages repeated reading sessions; bar heights retain total foreground time. A highlighted page is not proof of difficulty. Local text clues and explicit reactions are shown first; a consented Tinker request can add possible explanations and a next step. Book-period analysis uses only saved sessions in the selected period. Manual logs and insufficient samples have explicit empty states.
@@ -42,7 +44,7 @@ For an isolated 1.0 integration check, build the backend, run it with `COMMUNITY
 - Tinker produces three evidence-linked cards: habit, interest, and suggestion. Reports and feedback persist in Firestore; unchanged evidence reuses a cached report.
 - Real backend tests passed for authentication, save/retry deduplication, cross-user isolation, direct-write denial, statistics, model output, caching, feedback, and progress recalculation. Disposable test users are removed afterward.
 - Community includes interest circles, membership, reading check-ins, questions, book recommendations, encouragement, comments, reporting, blocking/unblocking, and author-only post removal.
-- Browser flow verified with disposable test journals and original test text. Thirty-seven automated tests pass. The web bundle exports successfully; this is **not** a signed or device-tested iOS binary. The ebook reader currently runs in the web/Safari version; native builds show a web-reader notice.
+- Browser flow verified with disposable test journals and original test text. Thirty-nine automated tests pass. The web bundle exports successfully; this is **not** a signed or device-tested iOS binary. The ebook reader currently runs in the web/Safari version; native builds show a web-reader notice.
 
 Cloud Run is **deployed and verified** in `us-central1` as of November 7, 2026. The app uses <https://reading-journal-api-au6vfycphq-uc.a.run.app>. The service allows the hosted frontend origins; the latest deployed revision is recorded locally after each deployment. Cloud checks cover reading records, Tinker, cross-user isolation, community membership, feeds, and ebook event deduplication/consent. The frontend is published on Firebase Hosting at <https://project-b00660ba-d6d4-4c9a-a05.web.app>.
 

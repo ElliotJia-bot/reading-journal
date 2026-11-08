@@ -329,7 +329,13 @@ app.post("/v1/insights", async (req, res) => {
     },
   ];
   const fingerprint = createHash("sha256")
-    .update(JSON.stringify({ evidence, goal: profile.goal }))
+    .update(
+      JSON.stringify({
+        evidence,
+        goal: profile.goal,
+        promptVersion: "behavioral-coach-3",
+      }),
+    )
     .digest("hex");
   const reportRef = userRef(uid).collection("insights").doc(fingerprint);
   const existing = await reportRef.get();

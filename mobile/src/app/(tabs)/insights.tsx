@@ -24,9 +24,16 @@ export default function Insights() {
     () => aggregate(sessions, books, days, profile.timezone, now),
     [sessions, books, days, profile.timezone, now],
   );
-  const places = Object.entries(stats.locations).sort(
-    (a, b) => b[1].averageMinutes - a[1].averageMinutes,
-  );
+  const places = Object.entries(stats.locations)
+    .sort((a, b) => b[1].seconds - a[1].seconds)
+    .slice(0, 3);
+  const topTimes = Object.entries(stats.times)
+    .filter(([, count]) => count > 0)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
+  const favoriteAuthor = Object.entries(stats.authors).sort(
+    (a, b) => b[1].seconds - a[1].seconds,
+  )[0];
   const topTopics = Object.entries(stats.topics)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3);
@@ -34,23 +41,30 @@ export default function Insights() {
     .map(([topic]) => [topic, stats.likedTopics[topic] ?? 0] as const)
     .filter(([, count]) => count > 0);
   return (
-    <Page title="Your reading rhythm">
+    <Page title={section === "Overview" ? "Overall insights" : "Reading coach"}>
       <Chips
         values={["Overview", "Reading coach"]}
         value={section}
         onChange={setSection}
       />
       {!!error && <Text style={styles.error}>{error}</Text>}
-      <Text style={styles.label}>
-        {section === "Overview" ? "EXPLORE YOUR HABITS" : "READING SUGGESTIONS"}
-      </Text>
-      <Chips
-        values={["Last 7 Days", "Last 30 Days", "All Time"]}
-        value={range}
-        onChange={setRange}
-      />
+      {section === "Overview" && (
+        <Chips
+          values={["Last 7 Days", "Last 30 Days", "All Time"]}
+          value={range}
+          onChange={setRange}
+        />
+      )}
       {section === "Overview" && (
         <>
+          <StatBlocks
+            items={[
+              { label: "Minutes", value: stats.totalMinutes },
+              { label: "Reading days", value: stats.readingDays },
+              { label: "Min / session", value: stats.averageMinutes },
+              { label: "Sessions", value: stats.sessionCount },
+            ]}
+          />
           <SessionChart
             sessions={sessions}
             timezone={profile.timezone}
@@ -59,18 +73,14 @@ export default function Insights() {
             onMetric={setMetric}
             now={now}
           />
-          <View style={styles.card}>
-            <Text style={styles.heading}>Explore a book</Text>
+          <View style={[styles.card, { zIndex: 10, padding: 16, gap: 10 }]}>
+            <Text style={styles.heading}>Book insights</Text>
             <LibraryInsightSearch books={books} />
           </View>
         </>
       )}
       {section === "Reading coach" ? (
-        <ReadingCoach
-          key={days}
-          days={days}
-          sessionCount={stats.sessionCount}
-        />
+        <ReadingCoach now={now} />
       ) : (
         <>
           {stats.sessionCount === 0 ? (
@@ -87,23 +97,10 @@ export default function Insights() {
             </View>
           ) : (
             <>
-              <StatBlocks
-                items={[
-                  { label: "Minutes", value: stats.totalMinutes },
-                  { label: "Reading days", value: stats.readingDays },
-                  { label: "Min / session", value: stats.averageMinutes },
-                  { label: "Sessions", value: stats.sessionCount },
-                ]}
-              />
-              <Button
-                title="Explore your reading coach"
-                secondary
-                onPress={() => setSection("Reading coach")}
-              />
               <View style={styles.card}>
                 <Text style={styles.heading}>When you read</Text>
                 <StatBlocks
-                  items={Object.entries(stats.times).map(([time, count]) => ({
+                  items={topTimes.map(([time, count]) => ({
                     label: time,
                     value: count,
                     detail: "sessions",
@@ -118,8 +115,8 @@ export default function Insights() {
                       <View style={{ flex: 1 }}>
                         <Text style={styles.body}>{place}</Text>
                         <Text style={styles.muted}>
-                          {value.count} sessions · {value.averageMinutes} min
-                          average
+                          {value.count}{" "}
+                          {value.count === 1 ? "session" : "sessions"}
                         </Text>
                       </View>
                       <Text style={styles.heading}>
@@ -173,35 +170,18 @@ export default function Insights() {
                   onPress={() => router.push("/(tabs)/for-you")}
                 />
               </View>
-              {Object.keys(stats.authors).length > 0 && (
-                <DetailFold title="Authors you spend time with">
-                  {Object.entries(stats.authors)
-                    .sort((a, b) => b[1].seconds - a[1].seconds)
-                    .map(([author, value]) => (
-                      <View key={author}>
-                        <Text style={styles.body}>{author}</Text>
-                        <Text style={styles.muted}>
-                          {Math.round(value.seconds / 60)} min ·{" "}
-                          {value.sessions} sessions · {value.liked} explicitly
-                          liked
-                        </Text>
-                      </View>
-                    ))}
-                </DetailFold>
+              {favoriteAuthor && (
+                <View style={styles.card}>
+                  <Text style={styles.heading}>Favorite author</Text>
+                  <Text style={styles.body}>{favoriteAuthor[0]}</Text>
+                  <Text style={styles.muted}>
+                    {Math.round(favoriteAuthor[1].seconds / 60)} min · Most time
+                    spent in this period
+                  </Text>
+                </View>
               )}
             </>
           )}
-          <DetailFold title="Your reading journey">
-            <StatBlocks
-              items={["Finished", "Reading", "Want to Read", "Dropped"].map(
-                (status) => ({
-                  label: status,
-                  value: books.filter((b) => b.status === status).length,
-                }),
-              )}
-            />
-            <Text style={styles.muted}>All-time Library totals.</Text>
-          </DetailFold>
           <Button
             title="Refresh records"
             secondary

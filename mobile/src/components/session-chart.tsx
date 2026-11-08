@@ -83,12 +83,12 @@ export default function SessionChart({
           horizontal
           showsHorizontalScrollIndicator={keys.length > 7}
           style={{ flex: 1 }}
-          contentContainerStyle={{ flexGrow: 1, gap: 8 }}
+          contentContainerStyle={{ flexGrow: 1, gap: 4 }}
         >
           {keys.map((key, index) => (
             <View
               key={key}
-              style={{ minWidth: 26, flex: 1, alignItems: "center", gap: 6 }}
+              style={{ minWidth: 32, flex: 1, alignItems: "center", gap: 6 }}
             >
               <View
                 style={{
@@ -136,21 +136,47 @@ export default function SessionChart({
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={`View sessions on ${key}`}
+                accessibilityState={{ selected: selectedDay === key }}
+                accessibilityHint="View reading sessions for this day"
                 onPress={() => setSelectedDay(key)}
                 style={{
+                  minWidth: 32,
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: selectedDay === key ? color.green : "#cad8c6",
+                  backgroundColor:
+                    selectedDay === key ? color.green : "#e6eee2",
+                  paddingVertical: 7,
                   minHeight: 44,
                   alignItems: "center",
                   justifyContent: "center",
                   gap: 4,
                 }}
               >
-                <Text style={[styles.muted, { fontSize: 10 }]}>
+                <Text
+                  style={[
+                    styles.muted,
+                    {
+                      fontSize: 10,
+                      color: selectedDay === key ? "white" : color.green,
+                    },
+                  ]}
+                >
                   {new Date(`${key}T12:00:00Z`).toLocaleDateString("en-US", {
                     weekday: "short",
                     timeZone: "UTC",
                   })}
                 </Text>
-                <Text style={[styles.muted, { fontSize: 9 }]}>
+                <Text
+                  style={[
+                    styles.label,
+                    {
+                      fontSize: 10,
+                      marginBottom: 0,
+                      color: selectedDay === key ? "white" : color.green,
+                    },
+                  ]}
+                >
                   {Number(key.slice(5, 7))}/{Number(key.slice(8))}
                 </Text>
               </Pressable>
