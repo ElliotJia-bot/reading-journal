@@ -5,6 +5,7 @@ import { database, userRef } from "./store.js";
 import { eligibleReaders } from "./discovery.js";
 import { catalogSearch, catalogSynopsis, quoteCatalog } from "./catalog.js";
 import { generateBookReason } from "./tinker.js";
+import { bookFitEvidence, demoFeaturesSchema } from "./book-fit-evidence.js";
 import { rankWithAI } from "./recommendation-ranking.js";
 import { recommendationEvidence } from "../../shared/recommendation-evidence.js";
 import {
@@ -43,12 +44,13 @@ const feedRef = (uid: string) =>
   userRef(uid).collection("private").doc("discovery-feed");
 async function records(uid: string) {
   const ref = userRef(uid);
-  const [p, b, s, f, pref] = await Promise.all([
+  const [p, b, s, f, pref, features] = await Promise.all([
     ref.get(),
     ref.collection("books").get(),
     ref.collection("sessions").get(),
     ref.collection("discoveryFeedback").get(),
     preference(uid).get(),
+    ref.collection("private").doc("demo-reading-features").get(),
   ]);
   return {
     profile: (p.data() ?? { topics: [], language: "eng" }) as Profile,
@@ -62,6 +64,7 @@ async function records(uid: string) {
       FeedbackBook
     >,
     experience: pref.data()?.experience as ReadingExperience | undefined,
+    features: demoFeaturesSchema.safeParse(features.data()).data,
   };
 }
 recommendations.put("/preferences", async (req, res) => {
@@ -97,7 +100,8 @@ export async function recommendationFeed(uid: string) {
     )
     .slice(0, 3);
   const key = fingerprint({
-    version: 6,
+    version: 7,
+    features: data.features,
     evidence: behavior.evidence,
     owned: data.books.map((b) => [b.id, b.title, b.author, b.status]).sort(),
     language,
@@ -169,7 +173,24 @@ export async function recommendationFeed(uid: string) {
           shelf: "personal",
           source: "catalog",
         }));
-        const result = await rankWithAI(uid, pool, behavior.evidence);
+        const result = await rankWithAI(
+          uid,
+          pool,
+          behavior.evidence,
+          Object.fromEntries(
+            pool.map((b) => [
+              b.id,
+              bookFitEvidence(
+                data.books,
+                data.sessions,
+                data.profile,
+                b.id,
+                data.features,
+              ),
+            ]),
+          ),
+          !!data.features?.presentationMode,
+        );
         const chosen = new Set(
           [...result.ranking.personal, ...result.ranking.explore].map(
             (b) => b.id,
@@ -325,7 +346,7 @@ recommendations.put("/:id/feedback", async (req, res) => {
   });
   res.json({ ok: true, value, libraryId });
 });
-async function reserveReason(uid: string) {
+async function reserveReason(uid: string, presentationMode = false) {
   const day = new Date().toISOString().slice(0, 10),
     local = userRef(uid).collection("private").doc("book-reasons"),
     global = database.collection("private").doc("book-reasons");
@@ -333,7 +354,8 @@ async function reserveReason(uid: string) {
     const [u, g] = await Promise.all([tx.get(local), tx.get(global)]);
     const uc = u.data()?.day === day ? u.data()!.count : 0,
       gc = g.data()?.day === day ? g.data()!.count : 0;
-    if (uc >= 24 || gc >= 120) throw new Error("TINKER_DISCOVERY_LIMIT");
+    if (uc >= (presentationMode ? 48 : 24) || gc >= 120)
+      throw new Error("TINKER_DISCOVERY_LIMIT");
     tx.set(local, { day, count: uc + 1 });
     tx.set(global, { day, count: gc + 1 });
   });
@@ -350,6 +372,26 @@ export async function recommendationDetails(uid: string, id: string) {
       data.feedback,
     ).evidence,
   );
+  const fit = bookFitEvidence(
+    data.books,
+    data.sessions,
+    data.profile,
+    id,
+    data.features,
+  );
+  evidence.push(...fit);
+  // Give the writer just two complementary matches, rather than a stats dump.
+  const pick = (id: string) => fit.find((e) => e.id === id);
+  const paceFit = pick("fit-pace");
+  const primary =
+    paceFit && JSON.parse(paceFit.text).dialoguePercent != null
+      ? paceFit
+      : (pick("fit-completion") ?? paceFit);
+  const secondary = pick("fit-session") ?? pick("fit-sentences");
+  const selectedFit = [pick("fit-connection"), primary, secondary].filter(
+    (e): e is NonNullable<typeof e> => !!e,
+  );
+  const presentationMode = !!data.features?.presentationMode;
   const matchingPace = evidence
     .filter(
       (e) =>
@@ -358,7 +400,8 @@ export async function recommendationDetails(uid: string, id: string) {
     )
     .slice(0, 1);
   const hash = fingerprint({
-    version: 8,
+    version: 10,
+    presentationMode,
     key,
     book: id,
     reason: book.reason,
@@ -380,7 +423,7 @@ export async function recommendationDetails(uid: string, id: string) {
     let relatedBooks: string[] = [];
     let expanded = false;
     try {
-      await reserveReason(uid);
+      await reserveReason(uid, presentationMode);
       const explanation = await generateBookReason(
         {
           book: {
@@ -391,18 +434,40 @@ export async function recommendationDetails(uid: string, id: string) {
           synopsis,
           shelf: book.shelf,
           source: book.source,
-          basis: book.reason,
+          basis: selectedFit.length ? undefined : book.reason,
           usualGenres: feed?.usualGenres ?? [],
           styleSignals: feed?.styleSignals ?? [],
           experience: feed?.experience ?? null,
           preferences: data.profile.topics,
-          relevantPaceEvidenceIds: matchingPace.map((e) => e.id),
+          presentationMode,
+          relevantFitEvidenceIds: selectedFit.map((e) => e.id),
+          relevantPaceEvidenceIds: selectedFit.length
+            ? []
+            : matchingPace.map((e) => e.id),
         },
-        evidence.filter(
-          (e) =>
-            !e.id.startsWith("pace-") ||
-            matchingPace.some((p) => p.id === e.id),
-        ),
+        selectedFit.length
+          ? [
+              ...selectedFit,
+              ...evidence
+                .filter((e) => /^(book|library)-/.test(e.id))
+                .map((e) => {
+                  const v = JSON.parse(e.text);
+                  return {
+                    id: e.id,
+                    text: JSON.stringify({
+                      title: v.title,
+                      author: v.author,
+                      topics: v.topics,
+                      status: v.status,
+                    }),
+                  };
+                }),
+            ]
+          : evidence.filter(
+              (e) =>
+                !e.id.startsWith("pace-") ||
+                matchingPace.some((p) => p.id === e.id),
+            ),
       );
       reason = explanation.reason;
       support = explanationSupport(explanation.evidenceIds, evidence);
@@ -434,6 +499,17 @@ export async function recommendationDetails(uid: string, id: string) {
       relatedBooks,
       dataPoints,
     };
+    if (presentationMode) {
+      const clean = (text: string) =>
+        text
+          .replace(/^Demo records: /, "")
+          .replace(
+            / · (?:\d+ simulated sessions|Includes demo records|Demo book)/g,
+            "",
+          );
+      result.support = result.support.map(clean);
+      result.dataPoints = result.dataPoints.map(clean);
+    }
     await ref.set({
       result,
       expiresAt: Date.now() + (expanded ? 7 * 86400000 : 5 * 60000),

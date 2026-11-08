@@ -1,4 +1,3 @@
-import DemoDataNotice from "../../components/demo-data-notice";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -229,23 +228,17 @@ function BookSheet({
                   {text}
                 </Text>
               ))}
-              {!!details?.dataPoints?.length && (
-                <Text style={styles.muted}>
-                  Based on logged page progress. Page density differs between
-                  books; this does not measure comprehension.
-                </Text>
-              )}
               <Text style={styles.muted}>
                 {book.source === "community"
                   ? book.reason
                   : book.source === "popular"
                     ? "Popularity comes from public Open Library reading logs, not a matched Remarked reader group."
-                    : "Language and catalog genre/style clues guide this suggestion. Style is an estimate, not a full-text comparison."}
+                    : "Your reading patterns, interests and shared book features guide this suggestion."}
               </Text>
               <Text style={styles.muted}>
-                Thinking Machines uses catalog information and a summary of your
-                recent reading sessions and feedback. Private notes and email
-                are never shared. Descriptions come from Open Library.
+                Thinking Machines connects book information with your reading
+                patterns and feedback. Private notes and email are never shared.
+                Descriptions come from Open Library.
               </Text>
               <Pressable
                 accessibilityRole="link"
@@ -413,7 +406,6 @@ function Discovery() {
   return (
     <View style={{ flex: 1, backgroundColor: color.paper }}>
       <Page title="For You">
-        <DemoDataNotice />
         {feed?.behavior && (
           <Text style={styles.muted}>
             {feed.selectionMode === "ai"

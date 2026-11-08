@@ -151,7 +151,7 @@ test("Plain-text model responses retain book links and numeric validation", () =
   );
   assert.throws(() =>
     validateBookExplanation(
-      { reason: reason + " More detail.".repeat(20), evidenceIds: ["book-0"] },
+      { reason: reason + " More detail.".repeat(50), evidenceIds: ["book-0"] },
       evidence,
     ),
   );

@@ -30,6 +30,13 @@ export function parseBookExplanation(
         return [...reason.matchAll(/(\d+(?:\.\d+)?)\s*%/g)].some(
           (m) => Number(m[1]) === Math.abs(JSON.parse(e.text).percentChange),
         );
+      if (e.id === "fit-connection")
+        return normalize(reason).includes(normalize(JSON.parse(e.text).title));
+      if (e.id === "fit-session") return /chapter|sitting/i.test(reason);
+      if (e.id === "fit-sentences") return /sentence/i.test(reason);
+      if (e.id === "fit-completion") return /complet|finish/i.test(reason);
+      if (e.id === "fit-pace")
+        return /pace|faster|slower|baseline/i.test(reason);
       return false;
     })
     .map((e) => e.id);
@@ -79,32 +86,66 @@ export function validateBookExplanation(
 ) {
   const result = z
     .object({
-      reason: z.string().trim().min(120).max(750),
-      evidenceIds: z.array(z.string()).max(4),
+      reason: z.string().trim().min(120).max(1150),
+      evidenceIds: z.array(z.string()).max(7),
     })
     .strict()
     .parse(raw);
   // Reference IDs belong in evidenceIds, never in reader-facing prose.
   result.reason = result.reason.replace(/\s*\((?:book|library)-\d+\)/g, "");
   result.reason = result.reason.replace(/\s+/g, " ").trim();
-  if (result.reason.split(/\s+/).length > 65)
+  if (result.reason.split(/\s+/).length > 95)
     throw new Error("TINKER_EXPLANATION_TOO_LONG");
   if (/\b(?:book|library)-\d+\b/.test(result.reason))
     throw new Error("TINKER_VISIBLE_EVIDENCE_ID");
   const known = new Set(evidence.map((e) => e.id));
   if (result.evidenceIds.some((id) => !known.has(id)))
     throw new Error("TINKER_INVALID_EVIDENCE");
+  if (
+    /comprehend best|comprehension (?:ceiling|limit|score)|under your ceiling|reading ability|diagnos|complexity (?:here )?scores?/i.test(
+      result.reason,
+    )
+  )
+    throw new Error("TINKER_UNSUPPORTED_ABILITY_CLAIM");
   const allowedPercents = evidence
     .filter(
-      (e) => result.evidenceIds.includes(e.id) && e.id.startsWith("pace-"),
+      (e) => result.evidenceIds.includes(e.id) && /^(pace|fit)-/.test(e.id),
     )
-    .map((e) => Math.abs(JSON.parse(e.text).percentChange));
+    .flatMap((e) =>
+      e.id.startsWith("pace-")
+        ? [Math.abs(JSON.parse(e.text).percentChange)]
+        : (JSON.parse(e.text).allowedPercents ?? []),
+    );
   if (
     [...result.reason.matchAll(/(\d+(?:\.\d+)?)\s*%/g)].some(
       (m) => !allowedPercents.includes(Number(m[1])),
     )
   )
     throw new Error("TINKER_UNSUPPORTED_PERCENTAGE");
+  for (const [pattern, id] of [
+    [/chapters?[^.]*\d|\d[^.]*chapters?/i, "fit-session"],
+    [/sentences?[^.]*\d|\d[^.]*words per sentence/i, "fit-sentences"],
+  ] as const) {
+    if (!pattern.test(result.reason)) continue;
+    const fact = evidence.find(
+      (e) => e.id === id && result.evidenceIds.includes(id),
+    );
+    if (!fact) throw new Error("TINKER_UNSUPPORTED_BOOK_FEATURE");
+    const allowed = JSON.parse(fact.text).allowedNumbers as number[];
+    const sentences = result.reason
+      .split(/(?<=[.!?])\s+/)
+      .filter((s) => pattern.test(s));
+    if (
+      sentences.some((s) =>
+        [
+          ...s.matchAll(
+            /\b(\d+(?:\.\d+)?)\s*[- ]\s*(?:pages?|minutes?|words?)\b/g,
+          ),
+        ].some((m) => !allowed.includes(Number(m[1]))),
+      )
+    )
+      throw new Error("TINKER_UNSUPPORTED_BOOK_FEATURE");
+  }
   const allBooks = referencedBooks([...known], evidence);
   const cited = referencedBooks(result.evidenceIds, evidence);
   const current = allBooks.filter((b) => b.status === "Reading");
@@ -134,7 +175,7 @@ export function explanationSupport(
     const item = evidence.find((e) => e.id === id);
     if (!item) return [];
     const e = JSON.parse(item.text);
-    if (id.startsWith("pace-")) return [e.summary];
+    if (/^(pace|fit)-/.test(id)) return [e.summary];
     if (id === "summary")
       return [
         `${e.sessions} reading sessions · ${e.totalMinutes} minutes · Last 30 days${e.syntheticSessions ? ` · ${e.syntheticSessions} simulated sessions` : ""}`,

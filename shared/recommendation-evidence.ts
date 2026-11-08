@@ -11,6 +11,25 @@ export interface RecommendationEvidence {
   id: string;
   text: string;
 }
+export function recentRecommendationSessions(
+  books: Book[],
+  sessions: ReadingSession[],
+  profile: Profile,
+  now = Date.now(),
+) {
+  const timezone = profile.timezone || "UTC";
+  const cutoff = new Date(`${dayKey(now, timezone)}T12:00:00Z`);
+  cutoff.setUTCDate(cutoff.getUTCDate() - 29);
+  const known = new Set(books.map((b) => b.id));
+  return sessions.filter(
+    (s) =>
+      known.has(s.bookId) &&
+      s.durationSeconds > 180 &&
+      s.startedAt <= now &&
+      s.endedAt <= now &&
+      dayKey(s.startedAt, timezone) >= cutoff.toISOString().slice(0, 10),
+  );
+}
 export function recommendationEvidence(
   books: Book[],
   sessions: ReadingSession[],
@@ -19,17 +38,7 @@ export function recommendationEvidence(
   now = Date.now(),
 ) {
   const timezone = profile.timezone || "UTC";
-  const cutoff = new Date(`${dayKey(now, timezone)}T12:00:00Z`);
-  cutoff.setUTCDate(cutoff.getUTCDate() - 29);
-  const known = new Set(books.map((b) => b.id));
-  const selected = sessions.filter(
-    (s) =>
-      known.has(s.bookId) &&
-      s.durationSeconds > 180 &&
-      s.startedAt <= now &&
-      s.endedAt <= now &&
-      dayKey(s.startedAt, timezone) >= cutoff.toISOString().slice(0, 10),
-  );
+  const selected = recentRecommendationSessions(books, sessions, profile, now);
   const safeLocations = new Set([
     "Home",
     "Library",

@@ -1,4 +1,3 @@
-import DemoDataNotice from "../../components/demo-data-notice";
 import React, { useEffect, useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
@@ -69,7 +68,6 @@ export default function Home() {
   );
   return (
     <Page>
-      <DemoDataNotice />
       <View style={styles.between}>
         <Text style={styles.muted}>
           {hour < 12
