@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { router } from "expo-router";
-import { EmailAuthProvider, linkWithCredential, signOut } from "firebase/auth";
+import { EmailAuthProvider, linkWithCredential } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { api } from "../lib/api";
 import { useJournal } from "../lib/journal";
 import { Page, Button, Chips, Field, styles, message } from "../components/ui";
+import { LogOutButton } from "../components/log-out-button";
 export default function Settings() {
   const { user, profile, refresh } = useJournal();
   const [draft, setDraft] = useState<{ goal: string; topics: string } | null>(
@@ -151,13 +152,7 @@ export default function Settings() {
           Coming soon · Automatic reading records from supported websites.
         </Text>
       </View>
-      {!user?.isAnonymous && (
-        <Button
-          title="Sign out"
-          secondary
-          onPress={() => void signOut(auth).then(() => router.replace("/"))}
-        />
-      )}
+      <LogOutButton />
     </Page>
   );
 }

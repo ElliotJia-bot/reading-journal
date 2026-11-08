@@ -2,7 +2,7 @@
   "expo": {
     "name": "Remarked",
     "slug": "reading-journal",
-    "version": "1.5.0",
+    "version": "1.6.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

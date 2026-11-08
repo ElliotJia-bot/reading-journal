@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { Redirect, router, useLocalSearchParams } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import {
   Page,
@@ -11,6 +11,7 @@ import {
   styles,
 } from "../../../components/ui";
 import { Avatar, Badge } from "../../../components/community";
+import { LogOutButton } from "../../../components/log-out-button";
 import { useCommunityResource } from "../../../lib/community";
 import { useJournal } from "../../../lib/journal";
 import { kindLabels } from "../../../../../shared/community";
@@ -22,7 +23,8 @@ import type {
 export default function ReaderPage() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user, loading } = useJournal();
-  if (loading || !user) return <Page title="Opening profile…" back />;
+  if (loading) return <Page title="Opening profile…" back />;
+  if (!user) return <Redirect href="/" />;
   return <Profile key={`${user.uid}:${id}`} id={id} />;
 }
 
@@ -72,11 +74,14 @@ function Profile({ id }: { id: string }) {
         </View>
         {reader.tier && <Badge text={`${reader.tier} reader`} />}
         {reader.isOwn && (
-          <Button
-            title="Edit profile & sharing"
-            secondary
-            onPress={() => router.push("/community/leaderboard")}
-          />
+          <View style={{ gap: 10 }}>
+            <Button
+              title="Edit profile & sharing"
+              secondary
+              onPress={() => router.push("/community/leaderboard")}
+            />
+            <LogOutButton />
+          </View>
         )}
       </View>
       <Chips
