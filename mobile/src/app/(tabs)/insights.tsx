@@ -3,14 +3,14 @@ import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { aggregate } from "../../../../shared/domain";
 import { useJournal } from "../../lib/journal";
-import { Page, Button, Chips, Field, styles } from "../../components/ui";
+import { Page, Button, Chips, styles } from "../../components/ui";
 import SessionChart from "../../components/session-chart";
 import ReadingCoach from "../../components/reading-coach";
 import { StatBlocks, DetailFold } from "../../components/insight-blocks";
+import LibraryInsightSearch from "../../components/library-insight-search";
 
 export default function Insights() {
   const { books, sessions, profile, error, refresh } = useJournal();
-  const [query, setQuery] = useState("");
   const [metric, setMetric] = useState<"Time" | "Pages">("Time");
   const [section, setSection] = useState("Overview");
   const [range, setRange] = useState("Last 7 Days");
@@ -27,6 +27,12 @@ export default function Insights() {
   const places = Object.entries(stats.locations).sort(
     (a, b) => b[1].averageMinutes - a[1].averageMinutes,
   );
+  const topTopics = Object.entries(stats.topics)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
+  const likedTopTopics = topTopics
+    .map(([topic]) => [topic, stats.likedTopics[topic] ?? 0] as const)
+    .filter(([, count]) => count > 0);
   return (
     <Page title="Your reading rhythm">
       <Chips
@@ -55,32 +61,7 @@ export default function Insights() {
           />
           <View style={styles.card}>
             <Text style={styles.heading}>Explore a book</Text>
-            <Field
-              label="Search your library"
-              value={query}
-              onChangeText={setQuery}
-              placeholder="Title or author"
-            />
-            {books
-              .filter((b) =>
-                `${b.title} ${b.author}`
-                  .toLowerCase()
-                  .includes(query.toLowerCase()),
-              )
-              .slice(0, 5)
-              .map((b) => (
-                <Button
-                  key={b.id}
-                  title={b.title}
-                  secondary
-                  onPress={() =>
-                    router.push({
-                      pathname: "/insights/book/[id]",
-                      params: { id: b.id },
-                    })
-                  }
-                />
-              ))}
+            <LibraryInsightSearch books={books} />
           </View>
         </>
       )}
@@ -155,16 +136,14 @@ export default function Insights() {
               <View style={styles.card}>
                 <Text style={styles.heading}>Interests & topics</Text>
 
-                {Object.entries(stats.topics)
-                  .sort((a, b) => b[1] - a[1])
-                  .map(([topic, seconds]) => (
-                    <View key={topic} style={styles.between}>
-                      <Text style={[styles.body, { flex: 1 }]}>{topic}</Text>
-                      <Text style={styles.label}>
-                        {Math.round(seconds / 60)} min
-                      </Text>
-                    </View>
-                  ))}
+                {topTopics.map(([topic, seconds]) => (
+                  <View key={topic} style={styles.between}>
+                    <Text style={[styles.body, { flex: 1 }]}>{topic}</Text>
+                    <Text style={styles.label}>
+                      {Math.round(seconds / 60)} min
+                    </Text>
+                  </View>
+                ))}
                 {!Object.keys(stats.topics).length && (
                   <Text style={styles.body}>
                     Add topic tags to your books to explore this view.
@@ -175,13 +154,13 @@ export default function Insights() {
                     Time is shared equally across a session’s topics.
                   </Text>
                   <Text style={styles.label}>YOU EXPLICITLY LIKED</Text>
-                  {Object.entries(stats.likedTopics).map(([topic, count]) => (
+                  {likedTopTopics.map(([topic, count]) => (
                     <Text key={topic} style={styles.body}>
                       {topic} · {count} positive{" "}
                       {count === 1 ? "reaction" : "reactions"}
                     </Text>
                   ))}
-                  {!Object.keys(stats.likedTopics).length && (
+                  {!likedTopTopics.length && (
                     <Text style={styles.muted}>
                       Mark a session “Liked it” and add book topics to explore
                       your preferences.
