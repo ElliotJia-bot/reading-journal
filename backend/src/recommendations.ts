@@ -7,6 +7,11 @@ import { catalogSearch, catalogSynopsis, quoteCatalog } from "./catalog.js";
 import { generateBookReason } from "./tinker.js";
 import { rankWithAI } from "./recommendation-ranking.js";
 import { recommendationEvidence } from "../../shared/recommendation-evidence.js";
+import {
+  explanationEvidence,
+  explanationSupport,
+  referencedBooks,
+} from "./recommendation-explanation.js";
 import { peerMatches } from "../../shared/discovery.js";
 import { sameBook, usefulSubjects } from "../../shared/book-recommendations.js";
 import {
@@ -92,7 +97,7 @@ export async function recommendationFeed(uid: string) {
     )
     .slice(0, 3);
   const key = fingerprint({
-    version: 4,
+    version: 6,
     evidence: behavior.evidence,
     owned: data.books.map((b) => [b.id, b.title, b.author, b.status]).sort(),
     language,
@@ -185,8 +190,13 @@ export async function recommendationFeed(uid: string) {
         }
         selectionMode = "ai";
         model = result.model;
-      } catch {
-        console.warn("recommendation_ranking_fallback");
+      } catch (error) {
+        console.warn(
+          "recommendation_ranking_fallback",
+          error instanceof Error && error.message.startsWith("TINKER_")
+            ? error.message
+            : "INVALID_RANKING",
+        );
       }
     }
     const peers = experience
@@ -328,74 +338,112 @@ async function reserveReason(uid: string) {
     tx.set(global, { day, count: gc + 1 });
   });
 }
-recommendations.get("/:id/details", async (req, res) => {
-  const uid = res.locals.uid as string,
-    id = workId.parse(req.params.id);
+export async function recommendationDetails(uid: string, id: string) {
   const { book, feed, key } = await offered(uid, id);
-  const hash = fingerprint({ version: 2, key, book: id, reason: book.reason });
+  const data = await records(uid);
+  const evidence = explanationEvidence(
+    data.books,
+    recommendationEvidence(
+      data.books,
+      data.sessions,
+      data.profile,
+      data.feedback,
+    ).evidence,
+  );
+  const matchingPace = evidence
+    .filter(
+      (e) =>
+        e.id.startsWith("pace-") &&
+        genresFor(book.subjects).includes(JSON.parse(e.text).genre),
+    )
+    .slice(0, 1);
+  const hash = fingerprint({
+    version: 6,
+    key,
+    book: id,
+    reason: book.reason,
+    evidence,
+    topics: data.profile.topics,
+  });
   const result = await detailFlight(uid + hash, async () => {
     const ref = userRef(uid).collection("recommendationDetails").doc(hash);
     const cached = (await ref.get()).data();
     if (cached && cached.expiresAt > Date.now())
       return cached.result as RecommendationDetail;
     const synopsis = await catalogSynopsis(id).catch(() => "");
-    if (book.aiSelected) {
-      const support = (book.evidenceIds ?? []).flatMap((id) => {
-        const item = feed?.evidence?.find((e) => e.id === id);
-        if (!item) return [];
-        const e = JSON.parse(item.text);
-        if (id === "summary")
-          return [
-            `${e.sessions} reading sessions · ${e.totalMinutes} minutes · Last 30 days${e.syntheticSessions ? ` · ${e.syntheticSessions} simulated sessions` : ""}`,
-          ];
-        if (id.startsWith("book-"))
-          return [
-            `${e.title}: ${e.sessions} sessions · ${e.minutes} minutes · ${e.likedSessions} explicitly liked${e.syntheticSessions ? " · Includes demo records" : ""}`,
-          ];
-        if (id === "rhythm")
-          return [
-            "Based on your recorded reading times, broad location categories and topic patterns.",
-          ];
-        return ["Based on your saved Like / Maybe / Not for me choices."];
-      });
-      const result: RecommendationDetail = {
-        synopsis,
-        reason: book.reason,
-        reasonSource: "ai",
-        support,
-      };
-      await ref.set({ result, expiresAt: Date.now() + 7 * 86400000 });
-      return result;
-    }
     let reason = book.reason,
-      reasonSource: "ai" | "catalog" = "catalog";
+      reasonSource: "ai" | "catalog" = book.aiSelected ? "ai" : "catalog";
+    let support = explanationSupport(
+      book.evidenceIds ?? [],
+      feed?.evidence ?? [],
+    );
+    let relatedBooks: string[] = [];
+    let expanded = false;
     try {
       await reserveReason(uid);
-      reason = await generateBookReason({
-        book: {
-          title: book.title,
-          authors: book.authors,
-          subjects: book.subjects.slice(0, 20),
+      const explanation = await generateBookReason(
+        {
+          book: {
+            title: book.title,
+            authors: book.authors,
+            subjects: book.subjects.slice(0, 20),
+          },
+          synopsis,
+          shelf: book.shelf,
+          source: book.source,
+          basis: book.reason,
+          usualGenres: feed?.usualGenres ?? [],
+          styleSignals: feed?.styleSignals ?? [],
+          experience: feed?.experience ?? null,
+          preferences: data.profile.topics,
+          relevantPaceEvidenceIds: matchingPace.map((e) => e.id),
         },
-        synopsis,
-        shelf: book.shelf,
-        source: book.source,
-        basis: book.reason,
-        usualGenres: feed?.usualGenres ?? [],
-        styleSignals: feed?.styleSignals ?? [],
-        experience: feed?.experience ?? null,
-      });
+        evidence.filter(
+          (e) =>
+            !e.id.startsWith("pace-") ||
+            matchingPace.some((p) => p.id === e.id),
+        ),
+      );
+      reason = explanation.reason;
+      support = explanationSupport(explanation.evidenceIds, evidence);
+      relatedBooks = [
+        ...new Set(
+          referencedBooks(explanation.evidenceIds, evidence).map(
+            (b) => b.title,
+          ),
+        ),
+      ];
       reasonSource = "ai";
-    } catch {
-      console.warn("discovery_reason_fallback");
+      expanded = true;
+    } catch (error) {
+      console.warn(
+        "discovery_reason_fallback",
+        error instanceof Error && error.message.startsWith("TINKER_")
+          ? error.message
+          : "INVALID_EXPLANATION",
+      );
     }
-    const result = { synopsis, reason, reasonSource };
+    const dataPoints = matchingPace.map(
+      (e) => JSON.parse(e.text).summary as string,
+    );
+    const result = {
+      synopsis,
+      reason,
+      reasonSource,
+      support,
+      relatedBooks,
+      dataPoints,
+    };
     await ref.set({
       result,
-      expiresAt:
-        Date.now() + (reasonSource === "ai" ? 7 * 86400000 : 5 * 60000),
+      expiresAt: Date.now() + (expanded ? 7 * 86400000 : 5 * 60000),
     });
     return result;
   });
-  res.json(result);
+  return result;
+}
+recommendations.get("/:id/details", async (req, res) => {
+  res.json(
+    await recommendationDetails(res.locals.uid, workId.parse(req.params.id)),
+  );
 });

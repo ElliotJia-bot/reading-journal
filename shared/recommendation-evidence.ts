@@ -6,6 +6,7 @@ import {
   type Profile,
 } from "./domain.js";
 import type { FeedbackBook } from "./for-you.js";
+import { readingComparisons } from "./reading-comparisons.js";
 export interface RecommendationEvidence {
   id: string;
   text: string;
@@ -141,6 +142,9 @@ export function recommendationEvidence(
     .sort((a, b) => a.title.localeCompare(b.title))
     .slice(0, 30);
   evidence.push({ id: "feedback", text: JSON.stringify(choices) });
+  readingComparisons(books, selected, profile).forEach((comparison, i) =>
+    evidence.push({ id: `pace-${i}`, text: JSON.stringify(comparison) }),
+  );
   return {
     evidence,
     sessionCount: selected.length,

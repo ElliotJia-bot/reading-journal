@@ -164,14 +164,31 @@ function BookSheet({
               <View style={[styles.row, { gap: 7 }]}>
                 <Feather name="sun" size={15} color={color.green} />
                 <Text style={[styles.label, { marginBottom: 0 }]}>
-                  {details?.reasonSource === "ai"
-                    ? book.aiSelected
-                      ? "AI SELECTED FOR YOU"
-                      : "AI RECOMMENDATION EXPLANATION"
-                    : "WHY THIS BOOK"}
+                  We Selected FOR YOU
                 </Text>
               </View>
-              <Text style={styles.body}>{details?.reason ?? book.reason}</Text>
+              {!!details?.relatedBooks?.length && (
+                <Text style={[styles.muted, { color: color.green }]}>
+                  Connected to your reading: {details.relatedBooks.join(" · ")}
+                </Text>
+              )}
+              {details?.dataPoints?.map((point, i) => (
+                <View key={i} style={{ gap: 5, paddingVertical: 8 }}>
+                  <Text style={styles.label}>YOUR READING DATA</Text>
+                  <Text style={styles.body}>{point}</Text>
+                  <Text style={styles.muted}>
+                    Based on logged page progress. Page density differs between
+                    books; this does not measure comprehension.
+                  </Text>
+                </View>
+              ))}
+              {(details?.reason ?? book.reason)
+                .split(/\n\s*\n/)
+                .map((paragraph, i) => (
+                  <Text key={i} style={styles.body}>
+                    {paragraph}
+                  </Text>
+                ))}
               {!details && !detailError && (
                 <View style={[styles.row, { gap: 8 }]}>
                   <ActivityIndicator size="small" color={color.green} />
@@ -234,9 +251,9 @@ function BookSheet({
                     : "Language and catalog genre/style clues guide this suggestion. Style is an estimate, not a full-text comparison."}
               </Text>
               <Text style={styles.muted}>
-                Thinking Machines uses catalog information and a summary of
-                your recent reading sessions and feedback. Private notes and
-                email are never shared. Descriptions come from Open Library.
+                Thinking Machines uses catalog information and a summary of your
+                recent reading sessions and feedback. Private notes and email
+                are never shared. Descriptions come from Open Library.
               </Text>
               <Pressable
                 accessibilityRole="link"

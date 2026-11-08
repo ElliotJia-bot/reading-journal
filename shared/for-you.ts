@@ -36,6 +36,8 @@ export interface RecommendationDetail {
   reason: string;
   reasonSource: "ai" | "catalog";
   support?: string[];
+  relatedBooks?: string[];
+  dataPoints?: string[];
 }
 const genrePatterns: [string, RegExp][] = [
   ["Finance", /finance|money|investing|investment|wealth/i],
