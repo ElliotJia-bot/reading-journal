@@ -9,6 +9,7 @@ export interface CatalogBook {
   cover: string;
   language?: string;
   pageCount?: number | null;
+  readingLogCount?: number;
 }
 export interface BookMatch extends CatalogBook {
   reason: string;
@@ -91,6 +92,10 @@ export function catalogBooks(
             : v.title.trim(),
         catalogTitle: v.title.trim(),
         language,
+        readingLogCount:
+          typeof v.readinglog_count === "number"
+            ? Math.max(0, v.readinglog_count)
+            : 0,
         pageCount:
           typeof v.number_of_pages_median === "number" &&
           v.number_of_pages_median > 0

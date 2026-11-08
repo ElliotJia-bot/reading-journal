@@ -83,14 +83,17 @@ export function peerMatches(
   language: string,
   owned: Book[],
   hidden: string[],
+  options?: { tier: PublicReader["tier"]; limit?: number },
 ) {
   const peers = readers.filter(
     (r) =>
       r.id !== uid &&
       r.language === language &&
-      r.topics.some((t) =>
-        topics.some((own) => normalized(own) === normalized(t)),
-      ),
+      (options
+        ? r.tier === options.tier
+        : r.topics.some((t) =>
+            topics.some((own) => normalized(own) === normalized(t)),
+          )),
   );
   if (peers.length < 3)
     return { matches: [] as BookMatch[], peerCount: peers.length };
@@ -114,12 +117,14 @@ export function peerMatches(
     matches: [...counts.values()]
       .filter((v) => v.count >= 2)
       .sort((a, b) => b.count - a.count)
-      .slice(0, 5)
+      .slice(0, options?.limit ?? 5)
       .map(({ book, count }) => ({
         ...book,
         score: count,
         matchedTopics: book.subjects,
-        reason: `Liked by ${count} opted-in readers with at least one topic in common with you.`,
+        reason: options
+          ? `Liked by ${count} readers who chose the same reading experience as you (${options.tier.toLowerCase()}).`
+          : `Liked by ${count} opted-in readers with at least one topic in common with you.`,
       })),
   };
 }

@@ -105,8 +105,7 @@ discovery.put("/participation", async (req, res) => {
   if (input.active) await refreshPublicReader(uid);
   res.json({ ok: true });
 });
-discovery.get("/readers", async (_req, res) => {
-  const uid = res.locals.uid as string;
+export async function eligibleReaders(uid: string) {
   await refreshPublicReader(uid);
   const [docs, permission, blocks] = await Promise.all([
     publicReaders
@@ -129,7 +128,7 @@ discovery.get("/readers", async (_req, res) => {
   const readers = candidates
     .filter((_, i) => !reverse[i].exists)
     .map((d) => d.data()) as PublicReader[];
-  res.json({
+  return {
     readers,
     participation: permission.data() ?? {
       active: false,
@@ -139,5 +138,8 @@ discovery.get("/readers", async (_req, res) => {
     limit: 50,
     updatedAt: Date.now(),
     testMode: namespace !== "community",
-  });
+  };
+}
+discovery.get("/readers", async (_req, res) => {
+  res.json(await eligibleReaders(res.locals.uid));
 });

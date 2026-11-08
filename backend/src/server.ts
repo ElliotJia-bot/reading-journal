@@ -21,6 +21,7 @@ import { generateInsights } from "./tinker.js";
 import { community } from "./community.js";
 import { reader } from "./reader.js";
 import { discovery, refreshPublicReader } from "./discovery.js";
+import { recommendations } from "./recommendations.js";
 
 export const app = express();
 app.disable("x-powered-by");
@@ -78,6 +79,7 @@ app.use("/v1", async (req, res, next) => {
 app.use("/v1/community", community);
 app.use("/v1/reader", reader);
 app.use("/v1/discovery", discovery);
+app.use("/v1/recommendations", recommendations);
 
 async function loadData(uid: string) {
   const user = userRef(uid);
