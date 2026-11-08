@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import { useJournal, type InsightReport } from "../lib/journal";
 import { api } from "../lib/api";
 import { Button, styles, message } from "./ui";
+import { DetailFold, SmallBlock } from "./insight-blocks";
 export default function ReadingCoach({
   days,
   sessionCount,
@@ -45,15 +46,8 @@ export default function ReadingCoach({
   }
   return (
     <View style={{ gap: 22 }}>
-      <Text style={styles.body}>
-        Turn your reading patterns into a small, thoughtful next step.
-      </Text>
       <View style={styles.card}>
         <Text style={styles.heading}>Your personal reading insights</Text>
-        <Text style={styles.body}>
-          Generate a habit observation, an interest observation, and one
-          suggestion grounded in your records.
-        </Text>
         <Text style={styles.muted}>
           This sends reading statistics, topic labels, and your reading goal to
           Thinking Machines. Your email and private notes stay out of the
@@ -79,33 +73,22 @@ export default function ReadingCoach({
       )}
       {insight && insight.period === days && (
         <>
-          <Text style={styles.muted}>
-            Generated {new Date(insight.generatedAt).toLocaleString()} ·{" "}
-            {insight.period ? `${insight.period}-day view` : "All time"} ·
-            Refresh after changing records.
-          </Text>
           {insight.cards.map((card) => (
-            <View key={card.kind} style={styles.card}>
-              <Text style={styles.label}>{card.kind.toUpperCase()}</Text>
-              <Text style={styles.heading}>{card.title}</Text>
-              <Text style={styles.body}>{card.body}</Text>
-              <Text style={styles.muted}>
-                Based on{" "}
-                {card.evidenceIds
-                  .map(
-                    (id) =>
-                      ({
-                        summary: "session totals",
-                        locations: "location records",
-                        topics: "topic records",
-                        times: "reading times",
-                      })[id] ?? id,
-                  )
-                  .join(", ")}
-                .
-              </Text>
-            </View>
+            <SmallBlock
+              key={card.kind}
+              label={card.kind.toUpperCase()}
+              title={card.title}
+              body={card.body}
+              evidence={`Based on ${card.evidenceIds.map((id) => ({ summary: "session totals", locations: "location records", topics: "topic records", times: "reading times" })[id] ?? id).join(", ")}.`}
+            />
           ))}
+          <DetailFold title="About these insights">
+            <Text style={styles.muted}>
+              Generated {new Date(insight.generatedAt).toLocaleString()} ·{" "}
+              {insight.period ? `${insight.period}-day view` : "All time"}.
+              Refresh after changing records.
+            </Text>
+          </DetailFold>
           <Text style={styles.label}>Was this helpful?</Text>
           <Button
             title="Helpful"

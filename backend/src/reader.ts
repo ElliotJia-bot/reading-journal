@@ -4,6 +4,7 @@ import { database, userRef } from "./store.js";
 import { identifier } from "./schema.js";
 import { visitInput, passageInput } from "./reader-schema.js";
 import { analyzePassage } from "./reader-model.js";
+import { pagePace } from "../../shared/reading-insights.js";
 import {
   summarizePages,
   textFeatures,
@@ -69,7 +70,11 @@ reader.post("/books/:bookId/analyze", async (req, res) => {
     .orderBy("endedAt", "desc")
     .limit(1000)
     .get();
-  const visits = docs.docs.map((d) => d.data()) as PageVisit[];
+  const visits = (docs.docs.map((d) => d.data()) as PageVisit[]).filter(
+    (v) =>
+      (!input.sessionId || v.sessionId === input.sessionId) &&
+      (!input.sessionIds || input.sessionIds.includes(v.sessionId)),
+  );
   const matching = visits.filter(
     (v) =>
       v.page === input.page &&
@@ -79,35 +84,27 @@ reader.post("/books/:bookId/analyze", async (req, res) => {
   if (!matching.length)
     throw fail("Record and sync this page before requesting an analysis.");
   const metrics = textFeatures(input.text);
-  const pages = summarizePages(visits);
   const page = summarizePages(matching)[0];
-  const comparable = pages.filter(
-    (p) => p.page !== input.page && p.activeMs >= 10000 && p.characters > 100,
-  );
-  const rates = comparable
-    .map((p) => p.activeMs / p.characters)
-    .sort((a, b) => a - b);
-  const baseline =
-    rates.length >= 3 ? rates[Math.floor(rates.length / 2)] : null;
+  const pace = pagePace(visits).find((p) => p.page === input.page)!;
   const evidence = {
     sessionId: input.sessionId ?? null,
+    sessionIds: input.sessionIds?.slice().sort() ?? null,
     page: input.page + 1,
     ...metrics,
     foregroundSeconds: Math.round(page.activeMs / 1000),
     visits: page.visits,
     explicitReactions: page.reactions,
-    comparablePages: rates.length,
-    medianMillisecondsPerCharacter: baseline,
+    comparablePages: pace.comparablePages,
+    medianMillisecondsPerCharacter: pace.baseline,
     relativeDwell:
-      baseline && page.activeMs >= 10000
-        ? Math.round((page.activeMs / metrics.characters / baseline) * 100) /
-          100
-        : null,
+      pace.relative === null ? null : Math.round(pace.relative * 100) / 100,
+    comparisonMethod:
+      "Time per character, averaged across reading sessions in the selected view. Includes rereading.",
     caveat:
       "Foreground dwell only. Background and 90-second inactivity excluded. Visits can include rereading; not verified reading speed.",
   };
   const fingerprint = createHash("sha256")
-    .update(JSON.stringify({ hash, evidence, promptVersion: "remarked-1" }))
+    .update(JSON.stringify({ hash, evidence, promptVersion: "remarked-2" }))
     .digest("hex");
   const reportRef = ref.collection("readerReports").doc(fingerprint);
   const cached = await reportRef.get();

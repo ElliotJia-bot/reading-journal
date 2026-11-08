@@ -6,6 +6,7 @@ import { useJournal } from "../../lib/journal";
 import { Page, Button, Chips, Field, styles } from "../../components/ui";
 import SessionChart from "../../components/session-chart";
 import ReadingCoach from "../../components/reading-coach";
+import { StatBlocks, DetailFold } from "../../components/insight-blocks";
 
 export default function Insights() {
   const { books, sessions, profile, error, refresh } = useJournal();
@@ -28,9 +29,6 @@ export default function Insights() {
   );
   return (
     <Page title="Your reading rhythm">
-      <Text style={styles.body}>
-        Understand your habits. Make room for your next chapter.
-      </Text>
       <Chips
         values={["Overview", "Reading coach"]}
         value={section}
@@ -108,47 +106,28 @@ export default function Insights() {
             </View>
           ) : (
             <>
-              <View style={styles.between}>
-                {[
-                  [stats.totalMinutes, "Minutes"],
-                  [stats.readingDays, "Reading days"],
-                  [stats.averageMinutes, "Min / session"],
-                ].map(([value, label]) => (
-                  <View key={label} style={{ alignItems: "center", flex: 1 }}>
-                    <Text style={styles.title}>{value}</Text>
-                    <Text style={styles.muted}>{label}</Text>
-                  </View>
-                ))}
-              </View>
-              <View style={[styles.card, { backgroundColor: "#e7eee2" }]}>
-                <Text style={styles.label}>MAKE YOUR NEXT SESSION YOURS</Text>
-                <Text style={styles.heading}>
-                  {places.length
-                    ? `${places[0][0]} sessions average ${places[0][1].averageMinutes} minutes.`
-                    : "Find a small habit that fits."}
-                </Text>
-                <Text style={styles.muted}>
-                  {places.length
-                    ? `Based on ${places[0][1].count} ${places[0][0].toLowerCase()} ${places[0][1].count === 1 ? "session" : "sessions"} in this period. This is a pattern to explore, not a rule.`
-                    : "Explore suggestions grounded in the time you actually spend reading."}
-                </Text>
-                <Button
-                  title="Explore with your reading coach"
-                  secondary
-                  onPress={() => setSection("Reading coach")}
-                />
-              </View>
+              <StatBlocks
+                items={[
+                  { label: "Minutes", value: stats.totalMinutes },
+                  { label: "Reading days", value: stats.readingDays },
+                  { label: "Min / session", value: stats.averageMinutes },
+                  { label: "Sessions", value: stats.sessionCount },
+                ]}
+              />
+              <Button
+                title="Explore your reading coach"
+                secondary
+                onPress={() => setSection("Reading coach")}
+              />
               <View style={styles.card}>
                 <Text style={styles.heading}>When you read</Text>
-                <Text style={styles.muted}>
-                  {stats.sessionCount} sessions · {profile.timezone}
-                </Text>
-                {Object.entries(stats.times).map(([time, count]) => (
-                  <View key={time} style={styles.between}>
-                    <Text style={styles.body}>{time}</Text>
-                    <Text style={styles.muted}>{count} sessions</Text>
-                  </View>
-                ))}
+                <StatBlocks
+                  items={Object.entries(stats.times).map(([time, count]) => ({
+                    label: time,
+                    value: count,
+                    detail: "sessions",
+                  }))}
+                />
               </View>
               <View style={styles.card}>
                 <Text style={styles.heading}>Places you read</Text>
@@ -175,9 +154,7 @@ export default function Insights() {
               </View>
               <View style={styles.card}>
                 <Text style={styles.heading}>Interests & topics</Text>
-                <Text style={styles.muted}>
-                  Time spent, shared equally across each session’s topics.
-                </Text>
+
                 {Object.entries(stats.topics)
                   .sort((a, b) => b[1] - a[1])
                   .map(([topic, seconds]) => (
@@ -193,19 +170,24 @@ export default function Insights() {
                     Add topic tags to your books to explore this view.
                   </Text>
                 )}
-                <Text style={styles.label}>YOU EXPLICITLY LIKED</Text>
-                {Object.entries(stats.likedTopics).map(([topic, count]) => (
-                  <Text key={topic} style={styles.body}>
-                    {topic} · {count} positive{" "}
-                    {count === 1 ? "reaction" : "reactions"}
-                  </Text>
-                ))}
-                {!Object.keys(stats.likedTopics).length && (
+                <DetailFold title="Topics you liked & calculation">
                   <Text style={styles.muted}>
-                    Mark a session “Liked it” and add book topics to explore
-                    your preferences.
+                    Time is shared equally across a session’s topics.
                   </Text>
-                )}
+                  <Text style={styles.label}>YOU EXPLICITLY LIKED</Text>
+                  {Object.entries(stats.likedTopics).map(([topic, count]) => (
+                    <Text key={topic} style={styles.body}>
+                      {topic} · {count} positive{" "}
+                      {count === 1 ? "reaction" : "reactions"}
+                    </Text>
+                  ))}
+                  {!Object.keys(stats.likedTopics).length && (
+                    <Text style={styles.muted}>
+                      Mark a session “Liked it” and add book topics to explore
+                      your preferences.
+                    </Text>
+                  )}
+                </DetailFold>
                 <Button
                   title="Find books with similar themes"
                   secondary
@@ -213,10 +195,7 @@ export default function Insights() {
                 />
               </View>
               {Object.keys(stats.authors).length > 0 && (
-                <View style={styles.card}>
-                  <Text style={styles.heading}>
-                    Authors you spend time with
-                  </Text>
+                <DetailFold title="Authors you spend time with">
                   {Object.entries(stats.authors)
                     .sort((a, b) => b[1].seconds - a[1].seconds)
                     .map(([author, value]) => (
@@ -229,24 +208,21 @@ export default function Insights() {
                         </Text>
                       </View>
                     ))}
-                </View>
+                </DetailFold>
               )}
             </>
           )}
-          <View style={styles.card}>
-            <Text style={styles.heading}>Your reading journey</Text>
-            <Text style={styles.body}>
-              {books.filter((b) => b.status === "Finished").length} finished ·{" "}
-              {books.filter((b) => b.status === "Reading").length} in progress ·{" "}
-              {books.filter((b) => b.status === "Want to Read").length} on your
-              wishlist · {books.filter((b) => b.status === "Dropped").length}{" "}
-              set aside
-            </Text>
-            <Text style={styles.muted}>
-              Library totals across all time. You decide when a book is
-              finished.
-            </Text>
-          </View>
+          <DetailFold title="Your reading journey">
+            <StatBlocks
+              items={["Finished", "Reading", "Want to Read", "Dropped"].map(
+                (status) => ({
+                  label: status,
+                  value: books.filter((b) => b.status === status).length,
+                }),
+              )}
+            />
+            <Text style={styles.muted}>All-time Library totals.</Text>
+          </DetailFold>
           <Button
             title="Refresh records"
             secondary

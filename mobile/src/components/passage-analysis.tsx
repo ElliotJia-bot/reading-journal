@@ -4,7 +4,9 @@ import { styles } from "./ui";
 export default function PassageAnalysis(_props: {
   bookId: string;
   page: number;
-  sessionId: string;
+  sessionId?: string;
+  sessionIds?: string[];
+  reactions?: string[];
 }) {
   return (
     <Text style={styles.body}>

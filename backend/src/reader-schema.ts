@@ -37,6 +37,7 @@ export const passageInput = z
     text: z.string().min(1).max(1200),
     consent: z.literal(true),
     sessionId: identifier.optional(),
+    sessionIds: z.array(identifier).min(1).max(1000).optional(),
   })
   .strict();
 export const passageResult = z

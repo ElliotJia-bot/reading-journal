@@ -11,6 +11,12 @@ The 1.0 iteration lives on `release/1.0`. The installed app, browser title and s
 3. **Three levels of Insights.** Overview → owned book → reading session. Time/Pages charts show all 7 or 30 calendar days, with empty days and clickable session segments. Book charts also support since-starting. Session detail includes exact recorded time, page progress, reflections, a qualified completion estimate, and available page visits. Tapping a measured ebook section opens the locally stored passage and an optional, explicitly consented Tinker analysis scoped to that session.
 4. **Discovery and community.** For You provides up to five personal catalog matches, five exploration matches, and qualifying shared-reader matches. Language filters select matching catalog editions; owned work IDs and dismissed titles are excluded. Yes adds a wishlist entry; Maybe and Not interested sync through private Firestore feedback. Maybe has a saved list. Nonfiction is a preset circle; readers can create up to three custom circles and join/leave. Optional public profiles power Beginner/Experienced rankings and peer suggestions using actual opt-in data, excluding synthetic demo records.
 
+### Insights presentation update
+
+Session Insights uses tappable vertical time-per-page bars and compact stat tiles. Book Insights places “Where & why you slowed down” immediately after the calendar chart and replaces the session list with book-specific behavioral suggestions. Session history remains accessible through chart bars and dates. Reading coach evidence, full passages and detailed content dimensions expand on demand.
+
+Longer dwell is highlighted at 1.5× or more than the median of at least three other comparable pages (10+ seconds, over 100 characters). The comparison normalizes by character count and averages repeated reading sessions; bar heights retain total foreground time. A highlighted page is not proof of difficulty. Local text clues and explicit reactions are shown first; a consented Tinker request can add possible explanations and a next step. Book-period analysis uses only saved sessions in the selected period. Manual logs and insufficient samples have explicit empty states.
+
 ### Metric and privacy boundaries
 
 - A streak day has **more than 3 minutes** of saved reading. Home weeks start Monday in the profile timezone. Comparison uses the same elapsed weekdays in the preceding week; zero baseline displays no percentage.
@@ -36,7 +42,7 @@ For an isolated 1.0 integration check, build the backend, run it with `COMMUNITY
 - Tinker produces three evidence-linked cards: habit, interest, and suggestion. Reports and feedback persist in Firestore; unchanged evidence reuses a cached report.
 - Real backend tests passed for authentication, save/retry deduplication, cross-user isolation, direct-write denial, statistics, model output, caching, feedback, and progress recalculation. Disposable test users are removed afterward.
 - Community includes interest circles, membership, reading check-ins, questions, book recommendations, encouragement, comments, reporting, blocking/unblocking, and author-only post removal.
-- Browser flow verified with disposable test journals and original test text. Thirty-one automated tests pass. The web bundle exports successfully; this is **not** a signed or device-tested iOS binary. The ebook reader currently runs in the web/Safari version; native builds show a web-reader notice.
+- Browser flow verified with disposable test journals and original test text. Thirty-seven automated tests pass. The web bundle exports successfully; this is **not** a signed or device-tested iOS binary. The ebook reader currently runs in the web/Safari version; native builds show a web-reader notice.
 
 Cloud Run is **deployed and verified** in `us-central1` as of November 7, 2026. The app uses <https://reading-journal-api-au6vfycphq-uc.a.run.app>. The service allows the hosted frontend origins; the latest deployed revision is recorded locally after each deployment. Cloud checks cover reading records, Tinker, cross-user isolation, community membership, feeds, and ebook event deduplication/consent. The frontend is published on Firebase Hosting at <https://project-b00660ba-d6d4-4c9a-a05.web.app>.
 

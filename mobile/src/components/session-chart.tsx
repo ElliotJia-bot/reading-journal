@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import type { ReadingSession } from "../../../shared/domain";
 import { calendarRange, pagesRead, sessionDays } from "../../../shared/metrics";
 import { styles, color, Chips, Button } from "./ui";
+import { DetailFold } from "./insight-blocks";
 export default function SessionChart({
   sessions,
   timezone,
@@ -20,7 +21,7 @@ export default function SessionChart({
   now?: number;
 }) {
   const chartScroll = useRef<React.ComponentRef<typeof ScrollView>>(null);
-  const [selectedDay,setSelectedDay]=useState<string|null>(null);
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [initialNow] = useState(Date.now);
   const now = providedNow ?? initialNow;
   const earliest = sessions.length
@@ -132,30 +133,64 @@ export default function SessionChart({
                     />
                   ))}
               </View>
-              <Pressable accessibilityRole="button" accessibilityLabel={`View sessions on ${key}`} onPress={()=>setSelectedDay(key)} style={{minHeight:44,alignItems:"center",justifyContent:"center",gap:4}}>
-              <Text style={[styles.muted, { fontSize: 10 }]}>
-                {new Date(`${key}T12:00:00Z`).toLocaleDateString("en-US", {
-                  weekday: "short",
-                  timeZone: "UTC",
-                })}
-              </Text>
-              <Text style={[styles.muted, { fontSize: 9 }]}>
-                {Number(key.slice(5, 7))}/{Number(key.slice(8))}
-              </Text>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`View sessions on ${key}`}
+                onPress={() => setSelectedDay(key)}
+                style={{
+                  minHeight: 44,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 4,
+                }}
+              >
+                <Text style={[styles.muted, { fontSize: 10 }]}>
+                  {new Date(`${key}T12:00:00Z`).toLocaleDateString("en-US", {
+                    weekday: "short",
+                    timeZone: "UTC",
+                  })}
+                </Text>
+                <Text style={[styles.muted, { fontSize: 9 }]}>
+                  {Number(key.slice(5, 7))}/{Number(key.slice(8))}
+                </Text>
               </Pressable>
             </View>
           ))}
         </ScrollView>
       </View>
       <Text style={styles.muted}>
-        Each segment is a session. Tap a bar or date for details.
-        {keys.length > 7 ? " Swipe horizontally for earlier days." : ""} Blank
-        days stay empty.
-        {metric === "Pages"
-          ? " Percentage logs are excluded; revisits do not subtract progress. Print pages and ebook sections differ."
-          : ""}
+        Tap a bar or date for sessions
+        {keys.length > 7 ? " · Swipe for earlier days" : ""}
       </Text>
-      {selectedDay&&keys.includes(selectedDay)&&<View style={{gap:10}}><Text style={styles.label}>Sessions on {selectedDay}</Text>{!(daily[selectedDay]?.sessions.length)&&<Text style={styles.muted}>No reading logged on this day.</Text>}{daily[selectedDay]?.sessions.map(s=><Button key={s.id} title={`${new Date(s.startedAt).toLocaleTimeString("en-US",{timeZone:timezone,hour:"numeric",minute:"2-digit"})} · ${Math.floor(s.durationSeconds/60)}m ${s.durationSeconds%60}s`} secondary onPress={()=>router.push({pathname:"/insights/session/[id]",params:{id:s.id}})}/>)}</View>}
+      {metric === "Pages" && (
+        <DetailFold title="About page totals">
+          <Text style={styles.muted}>
+            Forward progress only. Percentage logs are excluded; print pages and
+            ebook sections differ.
+          </Text>
+        </DetailFold>
+      )}
+      {selectedDay && keys.includes(selectedDay) && (
+        <View style={{ gap: 10 }}>
+          <Text style={styles.label}>Sessions on {selectedDay}</Text>
+          {!daily[selectedDay]?.sessions.length && (
+            <Text style={styles.muted}>No reading logged on this day.</Text>
+          )}
+          {daily[selectedDay]?.sessions.map((s) => (
+            <Button
+              key={s.id}
+              title={`${new Date(s.startedAt).toLocaleTimeString("en-US", { timeZone: timezone, hour: "numeric", minute: "2-digit" })} · ${Math.floor(s.durationSeconds / 60)}m ${s.durationSeconds % 60}s`}
+              secondary
+              onPress={() =>
+                router.push({
+                  pathname: "/insights/session/[id]",
+                  params: { id: s.id },
+                })
+              }
+            />
+          ))}
+        </View>
+      )}
     </View>
   );
 }
