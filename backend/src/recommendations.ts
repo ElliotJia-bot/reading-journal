@@ -358,7 +358,7 @@ export async function recommendationDetails(uid: string, id: string) {
     )
     .slice(0, 1);
   const hash = fingerprint({
-    version: 6,
+    version: 8,
     key,
     book: id,
     reason: book.reason,

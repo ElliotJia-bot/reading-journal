@@ -31,8 +31,8 @@ const evidence = [
   },
 ];
 const reason =
-  "Freedom of Money is on your current reading shelf, with Finance and Business among its recorded topics. This recommendation offers a move from those nonfiction interests into a fictional setting, giving you a different way to explore choices and consequences.\n\nYour demo journal includes several explicitly liked sessions. That is a reason to offer an adjacent theme to sample, without assuming that time spent reading proves enjoyment or that the books have identical writing styles.";
-test("Expanded explanations must name a cited currently-reading book and reject invented references", () => {
+  "Freedom of Money is on your current shelf, with Finance among its recorded topics. This recommendation moves those interests into fiction, offering a different way to explore choices and consequences. Your demo journal includes 13 liked sessions, so the connection builds on an explicit reaction while introducing a new genre.";
+test("Concise explanations must name a cited currently-reading book and reject invented references", () => {
   assert.equal(
     validateBookExplanation({ reason, evidenceIds: ["book-0"] }, evidence)
       .reason,
@@ -145,6 +145,16 @@ test("Generated percentages must be backed by a cited computed comparison", () =
   );
 });
 test("Plain-text model responses retain book links and numeric validation", () => {
+  assert.equal(
+    parseBookExplanation(reason.replace(" This", "\n\nThis"), evidence).reason,
+    reason,
+  );
+  assert.throws(() =>
+    validateBookExplanation(
+      { reason: reason + " More detail.".repeat(20), evidenceIds: ["book-0"] },
+      evidence,
+    ),
+  );
   assert.deepEqual(parseBookExplanation(reason, evidence), {
     reason,
     evidenceIds: ["book-0"],

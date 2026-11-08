@@ -79,13 +79,16 @@ export function validateBookExplanation(
 ) {
   const result = z
     .object({
-      reason: z.string().trim().min(300).max(1800),
+      reason: z.string().trim().min(120).max(750),
       evidenceIds: z.array(z.string()).max(4),
     })
     .strict()
     .parse(raw);
   // Reference IDs belong in evidenceIds, never in reader-facing prose.
   result.reason = result.reason.replace(/\s*\((?:book|library)-\d+\)/g, "");
+  result.reason = result.reason.replace(/\s+/g, " ").trim();
+  if (result.reason.split(/\s+/).length > 65)
+    throw new Error("TINKER_EXPLANATION_TOO_LONG");
   if (/\b(?:book|library)-\d+\b/.test(result.reason))
     throw new Error("TINKER_VISIBLE_EVIDENCE_ID");
   const known = new Set(evidence.map((e) => e.id));

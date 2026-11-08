@@ -164,31 +164,12 @@ function BookSheet({
               <View style={[styles.row, { gap: 7 }]}>
                 <Feather name="sun" size={15} color={color.green} />
                 <Text style={[styles.label, { marginBottom: 0 }]}>
-                  We Selected FOR YOU
+                  WE SELECTED FOR YOU
                 </Text>
               </View>
-              {!!details?.relatedBooks?.length && (
-                <Text style={[styles.muted, { color: color.green }]}>
-                  Connected to your reading: {details.relatedBooks.join(" · ")}
-                </Text>
-              )}
-              {details?.dataPoints?.map((point, i) => (
-                <View key={i} style={{ gap: 5, paddingVertical: 8 }}>
-                  <Text style={styles.label}>YOUR READING DATA</Text>
-                  <Text style={styles.body}>{point}</Text>
-                  <Text style={styles.muted}>
-                    Based on logged page progress. Page density differs between
-                    books; this does not measure comprehension.
-                  </Text>
-                </View>
-              ))}
-              {(details?.reason ?? book.reason)
-                .split(/\n\s*\n/)
-                .map((paragraph, i) => (
-                  <Text key={i} style={styles.body}>
-                    {paragraph}
-                  </Text>
-                ))}
+              <Text style={styles.body}>
+                {(details?.reason ?? book.reason).replace(/\s+/g, " ").trim()}
+              </Text>
               {!details && !detailError && (
                 <View style={[styles.row, { gap: 8 }]}>
                   <ActivityIndicator size="small" color={color.green} />
@@ -238,11 +219,22 @@ function BookSheet({
               )}
             </View>
             <DetailFold title="Recommendation details">
-              {details?.support?.map((text, i) => (
+              {[
+                ...new Set([
+                  ...(details?.dataPoints ?? []),
+                  ...(details?.support ?? []),
+                ]),
+              ].map((text, i) => (
                 <Text key={i} style={styles.body}>
                   {text}
                 </Text>
               ))}
+              {!!details?.dataPoints?.length && (
+                <Text style={styles.muted}>
+                  Based on logged page progress. Page density differs between
+                  books; this does not measure comprehension.
+                </Text>
+              )}
               <Text style={styles.muted}>
                 {book.source === "community"
                   ? book.reason
