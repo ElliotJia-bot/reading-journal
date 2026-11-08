@@ -7,6 +7,7 @@ export default function PassageAnalysis(_props: {
   sessionId?: string;
   sessionIds?: string[];
   reactions?: string[];
+  compact?: boolean;
 }) {
   return (
     <Text style={styles.body}>

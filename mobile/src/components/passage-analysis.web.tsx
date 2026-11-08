@@ -14,12 +14,14 @@ export default function PassageAnalysis({
   sessionId,
   sessionIds,
   reactions = [],
+  compact = false,
 }: {
   bookId: string;
   page: number;
   sessionId?: string;
   sessionIds?: string[];
   reactions?: string[];
+  compact?: boolean;
 }) {
   const { user } = useJournal();
   const [text, setText] = useState<string | null>(null),
@@ -65,6 +67,79 @@ export default function PassageAnalysis({
     }
   }
   const clue = passageClue(text ?? "", reactions);
+  if (compact)
+    return (
+      <View style={{ gap: 10 }}>
+        {loading ? (
+          <Text style={styles.muted}>Opening passage clues…</Text>
+        ) : (
+          <>
+            <Text style={styles.body}>
+              {report
+                ? report.result.possibleReasons[0] || "No clear cause yet."
+                : clue.body}
+            </Text>
+            <Text style={styles.muted}>
+              Try next: {report?.result.nextStep || clue.next}
+            </Text>
+            <DetailFold title={`Explore page ${page + 1}`}>
+              <Text style={styles.label}>
+                {report ? "POSSIBLE WHY · AI" : clue.title.toUpperCase()}
+              </Text>
+              <Text style={styles.muted}>
+                {report?.result.uncertainty || clue.evidence}
+              </Text>
+              {report?.result.observations.slice(0, 2).map((o, i) => (
+                <Text key={i} style={styles.body}>
+                  {o.explanation}
+                </Text>
+              ))}
+              {text ? (
+                <>
+                  <Text style={styles.quote}>{text}</Text>
+                  {!report && (
+                    <>
+                      <Text style={styles.muted}>
+                        Allow Thinking Machines to analyze this passage and its
+                        reading measurements for possible explanations.
+                      </Text>
+                      <Chips
+                        values={["Allow passage analysis"]}
+                        value={consent ? "Allow passage analysis" : ""}
+                        onChange={() => setConsent(!consent)}
+                      />
+                      <Button
+                        title="Analyze this passage"
+                        busy={busy}
+                        disabled={!consent}
+                        onPress={() => void analyze()}
+                      />
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Text style={styles.muted}>
+                    Import the same ebook on this device to explore its content.
+                  </Text>
+                  <Button
+                    title="Open reader"
+                    secondary
+                    onPress={() =>
+                      router.push({
+                        pathname: "/reader/[id]",
+                        params: { id: bookId },
+                      })
+                    }
+                  />
+                </>
+              )}
+            </DetailFold>
+          </>
+        )}
+        {!!error && <Text style={styles.error}>{error}</Text>}
+      </View>
+    );
   return (
     <View style={{ gap: 12 }}>
       {loading ? (
