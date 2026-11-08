@@ -4,6 +4,8 @@ import { calendarRange } from "./metrics.ts";
 export type ReaderTier = "Beginner" | "Experienced";
 export interface LeaderboardParticipation {
   active: boolean;
+  shareLibrary?: boolean;
+  shareHabits?: boolean;
   displayName: string;
   tier: ReaderTier;
 }

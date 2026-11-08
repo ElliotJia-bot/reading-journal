@@ -103,13 +103,26 @@ export const participationInput = z
     active: z.boolean(),
     displayName: z.string().trim().min(1).max(40),
     tier: z.enum(["Beginner", "Experienced"]),
+    shareLibrary: z.boolean().optional(),
+    shareHabits: z.boolean().optional(),
   })
   .strict();
 discovery.put("/participation", async (req, res) => {
   const input = participationInput.parse(req.body),
     uid = res.locals.uid as string;
   await database.runTransaction(async (tx) => {
-    tx.set(participation(uid), { ...input, updatedAt: Date.now() });
+    const previous = (await tx.get(participation(uid))).data();
+    tx.set(participation(uid), {
+      ...input,
+      shareLibrary: input.shareLibrary ?? previous?.shareLibrary ?? false,
+      shareHabits: input.shareHabits ?? previous?.shareHabits ?? false,
+      updatedAt: Date.now(),
+    });
+    tx.set(
+      userRef(uid).collection("private").doc(`${namespace}_profile`),
+      { displayName: input.displayName },
+      { merge: true },
+    );
     if (!input.active) {
       tx.delete(publicReaders.doc(uid));
       tx.delete(rankedReaders.doc(uid));

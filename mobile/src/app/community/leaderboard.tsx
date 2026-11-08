@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { Switch, Text, View } from "react-native";
 import { useCommunityResource } from "../../lib/community";
 import { api } from "../../lib/api";
 import {
@@ -15,6 +15,8 @@ import LeaderboardPanel from "../../components/leaderboard";
 import type { LeaderboardData } from "../../../../shared/leaderboard";
 interface Participation {
   active: boolean;
+  shareLibrary?: boolean;
+  shareHabits?: boolean;
   displayName: string;
   tier: "Beginner" | "Experienced";
 }
@@ -49,7 +51,7 @@ export default function Leaderboard() {
     }
   }
   return (
-    <Page title="Leaderboard profile" back>
+    <Page title="Profile & sharing" back>
       <Text style={styles.body}>
         Choose your name and reader group to celebrate progress together.
       </Text>
@@ -61,10 +63,9 @@ export default function Leaderboard() {
       <View style={styles.card}>
         <Text style={styles.heading}>Your public reading profile</Text>
         <Text style={styles.muted}>
-          Off by default. Enabling shares your chosen name, reader group,
-          reading totals, and the catalog books and topics you explicitly liked.
-          It helps other readers discover books too. Email, location and private
-          notes stay private.
+          Enabling shares your name, reader group, reading totals and books you
+          explicitly liked. Choose whether to also share your library and
+          habits. Email, exact locations and private notes stay private.
         </Text>
         <Field
           label="Public display name"
@@ -82,6 +83,36 @@ export default function Leaderboard() {
             setDraft({ ...preference, tier: value as Participation["tier"] })
           }
         />
+        <View style={styles.between}>
+          <View style={{ flex: 1, gap: 4 }}>
+            <Text style={styles.body}>Share my library</Text>
+            <Text style={styles.muted}>
+              Book covers, titles, reading status and progress.
+            </Text>
+          </View>
+          <Switch
+            accessibilityLabel="Share my library"
+            value={!!preference.shareLibrary}
+            onValueChange={(shareLibrary) =>
+              setDraft({ ...preference, shareLibrary })
+            }
+          />
+        </View>
+        <View style={styles.between}>
+          <View style={{ flex: 1, gap: 4 }}>
+            <Text style={styles.body}>Share my reading habits</Text>
+            <Text style={styles.muted}>
+              Recent reading rhythm, time of day and favorite topics.
+            </Text>
+          </View>
+          <Switch
+            accessibilityLabel="Share my reading habits"
+            value={!!preference.shareHabits}
+            onValueChange={(shareHabits) =>
+              setDraft({ ...preference, shareHabits })
+            }
+          />
+        </View>
         <Button
           title={
             resource.data?.participation.active
@@ -103,7 +134,8 @@ export default function Leaderboard() {
         <Text style={styles.muted}>
           {resource.data?.participation.active
             ? "Sharing is on. Your summary updates when you save reading records."
-            : "Your reading profile is private."}
+            : "Your library and habits are private."}{" "}
+          Posts you already published remain visible in the community.
         </Text>
       </View>
       {!!error && <Text style={styles.error}>{error}</Text>}

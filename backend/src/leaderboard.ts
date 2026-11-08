@@ -72,6 +72,8 @@ export async function communityLeaderboard(
   const p = permission.data();
   const participation: LeaderboardParticipation = {
     active: !!p?.active,
+    shareLibrary: !!p?.shareLibrary,
+    shareHabits: !!p?.shareHabits,
     displayName: p?.displayName ?? "",
     tier: p?.tier === "Experienced" ? "Experienced" : "Beginner",
   };

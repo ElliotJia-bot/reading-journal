@@ -130,8 +130,16 @@ export default function LeaderboardPanel({
           }}
         >
           {rows.map((reader, i) => (
-            <View
+            <Pressable
               key={reader.id}
+              accessibilityRole="button"
+              accessibilityLabel={`View ${reader.displayName}'s profile`}
+              onPress={() =>
+                router.push({
+                  pathname: "/community/reader/[id]",
+                  params: { id: reader.id },
+                })
+              }
               style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -174,7 +182,8 @@ export default function LeaderboardPanel({
                     : category.unit}
                 </Text>
               </View>
-            </View>
+              <Feather name="chevron-right" size={16} color={color.muted} />
+            </Pressable>
           ))}
         </View>
       )}

@@ -1,8 +1,8 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { Page, Button, Chips, styles, message } from "../../components/ui";
-import { CircleCard, LoadState } from "../../components/community";
+import { Avatar, CircleCard, LoadState } from "../../components/community";
 import { useCommunityResource } from "../../lib/community";
 import { useJournal } from "../../lib/journal";
 import { api } from "../../lib/api";
@@ -15,7 +15,7 @@ export default function Community() {
   const leaderboard = useCommunityResource<LeaderboardData>(
     "/v1/discovery/leaderboard",
   );
-  const { profile } = useJournal();
+  const { profile, user } = useJournal();
   const [filter, setFilter] = useState("All Topics");
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
@@ -41,7 +41,31 @@ export default function Community() {
   return (
     <Page>
       <View style={{ gap: 8 }}>
-        <Text style={styles.title}>Community</Text>
+        <View style={styles.between}>
+          <Text style={styles.title}>Community</Text>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Open my profile"
+            disabled={!user}
+            onPress={() =>
+              user &&
+              router.push({
+                pathname: "/community/reader/[id]",
+                params: { id: user.uid },
+              })
+            }
+            style={{ padding: 4 }}
+          >
+            <Avatar
+              name={
+                leaderboard.data?.participation.displayName ||
+                resource.data?.displayName ||
+                user?.displayName ||
+                "You"
+              }
+            />
+          </Pressable>
+        </View>
         <Text style={styles.body}>Every reader has a place to shine.</Text>
       </View>
       <LeaderboardPanel

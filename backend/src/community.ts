@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { postDTO } from "./community-view.js";
+import { readerProfile } from "./reader-profiles.js";
 import type {
   DocumentData,
   DocumentSnapshot,
@@ -85,30 +87,6 @@ async function quota(tx: Transaction, uid: string, kind: "posts" | "comments") {
     );
   value[kind] = (value[kind] ?? 0) + 1;
   return { ref, value };
-}
-function postDTO(
-  id: string,
-  data: DocumentData,
-  uid: string,
-  encouraged: boolean,
-): CommunityPost {
-  return {
-    id,
-    circleId: data.circleId,
-    authorId: data.authorId,
-    authorName: data.authorName,
-    kind: data.kind,
-    title: data.title,
-    body: data.body,
-    book: data.book,
-    reading: data.reading,
-    excerpt: data.excerpt ?? null,
-    createdAt: data.createdAt,
-    encouragementCount: data.encouragementCount,
-    commentCount: data.commentCount,
-    encouraged,
-    isOwn: data.authorId === uid,
-  };
 }
 async function viewPost(circle: string, id: string, uid: string) {
   const ref = postRef(circle, id);
@@ -470,4 +448,14 @@ community.put("/circles/:circle/posts/:id/report", async (req, res) => {
       status: "pending",
     });
   res.json({ ok: true });
+});
+
+community.get("/readers/:id", async (req, res) => {
+  res.json(
+    await readerProfile(
+      res.locals.uid,
+      identifier.parse(req.params.id),
+      namespace,
+    ),
+  );
 });
