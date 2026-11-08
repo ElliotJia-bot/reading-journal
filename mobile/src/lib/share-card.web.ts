@@ -25,7 +25,7 @@ function loadWordmark() {
       resolve(image);
     };
     image.onerror = fallback;
-    image.src = "/brand/remarked-wordmark-transparent.png";
+    image.src = "/brand/remarked-wordmark-light.png";
   }));
 }
 export async function createShareCards(

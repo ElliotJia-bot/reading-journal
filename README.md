@@ -298,15 +298,15 @@ Ebook quicker stretches require three adjacent comparable pages, each at least 1
 
 Validation: 81 automated tests pass; mobile typecheck, lint and web export pass. Browser checks at 390×844 and 1280×900 cover both highlight directions, two compact cards, expand/collapse, manual logs, empty history, local EPUB reimport, and the passage-analysis entry point. No new model call is needed for the graph. Temporary test records are removed after verification.
 
-### Remarked brand assets — V1.4
+### Remarked brand assets — V1.5
 
-The complete **Remarked.** wordmark appears only in the Home greeting row, immediately before the time-of-day greeting. Its width adapts to narrow phones and desktop layouts; it does not occupy a separate header row. Shared page headers, login, loading, detail screens and the other tabs have no brand image. Navigation arrows, page titles and profile controls remain available. Exported reflection cards retain their own brand signature.
+The complete **Remarked.** wordmark appears only in the Home greeting row, immediately before the time-of-day greeting. Its width adapts to narrow phones and desktop layouts without adding a separate header row. Other app pages retain navigation and profile avatars, with no brand image in their headers.
 
-The supplied JPEG originals remain untouched in `mobile/assets/brand/`. User-approved local processing creates `remarked-wordmark-transparent.png` and `remarked-mark-transparent.png`, preserving the original outlines and clearing letter counters as well as the surrounding charcoal background. `scripts/prepare_brand_assets.py` reproduces the cutouts with Pillow and NumPy; `wordmark-layout.json` describes their bounds. The discarded image-generation attempts are not used. A small alpha-based drop shadow makes the white wordmark readable on the paper-colored Home background.
+The supplied JPEG originals remain untouched in `mobile/assets/brand/`. `scripts/prepare_brand_assets.py` reproduces the transparent cutouts with Pillow and NumPy and changes the white lettering to black, preserving the green bookmark, dot, original outlines and alpha coverage. `wordmark-layout.json` describes their bounds. Black lettering is readable directly on the paper background, so the previous shadow is removed.
 
-The **R.** mark continues to identify the installed app. Native/PWA/Apple icons now use a paper-colored canvas and subtle silhouette shadow; Android's foreground retains alpha, and maskable variants include safe padding. Versioned `remarked-v14-*` URLs refresh browser icon resources. Reflection-card export loads the transparent wordmark from the same origin and falls back to the brand name if the image cannot load.
+The **R.** mark uses the same black-and-green palette for native, PWA and Apple icons. Icons retain their paper canvas and maskable padding; Android's foreground retains alpha. Versioned `remarked-v15-*` URLs refresh browser icon resources. The dark reflection-card export uses a separate original light-ink wordmark for contrast, with a text fallback if loading fails.
 
-Validation covers typecheck, lint, web export, share-card layout, Home layouts at 320/375/390/768/1280 pixels, eight other pages without a visible brand image, PNG alpha, icon backgrounds and PNG card export. Native builds and a physical iPhone installation are not part of these browser checks.
+Validation covers typecheck, lint, web export, Home layouts at 320/375/390/768/1280 pixels, eight other pages without a visible brand image, PNG alpha, icon backgrounds and PNG card export. Native builds and a physical iPhone installation are not part of these browser checks.
 
 ## Automatic cloud ebooks (1.2)
 

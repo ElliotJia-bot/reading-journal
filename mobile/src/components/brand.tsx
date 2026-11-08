@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Platform, View } from "react-native";
+import { Image, View } from "react-native";
 import layout from "../../assets/brand/wordmark-layout.json";
 
 export function BrandWordmark({ width = 156 }: { width?: number }) {
@@ -12,16 +12,6 @@ export function BrandWordmark({ width = 156 }: { width?: number }) {
         width,
         height,
         flexShrink: 0,
-        ...Platform.select({
-          web: { filter: "drop-shadow(0 1px 1px rgba(20, 66, 45, 0.6))" },
-          android: { filter: "drop-shadow(0 1px 1px rgba(20, 66, 45, 0.6))" },
-          default: {
-            shadowColor: "#14422d",
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.6,
-            shadowRadius: 1,
-          },
-        }),
       }}
     >
       <View style={{ width, height, overflow: "hidden" }}>

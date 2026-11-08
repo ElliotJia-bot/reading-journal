@@ -1,8 +1,8 @@
-"""User-approved local cutout of the original artwork. Requires Pillow and NumPy."""
+"""User-approved cutout and black-ink recolor. Requires Pillow and NumPy."""
 from pathlib import Path
 from PIL import Image, ImageFilter
 import numpy as np, json, shutil
-ROOT=Path(__file__).resolve().parents[1]; brand=ROOT/'mobile/assets/brand'; preview=ROOT/'.local/brand14'; preview.mkdir(parents=True,exist_ok=True)
+ROOT=Path(__file__).resolve().parents[1]; brand=ROOT/'mobile/assets/brand'; preview=ROOT/'.local/brand15'; preview.mkdir(parents=True,exist_ok=True)
 
 def extract(name):
     original=Image.open(brand/f'remarked-{name}.jpg').convert('RGB')
@@ -23,6 +23,15 @@ def extract(name):
     box=cutout.getchannel('A').getbbox()
     box=(max(0,box[0]-8),max(0,box[1]-8),min(cutout.width,box[2]+8),min(cutout.height,box[3]+8))
     cutout=cutout.crop(box)
+    # Dark reflection cards retain the original light-ink contrast variant.
+    if name=='wordmark':
+        cutout.save(ROOT/'mobile/public/brand/remarked-wordmark-light.png',optimize=True)
+    pixels=np.array(cutout)
+    colors=pixels[:,:,:3].astype(int)
+    green=(colors[:,:,1]-colors[:,:,0]>20)&(colors[:,:,1]-colors[:,:,2]>12)
+    # Preserve the supplied green gradient and all alpha/antialias coverage.
+    pixels[~green,:3]=0
+    cutout=Image.fromarray(pixels,'RGBA')
     cutout.save(brand/f'remarked-{name}-transparent.png',optimize=True)
     for bgname,color in [('paper','#fdf9f3'),('dark','#1c1e1d')]:
         base=Image.new('RGBA',cutout.size,color);base.alpha_composite(cutout)
@@ -39,18 +48,16 @@ def icon(size,padding=.19,opaque=True):
     result=Image.new('RGBA',(size,size),'#fdf9f3' if opaque else (0,0,0,0))
     fitted=mark.copy();fitted.thumbnail((round(size*(1-2*padding)),round(size*(1-2*padding))),Image.Resampling.LANCZOS)
     pos=((size-fitted.width)//2,(size-fitted.height)//2)
-    silhouette=Image.new('L',(size,size));silhouette.paste(fitted.getchannel('A'),(pos[0],pos[1]+max(1,round(size*.002))))
-    shadow=Image.new('RGBA',(size,size),(20,66,45,0));shadow.putalpha(silhouette.filter(ImageFilter.GaussianBlur(max(.5,size*.002))).point(lambda p:round(p*.5)))
-    result.alpha_composite(shadow);result.alpha_composite(fitted,pos)
+    result.alpha_composite(fitted,pos)
     return result.convert('RGB') if opaque else result
 assets=ROOT/'mobile/assets'; public=ROOT/'mobile/public/icons'
 icon(1024).save(assets/'icon.png'); icon(1024,.25,False).save(assets/'android-icon-foreground.png');icon(1024).save(assets/'splash-icon.png');icon(48,.1).save(assets/'favicon.png')
-for size,name,pad in [(192,'remarked-v14-192.png',.19),(512,'remarked-v14-512.png',.19),(512,'remarked-v14-maskable-512.png',.25),(180,'remarked-v14-apple-touch.png',.19),(48,'remarked-v14-favicon.png',.1)]:
+for size,name,pad in [(192,'remarked-v15-192.png',.19),(512,'remarked-v15-512.png',.19),(512,'remarked-v15-maskable-512.png',.25),(180,'remarked-v15-apple-touch.png',.19),(48,'remarked-v15-favicon.png',.1)]:
     icon(size,pad).save(public/name)
 icon(512).save(preview/'app-icon.png')
 
-# Keep prior icon paths working for existing shortcuts while new manifests use v14 URLs.
-for current in public.glob('remarked-v14-*.png'):
-    shutil.copy2(current,public/current.name.replace('remarked-v14-','remarked-'))
-for target,source in [('icon-512.png','remarked-v14-512.png'),('icon-192.png','remarked-v14-192.png'),('apple-touch-icon.png','remarked-v14-apple-touch.png')]:
+# Keep unversioned icon paths working while new manifests use v15 URLs.
+for current in public.glob('remarked-v15-*.png'):
+    shutil.copy2(current,public/current.name.replace('remarked-v15-','remarked-'))
+for target,source in [('icon-512.png','remarked-v15-512.png'),('icon-192.png','remarked-v15-192.png'),('apple-touch-icon.png','remarked-v15-apple-touch.png')]:
     shutil.copy2(public/source,public/target)
