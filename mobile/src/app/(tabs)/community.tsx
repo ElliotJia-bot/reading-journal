@@ -2,14 +2,19 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { Page, Button, Chips, styles, message } from "../../components/ui";
-import { Badge, CircleCard, LoadState } from "../../components/community";
+import { CircleCard, LoadState } from "../../components/community";
 import { useCommunityResource } from "../../lib/community";
 import { useJournal } from "../../lib/journal";
 import { api } from "../../lib/api";
+import LeaderboardPanel from "../../components/leaderboard";
+import type { LeaderboardData } from "../../../../shared/leaderboard";
 import type { Circle, CommunityHome } from "../../../../shared/community";
 
 export default function Community() {
   const resource = useCommunityResource<CommunityHome>("/v1/community");
+  const leaderboard = useCommunityResource<LeaderboardData>(
+    "/v1/discovery/leaderboard",
+  );
   const { profile } = useJournal();
   const [filter, setFilter] = useState("All Topics");
   const [busy, setBusy] = useState("");
@@ -35,18 +40,26 @@ export default function Community() {
   }
   return (
     <Page>
-      <Badge
-        text={
-          resource.data?.testMode
-            ? "Test community · isolated conversations"
-            : "Community · supportive & ad-free"
-        }
+      <View style={{ gap: 8 }}>
+        <Text style={styles.title}>Community</Text>
+        <Text style={styles.body}>Every reader has a place to shine.</Text>
+      </View>
+      <LeaderboardPanel
+        data={leaderboard.data}
+        loading={leaderboard.loading}
+        error={leaderboard.error}
+        refresh={() => void leaderboard.refresh()}
       />
-      <View style={{ gap: 10 }}>
-        <Text style={styles.title}>Find your reading people.</Text>
-        <Text style={styles.body}>
-          Small reading moments feel better together.
-        </Text>
+      <View
+        style={{
+          borderTopWidth: 1,
+          borderTopColor: "#e3ddd4",
+          paddingTop: 24,
+          gap: 8,
+        }}
+      >
+        <Text style={styles.heading}>Find your reading people</Text>
+        <Text style={styles.muted}>Share a thought. Start a conversation.</Text>
       </View>
       <LoadState
         loading={resource.loading}
@@ -54,11 +67,6 @@ export default function Community() {
         retry={() => void resource.refresh()}
       />
       {!!error && <Text style={styles.error}>{error}</Text>}
-      <Button
-        title="Community reading milestones"
-        secondary
-        onPress={() => router.push("/community/leaderboard")}
-      />
       <Button
         title="Create a circle"
         secondary

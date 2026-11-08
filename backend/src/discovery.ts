@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { communityLeaderboard } from "./leaderboard.js";
 import { z } from "zod";
 import { database, userRef } from "./store.js";
 import { readingSummary, type PublicReader } from "../../shared/discovery.js";
@@ -7,6 +8,7 @@ export const namespace = process.env.COMMUNITY_NAMESPACE || "community";
 if (namespace !== "community" && !/^community_test_[a-z0-9_]+$/.test(namespace))
   throw new Error("Invalid community namespace");
 const publicReaders = database.collection(`${namespace}_readers`);
+const rankedReaders = database.collection(`${namespace}_leaderboard`);
 const participation = (uid: string) =>
   userRef(uid).collection("private").doc(`${namespace}_participation`);
 export async function refreshPublicReader(uid: string) {
@@ -14,6 +16,7 @@ export async function refreshPublicReader(uid: string) {
     const permission = (await tx.get(participation(uid))).data();
     if (!permission?.active) {
       tx.delete(publicReaders.doc(uid));
+      tx.delete(rankedReaders.doc(uid));
       return;
     }
     const [books, sessions, profile] = await Promise.all([
@@ -22,6 +25,13 @@ export async function refreshPublicReader(uid: string) {
       tx.get(userRef(uid)),
     ]);
     const now = Date.now();
+    tx.set(rankedReaders.doc(uid), { id: uid, updatedAt: now });
+    // Fictional personas can participate in the requested demo leaderboard,
+    // without becoming purported real peers in book recommendations.
+    if (profile.data()?.demoData?.communityPersona) {
+      tx.delete(publicReaders.doc(uid));
+      return;
+    }
     tx.set(publicReaders.doc(uid), {
       id: uid,
       displayName: permission.displayName,
@@ -100,7 +110,10 @@ discovery.put("/participation", async (req, res) => {
     uid = res.locals.uid as string;
   await database.runTransaction(async (tx) => {
     tx.set(participation(uid), { ...input, updatedAt: Date.now() });
-    if (!input.active) tx.delete(publicReaders.doc(uid));
+    if (!input.active) {
+      tx.delete(publicReaders.doc(uid));
+      tx.delete(rankedReaders.doc(uid));
+    }
   });
   if (input.active) await refreshPublicReader(uid);
   res.json({ ok: true });
@@ -142,4 +155,8 @@ export async function eligibleReaders(uid: string) {
 }
 discovery.get("/readers", async (_req, res) => {
   res.json(await eligibleReaders(res.locals.uid));
+});
+
+discovery.get("/leaderboard", async (_req, res) => {
+  res.json(await communityLeaderboard(res.locals.uid, namespace));
 });
