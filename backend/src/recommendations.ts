@@ -5,6 +5,8 @@ import { database, userRef } from "./store.js";
 import { eligibleReaders } from "./discovery.js";
 import { catalogSearch, catalogSynopsis, quoteCatalog } from "./catalog.js";
 import { generateBookReason } from "./tinker.js";
+import { rankWithAI } from "./recommendation-ranking.js";
+import { recommendationEvidence } from "../../shared/recommendation-evidence.js";
 import { peerMatches } from "../../shared/discovery.js";
 import { sameBook, usefulSubjects } from "../../shared/book-recommendations.js";
 import {
@@ -14,6 +16,7 @@ import {
   rankCrossGenre,
   splitShelves,
   visibleFeed,
+  isAvailable,
   restoreSavedRecommendation,
   type DiscoveryFeed,
   type FeedbackBook,
@@ -64,11 +67,16 @@ recommendations.put("/preferences", async (req, res) => {
   await preference(res.locals.uid).set(input);
   res.json(input);
 });
-recommendations.get("/", async (_req, res) => {
-  const uid = res.locals.uid as string;
+export async function recommendationFeed(uid: string) {
   const data = await records(uid),
     community = await eligibleReaders(uid);
   const language = data.profile.language ?? "eng";
+  const behavior = recommendationEvidence(
+    data.books,
+    data.sessions,
+    data.profile,
+    data.feedback,
+  );
   const experience =
     data.experience ??
     (community.participation.displayName ? community.participation.tier : null);
@@ -84,7 +92,9 @@ recommendations.get("/", async (_req, res) => {
     )
     .slice(0, 3);
   const key = fingerprint({
-    version: 2,
+    version: 4,
+    evidence: behavior.evidence,
+    owned: data.books.map((b) => [b.id, b.title, b.author, b.status]).sort(),
     language,
     topics: data.profile.topics,
     seeds: seeds.map((b) => [b.id, b.title, b.author, b.topics]),
@@ -140,7 +150,45 @@ recommendations.get("/", async (_req, res) => {
       [],
       language,
     );
-    const split = splitShelves(ranked);
+    const candidates = ranked
+      .filter((b) => isAvailable(b, data.books, data.feedback, language))
+      .slice(0, 36);
+    const split: { personal: ShelfBook[]; explore: ShelfBook[] } =
+      splitShelves(candidates);
+    let selectionMode: "ai" | "catalog" = "catalog",
+      model = "";
+    if (behavior.sessionCount > 0 && candidates.length >= 2) {
+      try {
+        const pool: ShelfBook[] = candidates.map((b) => ({
+          ...b,
+          shelf: "personal",
+          source: "catalog",
+        }));
+        const result = await rankWithAI(uid, pool, behavior.evidence);
+        const chosen = new Set(
+          [...result.ranking.personal, ...result.ranking.explore].map(
+            (b) => b.id,
+          ),
+        );
+        for (const kind of ["personal", "explore"] as const) {
+          const selected = result.ranking[kind].map((choice) => ({
+            ...pool.find((b) => b.id === choice.id)!,
+            shelf: kind,
+            reason: choice.reason,
+            aiSelected: true,
+            evidenceIds: choice.evidenceIds,
+          }));
+          split[kind] = [
+            ...selected,
+            ...split[kind].filter((b) => !chosen.has(b.id)),
+          ];
+        }
+        selectionMode = "ai";
+        model = result.model;
+      } catch {
+        console.warn("recommendation_ranking_fallback");
+      }
+    }
     const peers = experience
       ? peerMatches(community.readers, uid, tags, language, [], [], {
           tier: experience,
@@ -174,11 +222,29 @@ recommendations.get("/", async (_req, res) => {
       generatedAt: Date.now(),
       usualGenres: usual,
       styleSignals: signals,
+      selectionMode,
+      model,
+      behavior: {
+        sessionCount: behavior.sessionCount,
+        syntheticSessionCount: behavior.syntheticSessionCount,
+      },
+      evidence: behavior.evidence,
     };
-    await feedRef(uid).set({ key, feed, expiresAt: Date.now() + 6 * 3600000 });
+    await feedRef(uid).set({
+      key,
+      feed,
+      expiresAt:
+        Date.now() +
+        (selectionMode === "ai" || !behavior.sessionCount
+          ? 6 * 3600000
+          : 5 * 60000),
+    });
     return feed;
   });
-  res.json(visibleFeed(base, data.books, data.feedback));
+  return visibleFeed(base, data.books, data.feedback);
+}
+recommendations.get("/", async (_req, res) => {
+  res.json(await recommendationFeed(res.locals.uid));
 });
 const workId = z.string().regex(/^OL\d+W$/);
 async function offered(uid: string, id: string) {
@@ -273,6 +339,34 @@ recommendations.get("/:id/details", async (req, res) => {
     if (cached && cached.expiresAt > Date.now())
       return cached.result as RecommendationDetail;
     const synopsis = await catalogSynopsis(id).catch(() => "");
+    if (book.aiSelected) {
+      const support = (book.evidenceIds ?? []).flatMap((id) => {
+        const item = feed?.evidence?.find((e) => e.id === id);
+        if (!item) return [];
+        const e = JSON.parse(item.text);
+        if (id === "summary")
+          return [
+            `${e.sessions} reading sessions · ${e.totalMinutes} minutes · Last 30 days${e.syntheticSessions ? ` · ${e.syntheticSessions} simulated sessions` : ""}`,
+          ];
+        if (id.startsWith("book-"))
+          return [
+            `${e.title}: ${e.sessions} sessions · ${e.minutes} minutes · ${e.likedSessions} explicitly liked${e.syntheticSessions ? " · Includes demo records" : ""}`,
+          ];
+        if (id === "rhythm")
+          return [
+            "Based on your recorded reading times, broad location categories and topic patterns.",
+          ];
+        return ["Based on your saved Like / Maybe / Not for me choices."];
+      });
+      const result: RecommendationDetail = {
+        synopsis,
+        reason: book.reason,
+        reasonSource: "ai",
+        support,
+      };
+      await ref.set({ result, expiresAt: Date.now() + 7 * 86400000 });
+      return result;
+    }
     let reason = book.reason,
       reasonSource: "ai" | "catalog" = "catalog";
     try {

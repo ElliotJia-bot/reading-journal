@@ -19,20 +19,17 @@ Language is verified against a catalog edition. Style matching uses genre and su
 
 Run `KEEP_QA=1 python3 scripts/verify_recommendations.py` against a local backend with an isolated `COMMUNITY_NAMESPACE` for the real catalog/AI/feedback integration check. After browser QA, use `CLEAN_QA=1 python3 scripts/verify_recommendations.py` to remove the disposable account.
 
-#### Deferred: behavior-driven For You recommendations
+#### Behavior-driven AI ranking
 
-Recorded at the user's request on November 7, 2026. **Status: deferred for a later iteration.**
+For You now computes a 30-calendar-day behavior summary using the same aggregation functions as Insights: valid sessions longer than 3 minutes, per-book time and explicit reactions, topic patterns, broad location/time-of-day patterns, stop reasons and recorded book status. Manual print-page ranges are distinguished from ebook sections; neither establishes comprehension or per-page dwell. Notes, email, exact timestamps, user IDs and precise location strings are excluded from the model input.
 
-Current implementation: candidate selection and ranking are rule-based. Up to three Reading/Finished books provide seed tags, prioritizing books with explicitly liked sessions and then recent book updates. Profile interests, selected language, catalog genre/style clues and saved feedback guide the shelves. Reading duration, per-page pace, completion rate, abandonment reasons, time of day and location do **not** currently influence For You ranking. Like/Maybe/Not for me controls library addition, retention and exclusion; it does not yet learn preference weights.
+After real catalog retrieval and ownership/language/dismissal filtering, Tinker selects and orders up to six unique books for each of the personal and exploration shelves from at most 36 candidates. Every selection must cite known behavior evidence IDs; unknown book IDs, duplicate selections, wrong counts and invented evidence references are rejected. Peer/popularity ranking retains its factual source and is not fabricated by the model. Reasons and readable supporting evidence are available in book details. The page identifies AI-ranked versus fallback catalog results. New records and feedback invalidate the recommendation fingerprint. Per-user/global generation quotas, a generation lease and cached results bound calls.
 
-Thinking Machines Tinker is called for real when a user opens book details, unless a saved explanation is reused. It receives catalog metadata, synopsis and preference summaries to explain an already selected book. AI does not currently choose or rank the books. The UI phrase **“WHY AI PICKED THIS” overstates that role**; a more accurate label would be “AI recommendation explanation.” This wording change is also deferred.
+Like/Maybe/Not for me now also enters the AI's context for subsequent selection; no model fine-tuning or persistent learned preference weights is claimed. A fallback pick receiving an AI-written explanation is labeled as an explanation, not an AI selection.
 
-Later work:
+The user-requested demonstration batch added 52 explicitly synthetic past sessions across seven existing titles, including 16 for Freedom of Money. Original sessions and non-synthetic book documents were preserved; a private local backup and a batch manifest allow audit and reversal. Synthetic records are clearly labeled in Home, Library, Insights and For You, identified in model evidence, and excluded from public reader summaries. These fixtures demonstrate the working pipeline, not validated predictions of actual preferences. Remaining work includes evaluating recommendation quality against real user feedback and assessing richer content/style evidence.
 
-- [ ] Connect relevant Insights behavior summaries to recommendation ranking, distinguishing explicit enjoyment from time spent and slow reading from difficulty.
-- [ ] Let AI rerank verified catalog candidates using the user's reading history and behavior, with reasons tied to supplied evidence; retain verified language and ownership/exclusion filters.
-- [ ] Use Like/Maybe/Not for me as a feedback loop for preference weights, while preserving their current save/retain/exclude behavior.
-- [ ] Align the recommendation wording with the model's actual role, and keep general-popularity fallbacks distinct from genuine peer evidence. Reading experience remains self-selected, not a literacy score inferred from speed.
+Validation: 49 automated tests, backend build, client typecheck/lint, and a live production API check with a disposable account passed. The live check confirmed authenticated access, 12 AI-selected catalog books across the first two shelves, known evidence references, detail evidence and stable cached responses. Browser checks at 390×844 and 1280×900 verified the demo disclosure, AI ranking status, cover grids and recommendation details. The requested demo account produced a real Tinker ranking from 70 valid recent sessions (69 synthetic); original records and real book positions were preserved.
 
 ### Insights presentation update
 
@@ -67,7 +64,7 @@ For an isolated 1.0 integration check, build the backend, run it with `COMMUNITY
 - Tinker produces three evidence-linked cards: habit, interest, and suggestion. Reports and feedback persist in Firestore; unchanged evidence reuses a cached report.
 - Real backend tests passed for authentication, save/retry deduplication, cross-user isolation, direct-write denial, statistics, model output, caching, feedback, and progress recalculation. Disposable test users are removed afterward.
 - Community includes interest circles, membership, reading check-ins, questions, book recommendations, encouragement, comments, reporting, blocking/unblocking, and author-only post removal.
-- Browser flow verified with disposable test journals and original test text. Forty-five automated tests pass. The web bundle exports successfully; this is **not** a signed or device-tested iOS binary. The ebook reader currently runs in the web/Safari version; native builds show a web-reader notice.
+- Browser flow verified with disposable test journals and original test text. Forty-nine automated tests pass. The web bundle exports successfully; this is **not** a signed or device-tested iOS binary. The ebook reader currently runs in the web/Safari version; native builds show a web-reader notice.
 
 Cloud Run is **deployed and verified** in `us-central1` as of November 7, 2026. The app uses <https://reading-journal-api-au6vfycphq-uc.a.run.app>. The service allows the hosted frontend origins; the latest deployed revision is recorded locally after each deployment. Cloud checks cover reading records, Tinker, cross-user isolation, community membership, feeds, and ebook event deduplication/consent. The frontend is published on Firebase Hosting at <https://project-b00660ba-d6d4-4c9a-a05.web.app>.
 

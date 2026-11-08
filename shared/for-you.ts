@@ -11,6 +11,8 @@ export type ReadingExperience = "Beginner" | "Experienced";
 export interface ShelfBook extends BookMatch {
   shelf: ShelfKind;
   source: "catalog" | "community" | "popular";
+  aiSelected?: boolean;
+  evidenceIds?: string[];
 }
 export interface DiscoveryFeed {
   personal: ShelfBook[];
@@ -24,13 +26,20 @@ export interface DiscoveryFeed {
   generatedAt: number;
   usualGenres: string[];
   styleSignals: string[];
+  selectionMode?: "ai" | "catalog";
+  behavior?: { sessionCount: number; syntheticSessionCount: number };
+  evidence?: { id: string; text: string }[];
+  model?: string;
 }
 export interface RecommendationDetail {
   synopsis: string;
   reason: string;
   reasonSource: "ai" | "catalog";
+  support?: string[];
 }
 const genrePatterns: [string, RegExp][] = [
+  ["Finance", /finance|money|investing|investment|wealth/i],
+  ["Business", /business|entrepreneur|management/i],
   ["Fantasy", /\bfantas(y|tic)\b|magic|fairy tales/i],
   ["Science fiction", /science fiction|dystopi|space opera/i],
   ["Mystery", /myster|detective|crime fiction|thriller/i],
@@ -196,7 +205,15 @@ export function visibleFeed(
   for (const kind of ["personal", "explore", "peers"] as const) {
     const maybe = Object.entries(feedback).flatMap(([id, f]) =>
       f.value === "maybe" && f.book && (f.book.shelf ?? "personal") === kind
-        ? [restoreSavedRecommendation(id, f.book)]
+        ? [
+            [...feed.personal, ...feed.explore, ...feed.peers].find(
+              (b) => b.id === id,
+            ) ?? {
+              ...restoreSavedRecommendation(id, f.book),
+              aiSelected: false,
+              reason: "You kept this book as Maybe.",
+            },
+          ]
         : [],
     );
     shelves[kind] = [];

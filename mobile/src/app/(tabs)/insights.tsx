@@ -1,3 +1,4 @@
+import DemoDataNotice from "../../components/demo-data-notice";
 import React, { useEffect, useMemo, useState } from "react";
 import { Text, View } from "react-native";
 import { router } from "expo-router";
@@ -42,6 +43,7 @@ export default function Insights() {
     .filter(([, count]) => count > 0);
   return (
     <Page title={section === "Overview" ? "Overall insights" : "Reading coach"}>
+      <DemoDataNotice />
       <Chips
         values={["Overview", "Reading coach"]}
         value={section}

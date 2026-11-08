@@ -1,3 +1,4 @@
+import DemoDataNotice from "../../components/demo-data-notice";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
@@ -20,6 +21,7 @@ export default function Library() {
     .sort((a, b) => b.updatedAt - a.updatedAt);
   return (
     <Page>
+      <DemoDataNotice />
       <View style={styles.between}>
         <Text style={styles.title}>My Library</Text>
         <Pressable

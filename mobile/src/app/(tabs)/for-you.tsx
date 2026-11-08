@@ -1,3 +1,4 @@
+import DemoDataNotice from "../../components/demo-data-notice";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -164,7 +165,9 @@ function BookSheet({
                 <Feather name="sun" size={15} color={color.green} />
                 <Text style={[styles.label, { marginBottom: 0 }]}>
                   {details?.reasonSource === "ai"
-                    ? "WHY AI PICKED THIS"
+                    ? book.aiSelected
+                      ? "AI SELECTED FOR YOU"
+                      : "AI RECOMMENDATION EXPLANATION"
                     : "WHY THIS BOOK"}
                 </Text>
               </View>
@@ -218,6 +221,11 @@ function BookSheet({
               )}
             </View>
             <DetailFold title="Recommendation details">
+              {details?.support?.map((text, i) => (
+                <Text key={i} style={styles.body}>
+                  {text}
+                </Text>
+              ))}
               <Text style={styles.muted}>
                 {book.source === "community"
                   ? book.reason
@@ -226,9 +234,9 @@ function BookSheet({
                     : "Language and catalog genre/style clues guide this suggestion. Style is an estimate, not a full-text comparison."}
               </Text>
               <Text style={styles.muted}>
-                Thinking Machines receives catalog details and reading
-                preference tags, never your private notes or email. Descriptions
-                come from Open Library.
+                Thinking Machines uses catalog information and a summary of
+                your recent reading sessions and feedback. Private notes and
+                email are never shared. Descriptions come from Open Library.
               </Text>
               <Pressable
                 accessibilityRole="link"
@@ -396,6 +404,16 @@ function Discovery() {
   return (
     <View style={{ flex: 1, backgroundColor: color.paper }}>
       <Page title="For You">
+        <DemoDataNotice />
+        {feed?.behavior && (
+          <Text style={styles.muted}>
+            {feed.selectionMode === "ai"
+              ? `AI-ranked from ${feed.behavior.sessionCount} reading sessions · Last 30 days`
+              : feed.behavior.sessionCount
+                ? "Catalog picks · AI ranking is temporarily unavailable"
+                : "Read a little to personalize these picks"}
+          </Text>
+        )}
         <Text style={[styles.muted, { marginTop: -14 }]}>
           Your next chapter, waiting to be found.
         </Text>
