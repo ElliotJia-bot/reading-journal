@@ -21,7 +21,10 @@ export default function EbookImport() {
     setError("");
     try {
       const ebook = await parseEbook(file);
-      const id = `ebook-${ebook.documentId.slice(0, 32)}`;
+      const existing = books.find(
+        (book) => book.reader?.documentId === ebook.documentId,
+      );
+      const id = existing?.id ?? `ebook-${ebook.documentId.slice(0, 32)}`;
       await storeEbook(user.uid, id, ebook);
       if (!books.some((b) => b.id === id))
         await saveBook(id, {
