@@ -1,3 +1,4 @@
+import { color } from "./theme";
 import {
   cardTextPages,
   wrapCardText,
@@ -81,13 +82,16 @@ export async function createShareCards(
   };
   try {
     for (let index = 0; index < layout.pages.length; index++) {
-      ctx.fillStyle = "#1c1e1d";
+      const background = ctx.createLinearGradient(0, 0, 1080, 1350);
+      background.addColorStop(0, color.green);
+      background.addColorStop(1, color.ink);
+      ctx.fillStyle = background;
       ctx.fillRect(0, 0, 1080, 1350);
-      ctx.strokeStyle = "#dacba333";
+      ctx.strokeStyle = "#d9cfc333";
       ctx.lineWidth = 1;
       ctx.strokeRect(30, 30, 1020, 1290);
-      drawLines(["A MOMENT BETWEEN PAGES"], left, 76, 18, 24, "#b6aa8d", sans);
-      ctx.fillStyle = "#343b31";
+      drawLines(["A MOMENT BETWEEN PAGES"], left, 76, 18, 24, color.stone, sans);
+      ctx.fillStyle = "#356c55";
       ctx.beginPath();
       ctx.arc(126, 184, 38, 0, Math.PI * 2);
       ctx.fill();
@@ -98,13 +102,13 @@ export async function createShareCards(
           ),
         ][0]?.segment || "R";
       ctx.font = `32px ${serif}`;
-      ctx.fillStyle = "#eedcb4";
+      ctx.fillStyle = color.paper;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(initial, 126, 185);
       ctx.textAlign = "left";
       const names = wrapCardText(content.name, 780, (t) => measure(t, 32));
-      drawLines(names, 190, 152, 32, 42, "#eedcb4");
+      drawLines(names, 190, 152, 32, 42, color.paper);
       drawLines(
         [
           new Date(content.date).toLocaleDateString(undefined, {
@@ -117,7 +121,7 @@ export async function createShareCards(
         158 + names.length * 42,
         21,
         30,
-        "#b6aa8d",
+        color.stone,
         sans,
       );
       drawLines(
@@ -126,9 +130,9 @@ export async function createShareCards(
         bodyTop,
         layout.size,
         layout.lineHeight,
-        "#eedcb4",
+        color.paper,
       );
-      ctx.strokeStyle = "#dacba34d";
+      ctx.strokeStyle = "#d9cfc34d";
       ctx.beginPath();
       ctx.moveTo(left, bookTop - 30);
       ctx.lineTo(992, bookTop - 30);
@@ -139,7 +143,7 @@ export async function createShareCards(
         bookTop,
         titleSize,
         titleSize * 1.4,
-        "#dccba4",
+        color.paper,
       );
       drawLines(
         authorLines,
@@ -147,7 +151,7 @@ export async function createShareCards(
         bookTop + titleLines.length * titleSize * 1.4 + 18,
         26,
         39,
-        "#a99f89",
+        color.stone,
         sans,
       );
       if (wordmark)
@@ -158,7 +162,7 @@ export async function createShareCards(
           240,
           (240 * wordmark.naturalHeight) / wordmark.naturalWidth,
         );
-      else drawLines(["Remarked."], left, 1251, 22, 30, "#a99f89", sans);
+      else drawLines(["Remarked."], left, 1251, 22, 30, color.stone, sans);
       if (layout.pages.length > 1) {
         ctx.textAlign = "right";
         drawLines(
@@ -167,7 +171,7 @@ export async function createShareCards(
           1251,
           22,
           30,
-          "#a99f89",
+          color.stone,
           sans,
         );
         ctx.textAlign = "left";

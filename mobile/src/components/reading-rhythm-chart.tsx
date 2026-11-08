@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import { Text, View, useWindowDimensions } from "react-native";
 import Svg, {
   Line,
@@ -6,6 +6,9 @@ import Svg, {
   Rect,
   Circle,
   Polygon,
+  Defs,
+  LinearGradient,
+  Stop,
   Text as SvgText,
 } from "react-native-svg";
 import type {
@@ -22,6 +25,7 @@ export default function ReadingRhythmChart({
   ranges: RhythmRange[];
   reader: boolean;
 }) {
+  const fillId = `rhythm-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const { width } = useWindowDimensions();
   const labelSize = (11 * 560) / Math.max(270, Math.min(width, 640) - 48);
   const measured = points.filter((p) => p.relative !== null);
@@ -49,9 +53,19 @@ export default function ReadingRhythmChart({
       <View
         style={{ width: "100%", aspectRatio: 2.65 }}
         accessibilityRole="image"
-        accessibilityLabel={`Reading rhythm across pages ${first} to ${last}. Below the 1 times baseline means less time; above means more time. Green highlights quicker stretches and orange highlights longer stays.`}
+        accessibilityLabel={`Reading rhythm across pages ${first} to ${last}. Below the 1 times baseline means less time; above means more time. Green highlights quicker stretches and coral highlights longer stays.`}
       >
         <Svg width="100%" height="100%" viewBox="0 0 560 210">
+          <Defs>
+            <LinearGradient id={fillId} x1="0%" y1="0%" x2="0%" y2="100%">
+              <Stop offset="0%" stopColor={color.green} stopOpacity={0.2} />
+              <Stop offset="100%" stopColor={color.green} stopOpacity={0.01} />
+            </LinearGradient>
+            <LinearGradient id={`${fillId}-coral`} x1="0%" y1="0%" x2="0%" y2="100%">
+              <Stop offset="0%" stopColor={color.coral} stopOpacity={0.55} />
+              <Stop offset="100%" stopColor={color.coral} stopOpacity={0.06} />
+            </LinearGradient>
+          </Defs>
           {ranges.map((r) => (
             <Rect
               key={r.key}
@@ -59,7 +73,7 @@ export default function ReadingRhythmChart({
               y={26}
               width={Math.max(8, x(r.end) - x(r.start))}
               height={130}
-              fill={r.direction === "quicker" ? "#dce8da" : "#f2ded3"}
+              fill={`url(#${r.direction === "quicker" ? fillId : `${fillId}-coral`})`}
             />
           ))}
           {[0, 1, ceiling].map((v) => (
@@ -69,7 +83,7 @@ export default function ReadingRhythmChart({
                 x2={538}
                 y1={y(v)}
                 y2={y(v)}
-                stroke={v === 1 ? "#8a8f7c" : "#ded8ce"}
+                stroke={v === 1 ? "#8c7c70" : "#ded5cb"}
                 strokeDasharray="5 5"
               />
               <SvgText
@@ -89,8 +103,7 @@ export default function ReadingRhythmChart({
                 {line.length > 1 && (
                   <Polygon
                     points={`${x(line[0].start)},156 ${line.map((p) => `${x(p.start)},${y(p.relative!)}`).join(" ")} ${x(line.at(-1)!.end)},156`}
-                    fill="#546b4b"
-                    opacity={0.07}
+                    fill={`url(#${fillId})`}
                   />
                 )}
                 <Polyline
@@ -98,7 +111,7 @@ export default function ReadingRhythmChart({
                     .map((p) => `${x(p.start)},${y(p.relative!)}`)
                     .join(" ")}
                   fill="none"
-                  stroke="#5d6654"
+                  stroke={color.green}
                   strokeWidth={2.5}
                 />
                 {line.length === 1 && (
@@ -117,7 +130,7 @@ export default function ReadingRhythmChart({
                 x2={x(line[0].end)}
                 y1={y(line[0].relative!)}
                 y2={y(line[0].relative!)}
-                stroke={line[0].relative! >= 1.5 ? color.rust : line[0].relative! <= 0.9 ? color.green : "#84917f"}
+                stroke={line[0].relative! >= 1.5 ? color.rust : line[0].relative! <= 0.9 ? color.green : "#8c9b90"}
                 strokeWidth={3}
                 strokeLinecap="round"
               />

@@ -4,6 +4,7 @@ import Svg, { Circle, Path, Text as SvgText } from "react-native-svg";
 import type { Book, ReadingSession } from "../../../shared/domain";
 import { hourLabel, readingClock } from "../../../shared/book-insights";
 import { color, styles } from "./ui";
+import { SurfaceFade } from "./surface-fade";
 import { DetailFold } from "./insight-blocks";
 const polar = (r: number, degrees: number) => [
   150 + r * Math.sin((degrees * Math.PI) / 180),
@@ -33,13 +34,14 @@ export default function ReadingClock({
       style={[
         styles.card,
         {
-          backgroundColor: "#faf6ef",
+          backgroundColor: "#f8f5f0",
           borderWidth: 1,
           borderColor: color.line,
           gap: 12,
         },
       ]}
     >
+      <SurfaceFade tone="stone" />
       <Text style={[styles.label, { marginBottom: 0, letterSpacing: 1.5 }]}>
         YOUR RHYTHM · THIS BOOK
       </Text>
@@ -48,7 +50,7 @@ export default function ReadingClock({
         <View
           style={{
             alignSelf: "flex-start",
-            backgroundColor: "#e6eadf",
+            backgroundColor: "#e3ebe5",
             paddingVertical: 7,
             paddingHorizontal: 12,
             borderRadius: 20,
@@ -77,7 +79,7 @@ export default function ReadingClock({
               cx={150}
               cy={150}
               r={r}
-              stroke="#d9d2c4"
+              stroke="#ded5cb"
               strokeDasharray="3 4"
               fill="none"
             />
@@ -91,7 +93,7 @@ export default function ReadingClock({
                 fill={
                   peak && [peak.start, (peak.start + 1) % 24].includes(h.hour)
                     ? color.green
-                    : "#8eaa94"
+                    : "#7b9987"
                 }
               />
             ))}

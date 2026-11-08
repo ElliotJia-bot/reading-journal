@@ -55,11 +55,11 @@ function stop(s: ReadingState, now = Date.now()): ReadingState {
 const buttonStyle: React.CSSProperties = {
   font: "inherit",
   fontSize: 14,
-  border: "1px solid #b7bcae",
+  border: "1px solid #c4b7a9",
   borderRadius: 10,
   padding: "12px 15px",
-  background: "#e6e9df",
-  color: "#14422d",
+  background: "#f0eae3",
+  color: "#003422",
   cursor: "pointer",
   minHeight: 44,
 };
@@ -491,7 +491,7 @@ export default function EbookReader() {
     );
   if (!ebook || !state || !book || displayKey !== key)
     return (
-      <div style={{ padding: 32, fontFamily: "sans-serif", color: "#14422d" }}>
+      <div style={{ padding: 32, fontFamily: "sans-serif", color: "#003422" }}>
         <h1>Ebook Reader</h1>
         <p>
           {error ||
@@ -519,8 +519,8 @@ export default function EbookReader() {
   const summaries = summarizePages(all),
     thisPage = summaries.find((p) => p.page === state.page);
   const night = state.theme === "Night",
-    ink = night ? "#eee6d7" : "#20362a",
-    paper = night ? "#17241e" : "#fdf9f3";
+    ink = night ? "#f0eae3" : "#4b3c35",
+    paper = night ? "#10271e" : "#f8f5f0";
   const pageNotes = notes.filter((n) => n.page === state.page);
   const points = [
     ...new Set([
@@ -990,35 +990,35 @@ const readerCss = `
 .reader-scroll {height:100%;overflow-y:auto;padding: max(28px,env(safe-area-inset-top)) 28px 110px;scrollbar-width:thin;}
 .reading-running-head {max-width:640px;margin:0 auto 38px;text-align:center;font-size:10px;letter-spacing:.1em;opacity:.48;line-height:1.6;}
 .reader-scroll article {max-width:640px;margin:0 auto;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;user-select:text;-webkit-user-select:text;}
-.reader-scroll mark {background:#c6b16a30;color:inherit;border-bottom:1px solid #ab8d6055;}
+.reader-scroll mark {background:#ee9c9140;color:inherit;border-bottom:1px solid #984d4266;}
 .reading-end {text-align:center;opacity:.4;font-size:12px;letter-spacing:.25em;margin:40px 0 10px;}
 .reader-footer {position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:20px;background:inherit;padding:10px 12px max(12px,env(safe-area-inset-bottom));font-size:11px;}
 .reader-footer button {border:0;background:none;color:inherit;opacity:.55;font-size:23px;width:44px;height:44px;cursor:pointer;border-radius:50%;}
 .reader-footer button:hover {background:#8881;opacity:1;}
 .reader-footer button:disabled {opacity:.15;}
 .reader-footer span {opacity:.45;letter-spacing:.08em;}
-.reader-sheet {position:fixed;inset:auto 0 0;margin:0 auto;width:min(100%,680px);max-height:82dvh;overflow:auto;border:0;border-radius:24px 24px 0 0;padding:12px 24px max(28px,env(safe-area-inset-bottom));background:#faf7f0;color:#20362a;box-shadow:0 -8px 60px #0002;}
-.reader-sheet::backdrop {background:#10231750;backdrop-filter:blur(3px);}
-.sheet-handle {width:36px;height:4px;border-radius:4px;background:#c7c9bd;margin:0 auto 20px;}
+.reader-sheet {position:fixed;inset:auto 0 0;margin:0 auto;width:min(100%,680px);max-height:82dvh;overflow:auto;border:0;border-radius:24px 24px 0 0;padding:12px 24px max(28px,env(safe-area-inset-bottom));background:#f8f5f0;color:#4b3c35;box-shadow:0 -8px 60px #0002;}
+.reader-sheet::backdrop {background:#00342266;backdrop-filter:blur(3px);}
+.sheet-handle {width:36px;height:4px;border-radius:4px;background:#d9cfc3;margin:0 auto 20px;}
 .sheet-heading {display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;}
 .sheet-heading h2 {font:normal 27px Newsreader_400Regular,Georgia,serif;margin:0;}
-.reader-sheet button,.selection-actions button,.reader-toast button {font:inherit;font-size:13px;min-height:44px;border:1px solid #d6dbcf;border-radius:12px;background:#f1f1e9;color:#204932;padding:10px 16px;cursor:pointer;margin:4px 6px 4px 0;}
+.reader-sheet button,.selection-actions button,.reader-toast button {font:inherit;font-size:13px;min-height:44px;border:1px solid #ded5cb;border-radius:12px;background:#f0eae3;color:#003422;padding:10px 16px;cursor:pointer;margin:4px 6px 4px 0;}
 .reader-sheet button:disabled {opacity:.45;cursor:default;}
-.reader-sheet .reader-primary,.selection-actions .reader-primary {background:#17432f;color:#fff;border-color:#17432f;}
-.reader-sheet input,.reader-sheet select,.reader-sheet textarea {font:inherit;font-size:15px;padding:12px;border:1px solid #cbd1c4;border-radius:10px;background:#fffdf8;color:#20362a;max-width:100%;}
+.reader-sheet .reader-primary,.selection-actions .reader-primary {background:#003422;color:#fff;border-color:#003422;}
+.reader-sheet input,.reader-sheet select,.reader-sheet textarea {font:inherit;font-size:15px;padding:12px;border:1px solid #ded5cb;border-radius:10px;background:#fffdfa;color:#4b3c35;max-width:100%;}
 .reader-sheet select,.reader-sheet textarea,.reader-sheet input:not([type=checkbox]) {display:block;width:100%;margin:10px 0 20px;}
 .reader-sheet label {display:block;font-size:13px;line-height:1.6;margin-top:12px;}
-.reader-muted {font-size:12px;line-height:1.7;color:#6c766c;}
+.reader-muted {font-size:12px;line-height:1.7;color:#706158;}
 .reading-tools {display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px 0;}
-.reading-tools button {display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px 4px;min-height:90px;margin:0;background:#eeeede;border:0;font-size:11px;}
+.reading-tools button {display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px 4px;min-height:90px;margin:0;background:#f0eae3;border:0;font-size:11px;}
 .reading-tools span {font:24px Georgia,serif;}
-.reader-sheet blockquote {font:22px/1.6 Newsreader_400Regular,Georgia,serif;border-left:2px solid #bca576;padding-left:16px;margin:20px 0;white-space:pre-wrap;overflow-wrap:anywhere;}
-.margin-note {border-top:1px solid #deded1;margin-top:24px;padding-top:18px;}
-.reader-sheet .reader-link {border:0;background:none;font-size:11px;padding:0;color:#757b65;}
-.reader-sheet a {color:#205c40;display:inline-block;padding:12px 0;}
-.selection-actions,.reader-toast {position:absolute;bottom:84px;left:50%;transform:translateX(-50%);background:#faf7f0;color:#20362a;box-shadow:0 4px 24px #0002;padding:8px 12px;border-radius:18px;max-width:calc(100% - 24px);width:max-content;font-size:13px;z-index:2;}
+.reader-sheet blockquote {font:22px/1.6 Newsreader_400Regular,Georgia,serif;border-left:2px solid #ee9c91;padding-left:16px;margin:20px 0;white-space:pre-wrap;overflow-wrap:anywhere;}
+.margin-note {border-top:1px solid #ded5cb;margin-top:24px;padding-top:18px;}
+.reader-sheet .reader-link {border:0;background:none;font-size:11px;padding:0;color:#706158;}
+.reader-sheet a {color:#003422;display:inline-block;padding:12px 0;}
+.selection-actions,.reader-toast {position:absolute;bottom:84px;left:50%;transform:translateX(-50%);background:#f8f5f0;color:#4b3c35;box-shadow:0 4px 24px #0002;padding:8px 12px;border-radius:18px;max-width:calc(100% - 24px);width:max-content;font-size:13px;z-index:2;}
 .reader-toast {max-width:360px;width:calc(100% - 32px);}
-.reader-sheet button:focus-visible,.reader-footer button:focus-visible {outline:2px solid #a48e60;outline-offset:3px;}
+.reader-sheet button:focus-visible,.reader-footer button:focus-visible {outline:2px solid #984d42;outline-offset:3px;}
 @media(min-width:800px) {.reader-scroll {padding-top:46px;}.reading-running-head {margin-bottom:50px;}.reader-footer {gap:40px;}}
 @media(prefers-reduced-motion:no-preference) {.reader-sheet {animation:reader-sheet-in .2s ease-out;}@keyframes reader-sheet-in {from{transform:translateY(30px);opacity:.5;}to{transform:translateY(0);opacity:1;}}}
 `;

@@ -56,7 +56,7 @@ export default function EbookImport() {
         records sync.
       </Text>
       <label
-        style={{ fontSize: 16, color: "#14422d", fontFamily: "sans-serif" }}
+        style={{ fontSize: 16, color: "#003422", fontFamily: "sans-serif" }}
       >
         Choose EPUB or TXT
         <input

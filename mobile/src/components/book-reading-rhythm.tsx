@@ -13,6 +13,7 @@ import { Button, color, message, styles } from "./ui";
 import { DetailFold } from "./insight-blocks";
 import ReadingRhythmChart from "./reading-rhythm-chart";
 import PassageAnalysis from "./passage-analysis";
+import { SurfaceFade } from "./surface-fade";
 export default function BookReadingRhythm({
   book,
   sessions,
@@ -112,11 +113,12 @@ export default function BookReadingRhythm({
                     padding: 18,
                     borderLeftWidth: 3,
                     borderLeftColor: accent,
-                    backgroundColor: quicker ? "#eef3ed" : "#f7eee8",
+                    backgroundColor: quicker ? "#eff3ef" : "#fcf0ed",
                     gap: 10,
                   },
                 ]}
               >
+                <SurfaceFade tone={quicker ? "forest" : "coral"} />
                 <Text style={[styles.label, { color: accent, marginBottom: 0 }]}>
                   {quicker ? "QUICKER STRETCH" : "MORE TIME HERE"}
                 </Text>
@@ -131,7 +133,7 @@ export default function BookReadingRhythm({
                   <Text style={styles.heading}>{rangeLabel(r.start, r.end)}</Text>
                   <View
                     style={{
-                      backgroundColor: quicker ? "#dce8da" : "#f2ded3",
+                      backgroundColor: quicker ? "#e3ebe5" : "#f7e1dc",
                       paddingHorizontal: 10,
                       paddingVertical: 5,
                       borderRadius: 20,

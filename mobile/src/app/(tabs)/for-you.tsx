@@ -1,3 +1,4 @@
+import { SurfaceFade } from "../../components/surface-fade";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -159,7 +160,7 @@ function BookSheet({
                 {book.authors.join(", ") || "Author not listed"}
               </Text>
             </View>
-            <View style={[styles.card, { padding: 16, gap: 7 }]}>
+            <View style={[styles.card, { padding: 16, gap: 7 }]}><SurfaceFade tone="coral" />
               <View style={[styles.row, { gap: 7 }]}>
                 <Feather name="sun" size={15} color={color.green} />
                 <Text style={[styles.label, { marginBottom: 0 }]}>
@@ -592,22 +593,22 @@ const s = StyleSheet.create({
   jacket: {
     width: "100%",
     aspectRatio: 2 / 3,
-    backgroundColor: "#dfdfcf",
+    backgroundColor: "#d9cfc3",
     borderRadius: 3,
     overflow: "hidden",
-    boxShadow: "0 6px 12px rgba(32,28,20,0.12)",
+    boxShadow: "0 6px 12px rgba(75,60,53,0.14)",
   },
   fallback: {
     flex: 1,
     padding: 12,
     justifyContent: "space-between",
     borderLeftWidth: 4,
-    borderLeftColor: "#bbc3b2",
+    borderLeftColor: "#b7a99b",
   },
   maybe: { flexDirection: "row", gap: 4, alignItems: "center", paddingTop: 8 },
   backdrop: {
     flex: 1,
-    backgroundColor: "rgba(20,24,20,0.4)",
+    backgroundColor: "rgba(0,52,34,0.34)",
     justifyContent: "flex-end",
     alignItems: "center",
   },

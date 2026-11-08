@@ -13,16 +13,10 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
+import { color } from "../lib/theme";
+import { SurfaceFade } from "./surface-fade";
+export { color } from "../lib/theme";
 
-export const color = {
-  paper: "#fdf9f3",
-  card: "#f2ede8",
-  green: "#14422d",
-  ink: "#1c1b19",
-  muted: "#626960",
-  line: "#e3ded5",
-  rust: "#9c4328",
-};
 export const styles = StyleSheet.create({
   quote: {
     fontFamily: "Newsreader_400Regular",
@@ -61,7 +55,14 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 12,
   },
-  card: { padding: 20, backgroundColor: color.card, borderRadius: 18, gap: 14 },
+  card: {
+    padding: 20,
+    backgroundColor: color.surface,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: color.line,
+    gap: 14,
+  },
   label: {
     fontFamily: "PlusJakartaSans_600SemiBold",
     fontSize: 12,
@@ -69,10 +70,10 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: "#fffdf9",
+    backgroundColor: color.surface,
     borderWidth: 1,
     borderColor: color.line,
-    borderRadius: 10,
+    borderRadius: 14,
     padding: 14,
     fontFamily: "PlusJakartaSans_400Regular",
     fontSize: 16,
@@ -81,7 +82,7 @@ export const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: color.green,
-    borderRadius: 10,
+    borderRadius: 14,
     minHeight: 48,
     paddingHorizontal: 18,
     paddingVertical: 14,
@@ -94,8 +95,8 @@ export const styles = StyleSheet.create({
     color: "white",
   },
   error: {
-    backgroundColor: "#fce7df",
-    color: "#7d2c13",
+    backgroundColor: color.coralSoft,
+    color: color.rust,
     padding: 14,
     borderRadius: 10,
     fontSize: 13,
@@ -105,7 +106,7 @@ export const styles = StyleSheet.create({
     width: 86,
     height: 128,
     borderRadius: 5,
-    backgroundColor: "#d8d7c4",
+    backgroundColor: "#d9cfc3",
   },
 });
 export function Page({
@@ -124,6 +125,9 @@ export function Page({
       style={{ flex: 1, backgroundColor: color.paper }}
       edges={["top", "left", "right"]}
     >
+      <View pointerEvents="none" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 320 }}>
+        <SurfaceFade radius={0} />
+      </View>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
@@ -179,12 +183,14 @@ export function Button({
       accessibilityRole="button"
       disabled={disabled || busy}
       onPress={onPress}
-      style={[
+      style={({ pressed }) => [
         styles.button,
-        secondary && { backgroundColor: "#e6e9df" },
+        secondary && { backgroundColor: color.card },
+        pressed && !disabled && !busy && { opacity: 0.86 },
         (disabled || busy) && { opacity: 0.5 },
       ]}
     >
+      {!secondary && <SurfaceFade tone="button" radius={14} />}
       {busy ? (
         <ActivityIndicator color={secondary ? color.green : "white"} />
       ) : (
@@ -201,7 +207,7 @@ export function Field({ label, ...props }: TextInputProps & { label: string }) {
       <Text style={styles.label}>{label}</Text>
       <TextInput
         accessibilityLabel={label}
-        placeholderTextColor="#8b9188"
+        placeholderTextColor="#706158"
         style={styles.input}
         {...props}
       />
@@ -226,7 +232,7 @@ export function Chips({
           accessibilityState={{ selected: value === item }}
           onPress={() => onChange(item)}
           style={{
-            backgroundColor: value === item ? color.green : "#e9e6df",
+            backgroundColor: value === item ? color.green : color.card,
             borderRadius: 24,
             paddingHorizontal: 15,
             paddingVertical: 11,
@@ -276,7 +282,7 @@ export function Cover({
           padding: 10,
           justifyContent: "center",
           borderLeftWidth: 5,
-          borderLeftColor: "#bcc2ae",
+          borderLeftColor: "#b7a99b",
         },
       ]}
     >
@@ -332,7 +338,9 @@ export function Progress({
               backgroundColor: color.green,
               width: `${percent}%`,
             }}
-          />
+          >
+            <SurfaceFade tone="progress" radius={5} />
+          </View>
         </View>
       )}
     </View>

@@ -124,7 +124,7 @@ export default function SessionChart({
                           index === keys.length - 1
                             ? color.rust
                             : i % 2
-                              ? "#789380"
+                              ? "#356c55"
                               : color.green,
                         borderTopWidth: 1,
                         borderColor: color.paper,
@@ -143,9 +143,9 @@ export default function SessionChart({
                   minWidth: 32,
                   borderRadius: 8,
                   borderWidth: 1,
-                  borderColor: selectedDay === key ? color.green : "#cad8c6",
+                  borderColor: selectedDay === key ? color.green : "#d9cfc3",
                   backgroundColor:
-                    selectedDay === key ? color.green : "#e6eee2",
+                    selectedDay === key ? color.green : "#e3ebe5",
                   paddingVertical: 7,
                   minHeight: 44,
                   alignItems: "center",

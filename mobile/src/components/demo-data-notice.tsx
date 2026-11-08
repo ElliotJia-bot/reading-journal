@@ -11,7 +11,7 @@ export default function DemoDataNotice() {
     <Text
       style={[
         styles.muted,
-        { backgroundColor: "#f2ede8", padding: 10, borderRadius: 8 },
+        { backgroundColor: "#f0eae3", padding: 10, borderRadius: 8 },
       ]}
     >
       Demo data included · Reading history contains fictional records.

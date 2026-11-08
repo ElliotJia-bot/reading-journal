@@ -206,7 +206,7 @@ function Profile({ id }: { id: string }) {
               style={[
                 styles.card,
                 {
-                  backgroundColor: "#fffdf9",
+                  backgroundColor: "#fffdfa",
                   borderWidth: 1,
                   borderColor: color.line,
                 },

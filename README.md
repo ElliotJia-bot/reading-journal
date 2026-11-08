@@ -325,3 +325,9 @@ Validation: the original five files were parsed by the actual web importer and m
 Signed-in readers can use **Log out** directly below **Edit profile & sharing** on their own profile. Other readers' profiles do not show this action. Settings uses the same logout control. An active timer is paused and retained locally before Firebase signs out, so time spent logged out does not inflate the reading session. A failed pause or sign-out shows an error and permits retry. Signed-out profile routes return to the login page; the existing auth observer clears the visible journal and restores only the next account's records.
 
 Validation includes typecheck, lint, web export, personal versus other-reader profiles, pause failure/retry, logout and re-login, paused-session restoration, and switching to an empty guest account without displaying the previous user's books or sessions. Cloud data is retained when logging out.
+
+### Palette and fades
+
+The V1.6 theme uses the supplied coral (`#EE9C91`), forest (`#003422`), stone (`#D9CFC3`) and espresso (`#4B3C35`) swatches. Core tokens live in `mobile/src/lib/theme.ts`. Warm paper backgrounds, fine card borders and darker text variants maintain readable contrast; body and secondary text combinations have at least 4.5:1 contrast on the themed surfaces.
+
+Decorative SVG linear gradients soften the page header, Home cards, primary buttons, progress bars, recommendation explanations and book rhythm cards. The reading graph fades toward its baseline; green and coral ranges keep their existing direction labels and calculations. Gradients ignore pointer events and accessibility focus, and use per-instance IDs. The reader's text area remains a plain paper or night surface. Exported reflection cards use a forest-to-espresso gradient with the light wordmark. Original logo artwork and book covers are unchanged.

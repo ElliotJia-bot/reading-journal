@@ -77,7 +77,7 @@ export default function Community() {
       <View
         style={{
           borderTopWidth: 1,
-          borderTopColor: "#e3ddd4",
+          borderTopColor: "#ded5cb",
           paddingTop: 24,
           gap: 8,
         }}

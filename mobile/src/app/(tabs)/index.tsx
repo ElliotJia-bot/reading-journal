@@ -6,6 +6,7 @@ import { useJournal } from "../../lib/journal";
 import { api } from "../../lib/api";
 import { homeMetrics, finishEstimate } from "../../../../shared/metrics";
 import { BrandWordmark } from "../../components/brand";
+import { SurfaceFade } from "../../components/surface-fade";
 import {
   Page,
   Button,
@@ -136,8 +137,9 @@ export default function Home() {
       )}
       {current ? (
         <View
-          style={[styles.card, { backgroundColor: "#e5ebdf", padding: 24 }]}
+          style={[styles.card, { padding: 24 }]}
         >
+          <SurfaceFade tone="forest" />
           <Text style={styles.label}>CURRENTLY READING</Text>
           <View style={styles.row}>
             <Cover title={current.title} uri={current.cover} />
@@ -218,11 +220,12 @@ export default function Home() {
             "Pages this week",
             `Personal best: ${metrics.bestWeeklyPages} in a week`,
           ],
-        ].map(([value, label, detail]) => (
+        ].map(([value, label, detail], index) => (
           <View
             key={label}
             style={[styles.card, { width: "47%", flexGrow: 1, padding: 16 }]}
           >
+            <SurfaceFade tone={index === 0 ? "coral" : "stone"} />
             <Text style={styles.muted}>{label}</Text>
             <Text style={styles.heading}>{value}</Text>
             <Text style={styles.muted}>{detail}</Text>

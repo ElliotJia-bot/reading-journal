@@ -85,14 +85,14 @@ export default function LeaderboardPanel({
             <Feather
               name={icons[c.id]}
               size={18}
-              color={metric === c.id ? "#fffdf9" : color.green}
+              color={metric === c.id ? "#fffdfa" : color.green}
             />
             <Text
               style={[
                 styles.label,
                 {
                   marginBottom: 0,
-                  color: metric === c.id ? "#fffdf9" : color.green,
+                  color: metric === c.id ? "#fffdfa" : color.green,
                   fontSize: 12,
                   lineHeight: 18,
                 },
@@ -124,7 +124,7 @@ export default function LeaderboardPanel({
       {!!rows.length && (
         <View
           style={{
-            backgroundColor: "#fffdf9",
+            backgroundColor: "#fffdfa",
             borderRadius: 18,
             paddingHorizontal: 16,
           }}

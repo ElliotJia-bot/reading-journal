@@ -25,7 +25,7 @@ export function Badge({
         paddingHorizontal: 11,
         paddingVertical: 6,
         borderRadius: 20,
-        backgroundColor: accent ? "#f6ded3" : "#e4e9df",
+        backgroundColor: accent ? "#f7e1dc" : "#e3ebe5",
       }}
     >
       <Text
@@ -87,10 +87,10 @@ export function CircleCard({
           style={{
             width: 58,
             height: 76,
-            backgroundColor: circle.id === "habit" ? "#e7d9c4" : "#dbe3d1",
+            backgroundColor: circle.id === "habit" ? "#f7e1dc" : "#e3ebe5",
             borderRadius: 8,
             borderLeftWidth: 4,
-            borderLeftColor: "#b6c0a7",
+            borderLeftColor: "#d9cfc3",
             alignItems: "center",
             justifyContent: "center",
           }}
@@ -150,7 +150,7 @@ export function Avatar({ name }: { name: string }) {
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: "#e3e7d9",
+        backgroundColor: "#f7e1dc",
         alignItems: "center",
         justifyContent: "center",
       }}
@@ -178,7 +178,7 @@ export function PostCard({
     <View
       style={{
         ...styles.card,
-        backgroundColor: "#fffdf9",
+        backgroundColor: "#fffdfa",
         borderWidth: 1,
         borderColor: color.line,
       }}
@@ -232,7 +232,7 @@ export function PostCard({
         <View
           style={{
             borderLeftWidth: 2,
-            borderLeftColor: "#ab8d60",
+            borderLeftColor: "#ee9c91",
             paddingLeft: 14,
             gap: 8,
           }}

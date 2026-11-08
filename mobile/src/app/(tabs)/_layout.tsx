@@ -51,7 +51,7 @@ export default function TabsLayout() {
             <Feather
               name="book-open"
               size={20}
-              color={typeof color === "string" ? color : "#14422d"}
+              color={typeof color === "string" ? color : "#003422"}
             />
           ),
         }}
@@ -64,7 +64,7 @@ export default function TabsLayout() {
             <Feather
               name="bar-chart-2"
               size={20}
-              color={typeof color === "string" ? color : "#14422d"}
+              color={typeof color === "string" ? color : "#003422"}
             />
           ),
         }}
@@ -77,7 +77,7 @@ export default function TabsLayout() {
             <Feather
               name="sun"
               size={20}
-              color={typeof color === "string" ? color : "#14422d"}
+              color={typeof color === "string" ? color : "#003422"}
             />
           ),
         }}
@@ -90,7 +90,7 @@ export default function TabsLayout() {
             <Feather
               name="users"
               size={20}
-              color={typeof color === "string" ? color : "#14422d"}
+              color={typeof color === "string" ? color : "#003422"}
             />
           ),
         }}

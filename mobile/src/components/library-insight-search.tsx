@@ -47,7 +47,7 @@ export default function LibraryInsightSearch({ books }: { books: Book[] }) {
           borderWidth: 1,
           borderColor: open ? color.green : color.line,
           borderRadius: 10,
-          backgroundColor: "#fffdf9",
+          backgroundColor: "#fffdfa",
         }}
       >
         <Feather name="search" size={16} color={color.muted} />
@@ -90,9 +90,9 @@ export default function LibraryInsightSearch({ books }: { books: Book[] }) {
             borderRadius: 12,
             borderWidth: 1,
             borderColor: color.line,
-            backgroundColor: "#fffdf9",
+            backgroundColor: "#fffdfa",
             overflow: "hidden",
-            boxShadow: "0 8px 24px rgba(20,66,45,0.12)",
+            boxShadow: "0 8px 24px rgba(75,60,53,0.10)",
           }}
         >
           <ScrollView
@@ -118,7 +118,7 @@ export default function LibraryInsightSearch({ books }: { books: Book[] }) {
                   paddingVertical: 9,
                   borderBottomWidth: 1,
                   borderBottomColor: color.line,
-                  backgroundColor: pressed ? "#e6eee2" : "#fffdf9",
+                  backgroundColor: pressed ? "#e3ebe5" : "#fffdfa",
                   gap: 2,
                 })}
               >

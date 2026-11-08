@@ -91,7 +91,7 @@ export default function ReadingWeekChart({
                       styles.muted,
                       {
                         fontSize: 10,
-                        color: day.seconds ? color.green : "#8b9188",
+                        color: day.seconds ? color.green : "#706158",
                       },
                     ]}
                   >
