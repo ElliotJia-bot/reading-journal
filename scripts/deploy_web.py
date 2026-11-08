@@ -20,6 +20,11 @@ def main():
     assert directory == ROOT / 'mobile/dist-web', 'Unexpected export directory'
     assert (directory / 'index.html').is_file(), 'Export the web app first'
     assert (directory / 'manifest.webmanifest').is_file(), 'Missing install manifest'
+    app_version = json.loads((ROOT / 'mobile/app.json').read_text())['expo']['version']
+    package_version = json.loads((ROOT / 'mobile/package.json').read_text())['version']
+    export_version = json.loads((directory / 'release.json').read_text())['version']
+    assert re.fullmatch(r'\d+\.\d+\.\d+', app_version), 'Invalid release version'
+    assert app_version == package_version == export_version, 'Release versions differ; rebuild before publishing'
     manifest = json.loads((directory / 'manifest.webmanifest').read_text())
     assert all((directory / icon['src'].lstrip('/')).is_file() for icon in manifest['icons'])
     allowed = {'.html', '.js', '.css', '.json', '.webmanifest', '.png', '.jpg',
@@ -78,8 +83,8 @@ def main():
         list(pool.map(upload, populated.get('uploadRequiredHashes', [])))
     api(base + name + '?updateMask=status', {'status': 'FINALIZED'}, 'PATCH')
     release = api(base + f'sites/{site}/releases?versionName=' + name,
-                  {'message': 'Remarked 1.0: reading insights, discovery and community'}, 'POST')
-    result = {'url': f'https://{site}.web.app', 'version': name,
+                  {'message': f'Remarked {app_version}: web release'}, 'POST')
+    result = {'url': f'https://{site}.web.app', 'appVersion': app_version, 'version': name,
               'release': release['name'], 'files': len(files)}
     (ROOT / '.local/hosting-release.json').write_text(json.dumps(result, indent=2))
     (ROOT / '.local/hosting-pending.json').unlink(missing_ok=True)

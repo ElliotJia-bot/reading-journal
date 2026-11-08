@@ -2,6 +2,10 @@
 
 Functional hackathon MVP based on the supplied Stitch prototype. Expo/React Native client, Firebase Authentication and Firestore, Express backend, and Thinking Machines Tinker insights. The UI is English.
 
+## Current release — V1.8
+
+Start with the [V1.8 developer handoff](docs/HANDOFF-V1.8.md). The working language is **English**. Current branch: `release/1.8`; release tag: `v1.8.0`. This handoff release carries forward the V1.7 palette and all existing features, aligns app/package/deployment version metadata, and adds a public `/release.json` identifier. It introduces no feature or layout changes. The sections below include historical implementation notes; use the handoff for the current starting point.
+
 ## Remarked 1.0
 
 The 1.0 iteration lives on `release/1.0`. The installed app, browser title and social card use **Remarked**. In-app screens lead with their purpose rather than a product-name header. Existing Firebase IDs, application identifiers and device-storage keys are intentionally retained so existing journals and imported ebooks continue working.
