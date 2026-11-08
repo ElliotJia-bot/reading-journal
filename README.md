@@ -298,11 +298,15 @@ Ebook quicker stretches require three adjacent comparable pages, each at least 1
 
 Validation: 81 automated tests pass; mobile typecheck, lint and web export pass. Browser checks at 390×844 and 1280×900 cover both highlight directions, two compact cards, expand/collapse, manual logs, empty history, local EPUB reimport, and the passage-analysis entry point. No new model call is needed for the graph. Temporary test records are removed after verification.
 
-### Remarked brand assets
+### Remarked brand assets — V1.4
 
-The supplied **R.** mark is the app identity: native icon resources, browser favicon, Apple Home Screen icon, PWA icons, loading mark and back-header mark. The complete **Remarked.** wordmark appears in page brand headers, the welcome screen and exported reflection cards. Original artwork is preserved in `mobile/assets/brand/`; icon variants only adapt image format, size and mask padding. The normal app icon is an opaque 1024×1024 PNG; the maskable variant includes additional padding. The immersive reader remains free of a persistent brand header.
+The complete **Remarked.** wordmark appears only in the Home greeting row, immediately before the time-of-day greeting. Its width adapts to narrow phones and desktop layouts; it does not occupy a separate header row. Shared page headers, login, loading, detail screens and the other tabs have no brand image. Navigation arrows, page titles and profile controls remain available. Exported reflection cards retain their own brand signature.
 
-The web manifest separates standard icons from the maskable icon, and new icon URLs avoid reusing the previous artwork's cache keys. Re-imported app shortcuts use the current Apple/PWA resources. Reflection-card branding loads from the same origin; an unavailable logo falls back to the brand name without preventing image export. Typecheck, lint, web export, share-card layout tests, and browser checks of mobile/desktop image proportions, icon dimensions and branded PNG export pass. Native build configuration is updated; native builds and a physical iPhone installation have not been run as part of this asset update.
+The supplied JPEG originals remain untouched in `mobile/assets/brand/`. User-approved local processing creates `remarked-wordmark-transparent.png` and `remarked-mark-transparent.png`, preserving the original outlines and clearing letter counters as well as the surrounding charcoal background. `scripts/prepare_brand_assets.py` reproduces the cutouts with Pillow and NumPy; `wordmark-layout.json` describes their bounds. The discarded image-generation attempts are not used. A small alpha-based drop shadow makes the white wordmark readable on the paper-colored Home background.
+
+The **R.** mark continues to identify the installed app. Native/PWA/Apple icons now use a paper-colored canvas and subtle silhouette shadow; Android's foreground retains alpha, and maskable variants include safe padding. Versioned `remarked-v14-*` URLs refresh browser icon resources. Reflection-card export loads the transparent wordmark from the same origin and falls back to the brand name if the image cannot load.
+
+Validation covers typecheck, lint, web export, share-card layout, Home layouts at 320/375/390/768/1280 pixels, eight other pages without a visible brand image, PNG alpha, icon backgrounds and PNG card export. Native builds and a physical iPhone installation are not part of these browser checks.
 
 ## Automatic cloud ebooks (1.2)
 

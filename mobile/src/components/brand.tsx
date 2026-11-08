@@ -1,39 +1,43 @@
 import React from "react";
-import { Image, View } from "react-native";
+import { Image, Platform, View } from "react-native";
+import layout from "../../assets/brand/wordmark-layout.json";
 
-export function BrandMark({ size = 36 }: { size?: number }) {
-  return (
-    <Image
-      source={require("../../assets/brand/remarked-mark.jpg")}
-      accessibilityLabel="Remarked app icon"
-      resizeMode="contain"
-      style={{ width: size, height: size, borderRadius: size * 0.2 }}
-    />
-  );
-}
-
-export function BrandWordmark({ hero = false }: { hero?: boolean }) {
+export function BrandWordmark({ width = 156 }: { width?: number }) {
+  const scale = width / layout.width;
+  const height = layout.height * scale;
   return (
     <View
-      style={
-        hero
-          ? {
-              width: "100%",
-              maxWidth: 420,
-              aspectRatio: 1600 / 533,
-              borderRadius: 16,
-              alignSelf: "flex-start",
-              overflow: "hidden",
-            }
-          : { width: 168, height: 56, borderRadius: 10, overflow: "hidden" }
-      }
+      testID="home-wordmark"
+      style={{
+        width,
+        height,
+        flexShrink: 0,
+        ...Platform.select({
+          web: { filter: "drop-shadow(0 1px 1px rgba(20, 66, 45, 0.6))" },
+          android: { filter: "drop-shadow(0 1px 1px rgba(20, 66, 45, 0.6))" },
+          default: {
+            shadowColor: "#14422d",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.6,
+            shadowRadius: 1,
+          },
+        }),
+      }}
     >
-      <Image
-        source={require("../../assets/brand/remarked-wordmark.jpg")}
-        accessibilityLabel="Remarked"
-        resizeMode="contain"
-        style={{ width: "100%", height: "100%" }}
-      />
+      <View style={{ width, height, overflow: "hidden" }}>
+        <Image
+          source={require("../../assets/brand/remarked-wordmark-transparent.png")}
+          accessibilityLabel="Remarked"
+          resizeMode="contain"
+          style={{
+            position: "absolute",
+            left: -layout.x * scale,
+            top: -layout.y * scale,
+            width: layout.imageWidth * scale,
+            height: layout.imageHeight * scale,
+          }}
+        />
+      </View>
     </View>
   );
 }

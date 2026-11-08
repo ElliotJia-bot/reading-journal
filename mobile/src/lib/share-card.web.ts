@@ -25,7 +25,7 @@ function loadWordmark() {
       resolve(image);
     };
     image.onerror = fallback;
-    image.src = "/brand/remarked-wordmark.jpg";
+    image.src = "/brand/remarked-wordmark-transparent.png";
   }));
 }
 export async function createShareCards(
@@ -150,7 +150,14 @@ export async function createShareCards(
         "#a99f89",
         sans,
       );
-      if (wordmark) ctx.drawImage(wordmark, left - 16, 1220, 240, 80);
+      if (wordmark)
+        ctx.drawImage(
+          wordmark,
+          left,
+          1242,
+          240,
+          (240 * wordmark.naturalHeight) / wordmark.naturalWidth,
+        );
       else drawLines(["Remarked."], left, 1251, 22, 30, "#a99f89", sans);
       if (layout.pages.length > 1) {
         ctx.textAlign = "right";

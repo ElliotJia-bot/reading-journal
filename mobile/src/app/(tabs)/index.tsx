@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, View, useWindowDimensions } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { useJournal } from "../../lib/journal";
 import { api } from "../../lib/api";
 import { homeMetrics, finishEstimate } from "../../../../shared/metrics";
+import { BrandWordmark } from "../../components/brand";
 import {
   Page,
   Button,
@@ -15,6 +16,10 @@ import {
 } from "../../components/ui";
 
 export default function Home() {
+  const { width } = useWindowDimensions();
+  const compactHeader = width < 390;
+  const logoWidth =
+    width < 350 ? 106 : width < 390 ? 132 : width < 600 ? 156 : 210;
   const { books, sessions, profile, timer, error, refresh, user } =
     useJournal();
   const [now, setNow] = useState(Date.now);
@@ -68,19 +73,43 @@ export default function Home() {
   );
   return (
     <Page>
-      <View style={styles.between}>
-        <Text style={styles.muted}>
-          {hour < 12
-            ? "Good morning"
-            : hour < 18
-              ? "Good afternoon"
-              : "Good evening"}
-        </Text>
+      <View
+        style={[styles.between, { gap: compactHeader ? 8 : 12 }]}
+        testID="home-header"
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: compactHeader ? 10 : 16,
+            flex: 1,
+            minWidth: 0,
+          }}
+        >
+          <BrandWordmark width={logoWidth} />
+          <Text
+            style={[styles.muted, { flexShrink: 0 }]}
+            numberOfLines={1}
+            testID="home-greeting"
+          >
+            {hour < 12
+              ? "Good morning"
+              : hour < 18
+                ? "Good afternoon"
+                : "Good evening"}
+          </Text>
+        </View>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Settings"
           onPress={() => router.push("/settings")}
-          style={{ padding: 10 }}
+          style={{
+            padding: 10,
+            minWidth: 44,
+            minHeight: 44,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
           <Feather name="settings" size={21} color={color.green} />
         </Pressable>

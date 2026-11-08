@@ -11,19 +11,19 @@
   "lang": "en",
   "icons": [
     {
-      "src": "/icons/remarked-192.png",
+      "src": "/icons/remarked-v14-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/remarked-512.png",
+      "src": "/icons/remarked-v14-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/remarked-maskable-512.png",
+      "src": "/icons/remarked-v14-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

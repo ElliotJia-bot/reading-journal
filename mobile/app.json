@@ -2,7 +2,7 @@
   "expo": {
     "name": "Remarked",
     "slug": "reading-journal",
-    "version": "1.2.0",
+    "version": "1.4.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,7 +12,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#1c1e1d",
+        "backgroundColor": "#fdf9f3",
         "foregroundImage": "./assets/android-icon-foreground.png"
       },
       "predictiveBackGestureEnabled": false
@@ -23,6 +23,9 @@
       "favicon": "./assets/favicon.png"
     },
     "scheme": "readingjournal",
-    "plugins": ["expo-router", "expo-font"]
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ]
   }
 }
