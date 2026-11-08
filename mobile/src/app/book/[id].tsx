@@ -123,14 +123,14 @@ export default function BookDetail() {
       {book.status === "Dropped" && (
         <Text style={styles.body}>Set aside: {book.dropReason}</Text>
       )}
-      {book.reader && (
+      {(book.reader || book.cloudEbook) && (
         <Button
           title="Continue reading"
           busy={busy}
           onPress={() => void readEbook()}
         />
       )}
-      {!book.reader && (
+      {!book.reader && !book.cloudEbook && (
         <Button
           title={timer ? "Return to active session" : "Start Reading"}
           busy={busy}

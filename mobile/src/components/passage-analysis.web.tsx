@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { router } from "expo-router";
-import { storeEbook } from "../lib/ebook.web";
+import { loadReadableEbook } from "../lib/shared-ebook.web";
 import { useJournal } from "../lib/journal";
 import { api } from "../lib/api";
 import { Button, Chips, styles, message } from "./ui";
@@ -25,7 +25,8 @@ export default function PassageAnalysis({
   compact?: boolean;
   rhythm?: "quicker" | "longer";
 }) {
-  const { user } = useJournal();
+  const { user, books } = useJournal();
+  const documentId = books.find(book => book.id === bookId)?.reader?.documentId;
   const [text, setText] = useState<string | null>(null),
     [loading, setLoading] = useState(true),
     [consent, setConsent] = useState(false),
@@ -34,8 +35,10 @@ export default function PassageAnalysis({
     [error, setError] = useState("");
   useEffect(() => {
     let active = true;
-    if (user)
-      void storeEbook(user.uid, bookId)
+    const opening = user && documentId
+      ? loadReadableEbook(user.uid, bookId, documentId)
+      : Promise.resolve(undefined);
+      void opening
         .then((e) => {
           if (active) setText(e?.pages[page]?.text ?? null);
         })
@@ -48,7 +51,7 @@ export default function PassageAnalysis({
     return () => {
       active = false;
     };
-  }, [user, bookId, page]);
+  }, [user, bookId, page, documentId]);
   async function analyze() {
     if (!text || !consent) return;
     setBusy(true);

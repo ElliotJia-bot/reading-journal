@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
-import { useJournal } from "../../lib/journal";
+import { useJournal, type Book } from "../../lib/journal";
+import { editableBook } from "../../../../shared/domain";
 import {
   Page,
   Button,
@@ -11,10 +12,24 @@ import {
   Progress,
   styles,
   color,
+  message,
 } from "../../components/ui";
 export default function Library() {
-  const { books, sessions, timer, error, refresh } = useJournal();
+  const { books, sessions, timer, error, refresh, saveBook } = useJournal();
   const [filter, setFilter] = useState("Reading");
+  const [opening, setOpening] = useState(false);
+  const [openError, setOpenError] = useState("");
+  async function open(book: Book) {
+    setOpening(true);
+    setOpenError("");
+    try {
+      const canRead = !!(book.reader || book.cloudEbook);
+      if (canRead && (book.status === "Want to Read" || book.status === "Dropped"))
+        await saveBook(book.id, editableBook(book, { status: "Reading" }));
+      router.push({ pathname: canRead ? "/reader/[id]" : "/book/[id]", params: { id: book.id } });
+    } catch (e) { setOpenError(message(e)); }
+    finally { setOpening(false); }
+  }
   const visible = books
     .filter((book) => book.status === filter)
     .sort((a, b) => b.updatedAt - a.updatedAt);
@@ -56,13 +71,13 @@ export default function Library() {
           onPress={() => router.push(timer.endedAt ? "/finish" : "/session")}
         />
       )}
+      {!!openError && <Text style={styles.error}>{openError}</Text>}
       {visible.map((book, index) => (
         <Pressable
           key={book.id}
           accessibilityRole="button"
-          onPress={() =>
-            router.push({ pathname: "/book/[id]", params: { id: book.id } })
-          }
+          disabled={opening}
+          onPress={() => void open(book)}
           style={styles.card}
         >
           <View style={styles.row}>
@@ -102,6 +117,7 @@ export default function Library() {
               <Text style={styles.buttonText}>Continue Reading</Text>
             </View>
           )}
+          {(book.reader || book.cloudEbook) && <Pressable accessibilityRole="button" accessibilityLabel={`Book details for ${book.title}`} onPress={(event) => { event.stopPropagation(); router.push({ pathname: "/book/[id]", params: { id: book.id } }); }} style={{ paddingVertical: 10 }}><Text style={styles.label}>Book details & insights</Text></Pressable>}
         </Pressable>
       ))}
       {!visible.length && (

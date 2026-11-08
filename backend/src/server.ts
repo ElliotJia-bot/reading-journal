@@ -22,6 +22,8 @@ import { community } from "./community.js";
 import { reader } from "./reader.js";
 import { discovery, refreshPublicReader } from "./discovery.js";
 import { recommendations } from "./recommendations.js";
+import { catalog, publishedEbooks } from "./cloud-ebooks.js";
+import { matchingSharedEdition } from "../../shared/catalog.js";
 
 export const app = express();
 app.disable("x-powered-by");
@@ -80,14 +82,16 @@ app.use("/v1/community", community);
 app.use("/v1/reader", reader);
 app.use("/v1/discovery", discovery);
 app.use("/v1/recommendations", recommendations);
+app.use("/v1/catalog", catalog);
 
 async function loadData(uid: string) {
   const user = userRef(uid);
-  const [profile, books, sessions, reports] = await Promise.all([
+  const [profile, books, sessions, reports, ebooks] = await Promise.all([
     user.get(),
     user.collection("books").get(),
     user.collection("sessions").get(),
     user.collection("insights").orderBy("generatedAt", "desc").limit(1).get(),
+    publishedEbooks(),
   ]);
   return {
     profile: (profile.data() ?? {
@@ -95,7 +99,10 @@ async function loadData(uid: string) {
       timezone: "America/New_York",
       topics: [],
     }) as Profile,
-    books: books.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as Book[],
+    books: books.docs.map((doc) => {
+      const book = { ...doc.data(), id: doc.id } as Book;
+      return { ...book, cloudEbook: !!matchingSharedEdition(book, ebooks) };
+    }),
     sessions: sessions.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,

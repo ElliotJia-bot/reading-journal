@@ -5,9 +5,10 @@ import ReaderNotes, {
   type QuoteSelection,
 } from "./reader-notes.web";
 import { router, useLocalSearchParams, usePreventRemove } from "expo-router";
-import { useJournal } from "../lib/journal";
+import { useJournal, type Book } from "../lib/journal";
 import { api } from "../lib/api";
-import { hashText, storeEbook } from "../lib/ebook.web";
+import { hashText } from "../lib/ebook.web";
+import { loadReadableEbook } from "../lib/shared-ebook.web";
 import {
   countedMs,
   textFeatures,
@@ -64,7 +65,7 @@ const buttonStyle: React.CSSProperties = {
 };
 export default function EbookReader() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { user, books, sessions, timer, updateTimer, loading } = useJournal();
+  const { user, books, sessions, timer, updateTimer, loading, refresh } = useJournal();
   const [exitReady, setExitReady] = useState(false);
   const leaving = useRef(false);
   const handingOff = useRef(false);
@@ -99,6 +100,20 @@ export default function EbookReader() {
   const loadedKey = useRef("");
   const scrollContainer = useRef<HTMLDivElement | null>(null);
   const [displayKey, setDisplayKey] = useState("");
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  useEffect(() => {
+    if (loading || !user || !book || book.reader || !book.cloudEbook) return;
+    let cancelled = false;
+    void api<{ book: Book | null }>(`/v1/catalog/books/${book.id}/open`, "POST")
+      .then(async result => {
+        if (cancelled) return;
+        if (!result.book) throw new Error("This ebook is no longer available.");
+        if (result.book.id !== book.id)
+          router.replace({ pathname: "/reader/[id]", params: { id: result.book.id } });
+        await refresh();
+      }).catch(e => { if (!cancelled) { setError(String(e.message)); setReady(true); } });
+    return () => { cancelled = true; };
+  }, [loading, user, book, refresh, loadAttempt]);
   const key = `ebook-state:${user?.uid}:${id}`;
   const disablePrevention = usePreventRemove(
     !exitReady &&
@@ -127,7 +142,7 @@ export default function EbookReader() {
     let cancelled = false;
     if (loading || !user || !book?.reader || loadedKey.current === key) return;
     Promise.all([
-      storeEbook(user.uid, id),
+      loadReadableEbook(user.uid, id, book.reader.documentId),
       api<{ visits: PageVisit[] }>(`/v1/reader/books/${id}/visits`).catch(
         () => ({ visits: [] }),
       ),
@@ -198,7 +213,7 @@ export default function EbookReader() {
     return () => {
       cancelled = true;
     };
-  }, [user, id, book, key, commit, loading, sessions]);
+  }, [user, id, book, key, commit, loading, sessions, loadAttempt]);
   useEffect(() => {
     if (!ebook) return;
     const tick = () => {
@@ -484,6 +499,7 @@ export default function EbookReader() {
               ? "Import this ebook on this device to read it here. Your saved records are already in your account."
               : "Opening ebook…")}
         </p>
+        {!!error && (book?.reader || book?.cloudEbook) && <button style={buttonStyle} onClick={() => { setError(""); setReady(false); setLoadAttempt(n => n + 1); }}>Try opening again</button>}
         <button style={buttonStyle} onClick={() => router.push("/add-book")}>
           Import EPUB or TXT
         </button>

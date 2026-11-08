@@ -132,7 +132,7 @@ export default function Home() {
             title="Continue reading"
             onPress={() =>
               router.push({
-                pathname: current.reader ? "/reader/[id]" : "/book/[id]",
+                pathname: current.reader || current.cloudEbook ? "/reader/[id]" : "/book/[id]",
                 params: { id: current.id },
               })
             }

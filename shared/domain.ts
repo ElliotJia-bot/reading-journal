@@ -1,6 +1,7 @@
 export type BookStatus = "Reading" | "Want to Read" | "Finished" | "Dropped";
 export type PositionUnit = "pages" | "percent";
 export interface Book {
+  cloudEbook?: boolean;
   reader?: { documentId: string; pageCount: number };
   catalogId?: string;
   language?: string;
