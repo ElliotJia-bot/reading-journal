@@ -87,6 +87,14 @@ test("Content clues separate explicit enjoyment from inferred difficulty and avo
     "Longer sentences",
   );
 });
+test("Quicker passage clues respect feedback without claiming comprehension or a slowdown", () => {
+  assert.match(passageClue("A passage.", ["Enjoyed"], "quicker").body, /more quickly/);
+  assert.match(passageClue("A passage.", ["Difficult"], "quicker").body, /despite spending less/);
+  assert.match(passageClue("A passage.", ["Rereading"], "quicker").body, /familiarity may/);
+  assert.equal(passageClue("These are short sentences. ".repeat(20), [], "quicker").title, "Shorter sentences");
+  assert.equal(passageClue("中文没有空格。".repeat(50), [], "quicker").title, "A quicker stretch");
+  assert.doesNotMatch(passageClue("", [], "quicker").body, /longer|slow|understood better/);
+});
 test("Behavioral suggestions are scoped to this book and require repeated observations", () => {
   const book = { id: "own" } as Book;
   const row = {

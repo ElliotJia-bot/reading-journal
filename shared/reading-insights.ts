@@ -43,8 +43,48 @@ export function durationLabel(seconds: number) {
     ? `${Math.floor(value / 60)}m${value % 60 ? ` ${value % 60}s` : ""}`
     : `${value}s`;
 }
-export function passageClue(text: string, reactions: string[]) {
+export function passageClue(
+  text: string,
+  reactions: string[],
+  rhythm?: "quicker" | "longer",
+) {
   const features = textFeatures(text);
+  if (rhythm === "quicker") {
+    if (reactions.includes("Difficult"))
+      return {
+        title: "Quicker, but still challenging",
+        body: "You marked this page Difficult despite spending less time here.",
+        evidence: "Your page feedback",
+        next: "Pause and paraphrase one sentence before continuing.",
+      };
+    if (reactions.includes("Rereading"))
+      return {
+        title: "Familiar territory",
+        body: "You returned to this passage; familiarity may help explain the shorter stay.",
+        evidence: "Your page feedback",
+        next: "Note one detail you noticed on this visit.",
+      };
+    if (reactions.includes("Enjoyed"))
+      return {
+        title: "A passage you enjoyed",
+        body: "You marked this page Enjoyed and moved through it more quickly.",
+        evidence: "Your page feedback",
+        next: "Save a line that kept you reading.",
+      };
+    if (!features.hasCjk && features.words >= 50 && features.averageWordsPerSentence <= 14)
+      return {
+        title: "Shorter sentences",
+        body: "Shorter sentences here may have helped the passage flow.",
+        evidence: `${features.averageWordsPerSentence} words per sentence in this passage`,
+        next: "Recall the main idea before moving on.",
+      };
+    return {
+      title: "A quicker stretch",
+      body: "Your shorter stay may reflect familiarity, flow, or a quick skim.",
+      evidence: "Timing alone does not show how much you understood",
+      next: "Recall one idea before moving on.",
+    };
+  }
   if (reactions.includes("Enjoyed"))
     return {
       title: "Something held your interest",

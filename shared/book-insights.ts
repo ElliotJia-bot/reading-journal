@@ -200,3 +200,80 @@ export function slowdownOverview(
 export function rangeLabel(start: number, end: number) {
   return start === end ? `Page ${start}` : `Pages ${start}–${end}`;
 }
+
+export type RhythmDirection = "quicker" | "longer";
+export type RhythmRange = SlowdownRange & { direction: RhythmDirection };
+
+// Keep the comparison on time, not inferred reading speed or comprehension.
+export function readingRhythmOverview(
+  book: Book,
+  sessions: ReadingSession[],
+  visits: PageVisit[] = [],
+  now = Date.now(),
+) {
+  const data = slowdownOverview(book, sessions, visits, now);
+  const groups: { direction: RhythmDirection; points: SlowdownPoint[] }[] = [];
+  for (const point of data.points) {
+    const direction =
+      point.relative !== null && point.relative >= 1.5
+        ? "longer"
+        : point.relative !== null && point.relative <= 0.9
+          ? "quicker"
+          : null;
+    if (!direction) continue;
+    const previous = groups.at(-1);
+    if (
+      book.reader &&
+      previous?.direction === direction &&
+      previous.points.at(-1)!.end + 1 === point.start
+    ) {
+      previous.points.push(point);
+    } else groups.push({ direction, points: [point] });
+  }
+  const ranges: RhythmRange[] = groups
+    // A brief, isolated ebook page is not a sustained quicker stretch.
+    .filter((g) => !book.reader || g.direction === "longer" || g.points.length >= 3)
+    .map(({ direction, points }) => {
+      const relative = points.reduce((n, p) => n + p.relative!, 0) / points.length;
+      const representative = [...points].sort(
+        (a, b) => Math.abs(a.relative! - relative) - Math.abs(b.relative! - relative),
+      )[0];
+      return {
+        ...representative,
+        key: `${direction}-${points[0].key}`,
+        start: points[0].start,
+        end: points.at(-1)!.end,
+        relative,
+        direction,
+        pages: points.flatMap((p) => p.page === null ? [] : [p.page]),
+        sessionIds: [...new Set(points.flatMap((p) => p.sessionIds))],
+        ...(direction === "quicker" && representative.page === null
+          ? {
+              reason: representative.reactions.includes("Liked it")
+                ? "You enjoyed this sitting and spent less time per page."
+                : representative.reactions.includes("Challenging")
+                  ? "You marked this sitting challenging despite spending less time per page."
+                  : "You moved through these pages more quickly than your usual rhythm.",
+              nextStep: "Recall one idea before moving on.",
+            }
+          : {}),
+      };
+    });
+  const strongest = (direction: RhythmDirection) =>
+    ranges.filter((r) => r.direction === direction).sort((a, b) =>
+      direction === "quicker"
+        ? a.relative! - b.relative! || a.start - b.start
+        : b.relative! - a.relative! || a.start - b.start,
+    )[0];
+  return {
+    ...data,
+    ranges: [strongest("quicker"), strongest("longer")].filter(
+      (r): r is RhythmRange => !!r,
+    ),
+  };
+}
+
+export function rhythmDifference(range: Pick<RhythmRange, "relative" | "direction">) {
+  const difference = Math.round(Math.abs(range.relative! - 1) * 100);
+  return `${difference}% ${range.direction === "quicker" ? "less" : "more"} time`;
+}

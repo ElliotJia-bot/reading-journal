@@ -17,7 +17,7 @@ import {
 import { SmallBlock } from "../../../components/insight-blocks";
 import SessionChart from "../../../components/session-chart";
 import ReadingClock from "../../../components/reading-clock";
-import BookSlowdowns from "../../../components/book-slowdowns";
+import BookReadingRhythm from "../../../components/book-reading-rhythm";
 import { validBookSessions } from "../../../../../shared/book-insights";
 import { Feather } from "@expo/vector-icons";
 export default function BookInsights() {
@@ -96,8 +96,8 @@ export default function BookInsights() {
         metric={metric}
         onMetric={setMetric}
       />
-      <BookSlowdowns
-        key={`${user?.uid}:${id}:${range}`}
+      <BookReadingRhythm
+        key={`${user?.uid}:${id}:${range}:${book.reader?.documentId ?? "manual"}`}
         book={book}
         sessions={filtered}
       />

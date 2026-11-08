@@ -4,6 +4,8 @@ import {
   readingClock,
   hourLabel,
   slowdownOverview,
+  readingRhythmOverview,
+  rhythmDifference,
 } from "../../shared/book-insights.ts";
 import type { Book, ReadingSession } from "../../shared/domain.ts";
 import type { PageVisit } from "../../shared/reader.ts";
@@ -166,4 +168,57 @@ test("Slowdown cards are limited to the three largest differences", () => {
   const result = slowdownOverview(book, [...baseline, ...more], [], now);
   assert.equal(result.ranges.length, 3);
   assert(result.ranges[0].relative! > result.ranges[2].relative!);
+});
+
+const rhythmBook = { ...book, reader: { documentId: "rhythm", pageCount: 30 } } as Book;
+const rhythmSession = session("rhythm-session", "2026-11-07T18:00:00Z", 0, 20, 30);
+const rhythmVisit = (page: number, seconds: number): PageVisit => ({
+  id: `rhythm-${page}`, page, activeMs: seconds * 1000,
+  sessionId: rhythmSession.id, documentId: "rhythm", characters: 500, words: 100,
+  startedAt: rhythmSession.startedAt, endedAt: rhythmSession.endedAt, reaction: "",
+}) as PageVisit;
+const rhythmBase = Array.from({ length: 10 }, (_, i) => rhythmVisit(i, 100));
+test("Reading rhythm includes both directions and shows range-average time differences", () => {
+  const result = readingRhythmOverview(rhythmBook, [rhythmSession], [
+    ...rhythmBase, rhythmVisit(10, 60), rhythmVisit(11, 70), rhythmVisit(12, 80),
+    rhythmVisit(13, 180), rhythmVisit(14, 220), rhythmVisit(16, 160),
+  ], now);
+  assert.equal(result.ranges.length, 2);
+  const [quicker, longer] = result.ranges;
+  assert.equal(quicker.direction, "quicker");
+  assert.deepEqual(quicker.pages, [10, 11, 12]);
+  assert.ok(Math.abs(quicker.relative! - .7) < 1e-10);
+  assert.equal(quicker.page, 11);
+  assert.equal(rhythmDifference(quicker), "30% less time");
+  assert.equal(longer.direction, "longer");
+  assert.deepEqual(longer.pages, [13, 14]);
+  assert.equal(longer.relative, 2);
+  assert.equal(rhythmDifference(longer), "100% more time");
+});
+test("A missing, usual, or very brief page breaks a quicker stretch", () => {
+  for (const middle of [[], [rhythmVisit(12, 100)], [rhythmVisit(12, 2)]]) {
+    const result = readingRhythmOverview(rhythmBook, [rhythmSession], [
+      ...rhythmBase, rhythmVisit(10, 50), rhythmVisit(11, 50), ...middle, rhythmVisit(13, 50),
+    ], now);
+    assert.equal(result.ranges.length, 0);
+  }
+});
+test("Manual quicker stretches retain whole sittings and never imply per-page telemetry", () => {
+  const quicker = session("quick", "2026-11-07T12:00:00Z", 80, 100, 12);
+  const result = readingRhythmOverview(book, [...logs, quicker], [], now);
+  assert.equal(result.ranges.length, 2);
+  assert.equal(result.ranges[0].direction, "quicker");
+  assert.equal(result.ranges[0].page, null);
+  assert.deepEqual(result.ranges[0].pages, []);
+  assert.equal(result.ranges[0].start, 80);
+  assert.equal(result.ranges[0].relative, .6);
+  assert.doesNotMatch(result.ranges[0].reason, /more time/);
+  assert.equal(result.ranges[1].direction, "longer");
+});
+test("A one-sided or insufficient history does not manufacture the missing direction", () => {
+  assert.equal(readingRhythmOverview(book, logs.slice(0, 3), [], now).ranges.length, 0);
+  const result = readingRhythmOverview(rhythmBook, [rhythmSession], [...rhythmBase, rhythmVisit(11, 200)], now);
+  assert.equal(result.ranges.length, 1);
+  assert.equal(result.ranges[0].direction, "longer");
+  assert.equal(rhythmDifference({direction: "quicker", relative: .75}), "25% less time");
 });

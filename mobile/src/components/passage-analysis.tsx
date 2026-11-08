@@ -8,6 +8,7 @@ export default function PassageAnalysis(_props: {
   sessionIds?: string[];
   reactions?: string[];
   compact?: boolean;
+  rhythm?: "quicker" | "longer";
 }) {
   return (
     <Text style={styles.body}>

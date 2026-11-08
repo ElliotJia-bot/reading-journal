@@ -5,24 +5,25 @@ import Svg, {
   Polyline,
   Rect,
   Circle,
+  Polygon,
   Text as SvgText,
 } from "react-native-svg";
 import type {
   SlowdownPoint,
-  SlowdownRange,
+  RhythmRange,
 } from "../../../shared/book-insights";
 import { color, styles } from "./ui";
-export default function SlowdownChart({
+export default function ReadingRhythmChart({
   points,
   ranges,
   reader,
 }: {
   points: SlowdownPoint[];
-  ranges: SlowdownRange[];
+  ranges: RhythmRange[];
   reader: boolean;
 }) {
   const { width } = useWindowDimensions();
-  const labelSize = (12 * 560) / Math.max(270, Math.min(width, 640) - 48);
+  const labelSize = (11 * 560) / Math.max(270, Math.min(width, 640) - 48);
   const measured = points.filter((p) => p.relative !== null);
   if (!measured.length) return null;
   const first = Math.min(...points.map((p) => p.start)),
@@ -42,13 +43,13 @@ export default function SlowdownChart({
   return (
     <View style={{ gap: 6 }}>
       <View style={styles.between}>
-        <Text style={styles.muted}>Time vs. your usual pace</Text>
-        <Text style={[styles.muted, { color: color.green }]}>1× = usual</Text>
+        <Text style={styles.muted}>Time compared with usual</Text>
+        <Text style={[styles.muted, { color: color.green }]}>1× baseline</Text>
       </View>
       <View
         style={{ width: "100%", aspectRatio: 2.65 }}
         accessibilityRole="image"
-        accessibilityLabel={`Reading pace across pages ${first} to ${last}. Highlighted passages took at least 50 percent more time.`}
+        accessibilityLabel={`Reading rhythm across pages ${first} to ${last}. Below the 1 times baseline means less time; above means more time. Green highlights quicker stretches and orange highlights longer stays.`}
       >
         <Svg width="100%" height="100%" viewBox="0 0 560 210">
           {ranges.map((r) => (
@@ -58,7 +59,7 @@ export default function SlowdownChart({
               y={26}
               width={Math.max(8, x(r.end) - x(r.start))}
               height={130}
-              fill="#f2ded3"
+              fill={r.direction === "quicker" ? "#dce8da" : "#f2ded3"}
             />
           ))}
           {[0, 1, ceiling].map((v) => (
@@ -85,6 +86,13 @@ export default function SlowdownChart({
           {lines.map((line, i) =>
             reader ? (
               <React.Fragment key={i}>
+                {line.length > 1 && (
+                  <Polygon
+                    points={`${x(line[0].start)},156 ${line.map((p) => `${x(p.start)},${y(p.relative!)}`).join(" ")} ${x(line.at(-1)!.end)},156`}
+                    fill="#546b4b"
+                    opacity={0.07}
+                  />
+                )}
                 <Polyline
                   points={line
                     .map((p) => `${x(p.start)},${y(p.relative!)}`)
@@ -109,7 +117,7 @@ export default function SlowdownChart({
                 x2={x(line[0].end)}
                 y1={y(line[0].relative!)}
                 y2={y(line[0].relative!)}
-                stroke={line[0].relative! >= 1.5 ? color.rust : "#708570"}
+                stroke={line[0].relative! >= 1.5 ? color.rust : line[0].relative! <= 0.9 ? color.green : "#84917f"}
                 strokeWidth={3}
                 strokeLinecap="round"
               />
@@ -129,11 +137,10 @@ export default function SlowdownChart({
           ))}
         </Svg>
       </View>
-      <Text style={styles.muted}>
-        {reader
-          ? "Shaded areas show longer dwell on comparable text."
-          : "Each segment is a sitting’s average, across its logged pages."}
-      </Text>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 16 }}>
+        <Text style={[styles.muted, { color: color.green }]}>↓ Quicker stretches</Text>
+        <Text style={[styles.muted, { color: color.rust }]}>↑ More time here</Text>
+      </View>
     </View>
   );
 }

@@ -15,6 +15,7 @@ export default function PassageAnalysis({
   sessionIds,
   reactions = [],
   compact = false,
+  rhythm,
 }: {
   bookId: string;
   page: number;
@@ -22,6 +23,7 @@ export default function PassageAnalysis({
   sessionIds?: string[];
   reactions?: string[];
   compact?: boolean;
+  rhythm?: "quicker" | "longer";
 }) {
   const { user } = useJournal();
   const [text, setText] = useState<string | null>(null),
@@ -66,7 +68,7 @@ export default function PassageAnalysis({
       setBusy(false);
     }
   }
-  const clue = passageClue(text ?? "", reactions);
+  const clue = passageClue(text ?? "", reactions, rhythm);
   if (compact)
     return (
       <View style={{ gap: 10 }}>
@@ -79,10 +81,10 @@ export default function PassageAnalysis({
                 ? report.result.possibleReasons[0] || "No clear cause yet."
                 : clue.body}
             </Text>
-            <Text style={styles.muted}>
-              Try next: {report?.result.nextStep || clue.next}
-            </Text>
             <DetailFold title={`Explore page ${page + 1}`}>
+              <Text style={styles.muted}>
+                Try next: {report?.result.nextStep || clue.next}
+              </Text>
               <Text style={styles.label}>
                 {report ? "POSSIBLE WHY · AI" : clue.title.toUpperCase()}
               </Text>
