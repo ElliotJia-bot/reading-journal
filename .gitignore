@@ -1,0 +1,29 @@
+node_modules/
+.tools/
+.local/
+.env
+.env.*
+!.env.example
+.expo/
+dist/
+dist-web/
+coverage/
+*.log
+
+dist-reader-test/
+
+# Local operating-system, Python, and build artifacts
+.DS_Store
+__pycache__/
+*.py[cod]
+*.tsbuildinfo
+
+# Credentials and signing files (examples remain shareable)
+*.key
+*.pem
+*.p8
+*.p12
+*.mobileprovision
+application_default_credentials.json
+service-account*.json
+firebase-adminsdk*.json

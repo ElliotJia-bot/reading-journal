@@ -1,0 +1,7 @@
+.local
+.tools
+mobile
+design
+**/node_modules
+**/.env*
+**/*.log

@@ -1,0 +1,203 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_stack" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary-fixed": "#b8efce", "on-secondary": "#ffffff", "on-surface": "#1c1b19", "on-tertiary-fixed-variant": "#1b5038", "secondary": "#9c4328", "inverse-surface": "#31302d", "inverse-primary": "#a1d1b4", "secondary-container": "#ff8f6e", "surface-tint": "#3a674f", "on-primary-fixed": "#002112", "tertiary": "#0b432c", "surface-dim": "#ddd9d4", "on-tertiary-container": "#9bd1b1", "secondary-fixed": "#ffdbd1", "on-secondary-fixed-variant": "#7d2c13", "surface-container": "#f2ede8", "surface": "#fdf9f3", "primary-fixed": "#bceecf", "outline": "#717973", "on-primary-fixed-variant": "#224f39", "on-background": "#1c1b19", "surface-container-highest": "#e6e2dd", "error-container": "#ffdad6", "tertiary-container": "#285b42", "background": "#fdf9f3", "surface-container-high": "#ece7e2", "on-error-container": "#93000a", "surface-container-lowest": "#ffffff", "error": "#ba1a1a", "inverse-on-surface": "#f4f0eb", "primary": "#14422d", "on-surface-variant": "#414943", "on-primary": "#ffffff", "secondary-fixed-dim": "#ffb59f", "tertiary-fixed-dim": "#9cd2b3", "surface-container-low": "#f7f3ee", "on-primary-container": "#9fcfb2", "on-secondary-fixed": "#3a0a00", "surface-bright": "#fdf9f3", "primary-container": "#2d5a43", "on-tertiary-fixed": "#002113", "outline-variant": "#c0c9c1", "on-tertiary": "#ffffff", "surface-variant": "#e6e2dd", "on-error": "#ffffff", "primary-fixed-dim": "#a1d1b4", "on-secondary-container": "#76270e" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-mobile": "0.75rem", "space-sm": "0.5rem", "gutter": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "margin-tablet": "2rem", "space-xl": "2.25rem", "space-lg": "1.5rem", "margin": "1.25rem" }, fontFamily: { "quote-editorial": ["Newsreader"], "body-md": ["Plus Jakarta Sans"], "display-lg-mobile": ["Newsreader"], "label-sm": ["Plus Jakarta Sans"], "display-lg": ["Newsreader"], "headline-lg": ["Newsreader"], "body-sm": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Newsreader"], "headline-md": ["Newsreader"], "label-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"] }, fontSize: { "quote-editorial": ["18px", { lineHeight: "28px", fontWeight: "400" }], "body-md": ["15px", { lineHeight: "22px", fontWeight: "400" }], "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.015em", fontWeight: "400" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }], "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "400" }], "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "400" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "headline-sm": ["19px", { lineHeight: "26px", fontWeight: "500" }], "headline-md": ["22px", { lineHeight: "30px", letterSpacing: "-0.01em", fontWeight: "500" }], "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }], "body-lg": ["17px", { lineHeight: "26px", fontWeight: "400" }] } } } };</script><style>@layer base { html, body { min-height: 100%; margin: 0; padding: 0; background-color: #fdf9f3; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(36,35,32,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs min-w-0"><button aria-label="Back" class="w-11 h-11 -ml-space-xs flex items-center justify-center rounded-full text-on-surface hover:text-primary transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Reading Journal Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1XmpIVW6LuvbZeFkkI1L8AuaPbvGzCj0RmrWCRS2p5G3gTnnH67w3QDBJwF4AzA7uIEfpMYHRKZPNOhRaCfcNNm3kdNvyPyPo-FhN0OXiNnumu_-iCKMM5C7rPv7qywL2cxMd8H4Pgmtnk4GsFAE4955puVxn_IIkvfMFVxQUJa4LcLwAzX3tletpLhIzR2T01sgwFsSB_WoR0vHigN_GF3VaJiigluNLxIBlrcyDe0"><div class="flex flex-col truncate"><span class="font-headline-sm text-headline-sm text-primary font-medium tracking-tight truncate leading-none">Reading Journal</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate mt-0.5">Reading Session</span></div></div><div class="flex items-center gap-space-xs shrink-0"><a aria-label="Chrome Extension" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors" data-path="extension-preview" href="#"><span class="material-symbols-outlined text-[22px]">extension</span></a><a aria-label="Reader Profile" class="w-11 h-11 flex items-center justify-center rounded-full" data-path="profile-settings" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover shadow-[0_2px_6px_rgba(36,35,32,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2gRn2gEo5xLfFtLoY2ENOcPwN_ufuqFvB6ZJrZxKPxGYUN10NJ8a5aQzklOw8EDKwut4eC1AIIie-Ps5694KBQRDak2xpS3qyVW6I_kltNV6h2bngHGYXd3t2z3BkVbpG6xjhVhbCYg7MnHYHlTTiM3ao71FdTE3FpwZOo1JCmi-zR7DHji0C3otVkimAmylaERo6B6w3XX8_OzBNTysXmVPeYTYYE8pZGU1svQI"></a></div></div></header><main class="flex-1 w-full bg-surface pt-16 pb-safe px-margin"><div class="flex flex-col w-full pb-8">
+<div class="flex items-center justify-between py-space-sm mb-space-sm">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Cancel session logging" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-headline-sm text-headline-sm text-on-surface leading-snug">Finish Session</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Capture your reading journey</p>
+</div>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full">
+<span class="material-symbols-outlined text-[14px]">timer</span>
+<span class="font-label-sm text-label-sm tracking-wider uppercase font-semibold">Active Log</span>
+</div>
+</div>
+<div class="relative overflow-hidden rounded-xl bg-surface-container p-space-md shadow-sm mb-space-md">
+<div class="absolute -right-6 -bottom-6 w-32 h-32 bg-primary/5 rounded-full pointer-events-none"></div>
+<div class="flex items-start justify-between gap-space-md relative z-10">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold mb-1">Time Immersed</span>
+<div class="flex items-baseline gap-1.5">
+<span class="font-display-lg-mobile text-display-lg-mobile text-primary font-normal tracking-tight">24</span>
+<span class="font-headline-sm text-headline-sm text-on-surface-variant">min</span>
+</div>
+<div class="inline-flex items-center gap-1.5 mt-2 text-secondary font-medium">
+<span class="material-symbols-outlined text-[16px]">local_fire_department</span>
+<span class="font-label-sm text-label-sm">Daily focus streak preserved</span>
+</div>
+</div>
+<div class="flex flex-col items-end max-w-[50%] text-right">
+<div class="w-10 h-14 rounded bg-surface-container-highest shadow-sm overflow-hidden mb-2 relative flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Vintage hardcover book spine and cover with rich emerald green linen texture and elegant gold foil stamping on an ivory library desk under warm afternoon light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAj1Dy1cgv-3r5gHcWd5GhAbx5VVmUSGQbvuMYpwtaCD0GmGLvPSRd9h7nSo96vRT9_7DpRNAzI7x7Y96n9NYzZy5qY89PIuTbkG5JLGD9JFir06eY4KJLTyFgQEG3YMpBLLV0PVoQJ1yDajFi6zVLSlkAwpn68hN0irzpk7w3Wz0bTL5xETtGYwO0U7FctZ5kCjjBy5K7Bd5Lu4iE8dhQxjRMAWK2g9KReGMqXRk">
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface line-clamp-1 leading-snug text-right">Tomorrow, and Tomorrow, and Tomorrow</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate text-right">Gabrielle Zevin</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-space-lg">
+<div class="flex flex-col gap-space-xs">
+<label class="flex items-center justify-between font-label-lg text-label-lg text-on-surface">
+<span class="">Ending Position</span>
+<span class="font-label-sm text-label-sm text-secondary font-semibold bg-secondary-fixed/50 px-2 py-0.5 rounded-full">+24 pages read</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-on-surface-variant text-[20px] pointer-events-none">bookmark</span>
+<input class="w-full h-12 pl-11 pr-24 rounded-lg bg-surface-container text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none shadow-sm transition-all" placeholder="Enter page or %" type="text" value="Page 280">
+<div class="absolute right-3 text-on-surface-variant font-label-sm text-label-sm pointer-events-none bg-surface-container-high px-2 py-1 rounded">of 400</div>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface flex items-center justify-between">
+<span class="">Reading Atmosphere</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Where did you settle in?</span>
+</label>
+<div class="flex flex-wrap gap-2 pt-0.5" id="location-chips">
+<button class="location-pill flex items-center gap-1.5 px-3.5 py-2 rounded-full font-label-md text-label-md transition-all bg-primary-container text-on-primary shadow-sm" data-selected="true" type="button">
+<span class="material-symbols-outlined text-[16px]">cottage</span>
+<span class="">Home</span>
+</button>
+<button class="location-pill flex items-center gap-1.5 px-3.5 py-2 rounded-full font-label-md text-label-md transition-all bg-surface-container hover:bg-surface-container-high text-on-surface" data-selected="false" type="button">
+<span class="material-symbols-outlined text-[16px]">local_library</span>
+<span class="">Library</span>
+</button>
+<button class="location-pill flex items-center gap-1.5 px-3.5 py-2 rounded-full font-label-md text-label-md transition-all bg-surface-container hover:bg-surface-container-high text-on-surface" data-selected="false" type="button">
+<span class="material-symbols-outlined text-[16px]">coffee</span>
+<span class="">Café</span>
+</button>
+<button class="location-pill flex items-center gap-1.5 px-3.5 py-2 rounded-full font-label-md text-label-md transition-all bg-surface-container hover:bg-surface-container-high text-on-surface" data-selected="false" type="button">
+<span class="material-symbols-outlined text-[16px]">commute</span>
+<span class="">In Transit</span>
+</button>
+<button class="location-pill flex items-center gap-1.5 px-3.5 py-2 rounded-full font-label-md text-label-md transition-all bg-surface-container hover:bg-surface-container-high text-on-surface" data-selected="false" type="button">
+<span class="material-symbols-outlined text-[16px]">more_horiz</span>
+<span class="">Other</span>
+</button>
+</div>
+</div>
+<div class="rounded-xl bg-surface-container p-space-md shadow-sm">
+<button class="w-full flex items-center justify-between text-left group" id="reflection-toggle" type="button"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[18px]">edit_note</span></div><div><h2 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Add a reflection (optional)</h2><p class="font-body-sm text-body-sm text-on-surface-variant">Pace notes, feelings &amp; marginalia</p></div></div><span class="material-symbols-outlined text-[20px] text-on-surface-variant group-hover:text-primary transition-transform duration-200 -rotate-90" id="reflection-arrow">expand_more</span></button>
+<div class="flex flex-col gap-space-md mt-space-md pt-space-md hidden" id="reflection-body">
+<div class="flex flex-col gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-semibold">How did this session feel?</span>
+<div class="flex flex-wrap gap-2">
+<button class="tag-chip flex items-center gap-1 px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-primary-container text-on-primary" type="button">
+<span class="material-symbols-outlined text-[14px]">check</span>
+              Engaging
+            </button>
+<button class="tag-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest hover:bg-surface-container text-on-surface-variant" type="button">
+              Challenging
+            </button>
+<button class="tag-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest hover:bg-surface-container text-on-surface-variant" type="button">
+              Relaxing
+            </button>
+<button class="tag-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest hover:bg-surface-container text-on-surface-variant" type="button">
+              Inspiring
+            </button>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-semibold">What made you stop?</span>
+<div class="flex flex-wrap gap-2">
+<button class="tag-chip flex items-center gap-1 px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-primary-container text-on-primary" type="button">
+<span class="material-symbols-outlined text-[14px]">check</span>
+              Time was up
+            </button>
+<button class="tag-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest hover:bg-surface-container text-on-surface-variant" type="button">
+              Tired
+            </button>
+<button class="tag-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest hover:bg-surface-container text-on-surface-variant" type="button">
+              Distracted
+            </button>
+<button class="tag-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest hover:bg-surface-container text-on-surface-variant" type="button">
+              Lost interest
+            </button>
+<button class="tag-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest hover:bg-surface-container text-on-surface-variant" type="button">
+              Finished chapter
+            </button>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Key Theme or Topic</span>
+<div class="flex flex-wrap gap-2">
+<button class="tag-chip flex items-center gap-1 px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-secondary text-on-secondary" type="button">
+<span class="material-symbols-outlined text-[14px]">auto_stories</span>
+              Fiction &amp; Story
+            </button>
+<button class="tag-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest hover:bg-surface-container text-on-surface-variant" type="button">
+              Philosophy
+            </button>
+<button class="tag-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest hover:bg-surface-container text-on-surface-variant" type="button">
+              Design
+            </button>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold flex items-center justify-between">
+<span class="">Marginalia &amp; Quick Notes</span>
+<span class="text-on-surface-variant font-normal">Private</span>
+</label>
+<div class="relative">
+<textarea class="w-full p-3 rounded-lg bg-surface-container-lowest text-on-surface font-quote-editorial text-quote-editorial placeholder:text-outline-variant focus:outline-none shadow-sm leading-relaxed" placeholder="Jot a memorable phrase or thought..." rows="3">Sam and Sadie began collaborating on their first engine. Such great rhythm tonight.</textarea>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-space-sm pt-2">
+<button class="w-full h-12 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-md active:scale-[0.99] transition-all" id="save-btn" type="button">
+<span class="material-symbols-outlined text-[20px]">bookmark_added</span>
+<span class="">Save Session</span>
+</button>
+<div class="rounded-xl bg-surface-container-high p-space-md shadow-sm flex items-center justify-between gap-space-sm transition-all duration-300" id="toast-preview"><div class="flex flex-col gap-space-sm w-full"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span></div><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md text-on-surface font-semibold">Session saved to journal!</span><span class="font-body-sm text-body-sm text-on-surface-variant truncate">+24 pages • 70% complete</span></div></div><div class="flex items-center justify-end gap-2 pt-1"><a class="inline-flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface font-semibold px-3 py-2 rounded-lg bg-surface-container hover:bg-surface-container-lowest transition-colors" href="#" data-path="bookshelf"><span class="">Back to Bookshelf</span></a><a class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary hover:text-primary-container font-semibold px-3 py-2 rounded-lg bg-surface-container-highest hover:bg-surface-container-lowest transition-colors" href="#" data-path="insights"><span class="">View Insights</span><span class="material-symbols-outlined text-[16px]">arrow_forward</span></a></div></div></div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const locationChips = document.querySelectorAll('#location-chips .location-pill');
+    locationChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        locationChips.forEach(c => {
+          c.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm');
+          c.classList.add('bg-surface-container', 'text-on-surface');
+          c.setAttribute('data-selected', 'false');
+        });
+        chip.classList.remove('bg-surface-container', 'text-on-surface');
+        chip.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm');
+        chip.setAttribute('data-selected', 'true');
+      });
+    });
+
+    const toggle = document.getElementById('reflection-toggle');
+    const body = document.getElementById('reflection-body');
+    const arrow = document.getElementById('reflection-arrow');
+
+    toggle.addEventListener('click', () => {
+      const isHidden = body.classList.toggle('hidden');
+      if (isHidden) {
+        arrow.style.transform = 'rotate(-90deg)';
+      } else {
+        arrow.style.transform = 'rotate(0deg)';
+      }
+    });
+
+    const saveBtn = document.getElementById('save-btn');
+    const toast = document.getElementById('toast-preview');
+    saveBtn.addEventListener('click', () => {
+      toast.classList.add('scale-[1.02]');
+      setTimeout(() => {
+        toast.classList.remove('scale-[1.02]');
+      }, 200);
+    });
+  })();
+</script></main>
+
+</body></html>

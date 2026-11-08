@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary-fixed": "#b8efce", "on-secondary": "#ffffff", "on-surface": "#1c1b19", "on-tertiary-fixed-variant": "#1b5038", "secondary": "#9c4328", "inverse-surface": "#31302d", "inverse-primary": "#a1d1b4", "secondary-container": "#ff8f6e", "surface-tint": "#3a674f", "on-primary-fixed": "#002112", "tertiary": "#0b432c", "surface-dim": "#ddd9d4", "on-tertiary-container": "#9bd1b1", "secondary-fixed": "#ffdbd1", "on-secondary-fixed-variant": "#7d2c13", "surface-container": "#f2ede8", "surface": "#fdf9f3", "primary-fixed": "#bceecf", "outline": "#717973", "on-primary-fixed-variant": "#224f39", "on-background": "#1c1b19", "surface-container-highest": "#e6e2dd", "error-container": "#ffdad6", "tertiary-container": "#285b42", "background": "#fdf9f3", "surface-container-high": "#ece7e2", "on-error-container": "#93000a", "surface-container-lowest": "#ffffff", "error": "#ba1a1a", "inverse-on-surface": "#f4f0eb", "primary": "#14422d", "on-surface-variant": "#414943", "on-primary": "#ffffff", "secondary-fixed-dim": "#ffb59f", "tertiary-fixed-dim": "#9cd2b3", "surface-container-low": "#f7f3ee", "on-primary-container": "#9fcfb2", "on-secondary-fixed": "#3a0a00", "surface-bright": "#fdf9f3", "primary-container": "#2d5a43", "on-tertiary-fixed": "#002113", "outline-variant": "#c0c9c1", "on-tertiary": "#ffffff", "surface-variant": "#e6e2dd", "on-error": "#ffffff", "primary-fixed-dim": "#a1d1b4", "on-secondary-container": "#76270e" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-mobile": "0.75rem", "space-sm": "0.5rem", "gutter": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "margin-tablet": "2rem", "space-xl": "2.25rem", "space-lg": "1.5rem", "margin": "1.25rem" }, fontFamily: { "quote-editorial": ["Newsreader"], "body-md": ["Plus Jakarta Sans"], "display-lg-mobile": ["Newsreader"], "label-sm": ["Plus Jakarta Sans"], "display-lg": ["Newsreader"], "headline-lg": ["Newsreader"], "body-sm": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Newsreader"], "headline-md": ["Newsreader"], "label-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"] }, fontSize: { "quote-editorial": ["18px", { lineHeight: "28px", fontWeight: "400" }], "body-md": ["15px", { lineHeight: "22px", fontWeight: "400" }], "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.015em", fontWeight: "400" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }], "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "400" }], "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "400" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "headline-sm": ["19px", { lineHeight: "26px", fontWeight: "500" }], "headline-md": ["22px", { lineHeight: "30px", letterSpacing: "-0.01em", fontWeight: "500" }], "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }], "body-lg": ["17px", { lineHeight: "26px", fontWeight: "400" }] } } } };</script><style>@layer base { html, body { min-height: 100%; margin: 0; padding: 0; background-color: #fdf9f3; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(36,35,32,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="Reading Journal Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1XmpIVW6LuvbZeFkkI1L8AuaPbvGzCj0RmrWCRS2p5G3gTnnH67w3QDBJwF4AzA7uIEfpMYHRKZPNOhRaCfcNNm3kdNvyPyPo-FhN0OXiNnumu_-iCKMM5C7rPv7qywL2cxMd8H4Pgmtnk4GsFAE4955puVxn_IIkvfMFVxQUJa4LcLwAzX3tletpLhIzR2T01sgwFsSB_WoR0vHigN_GF3VaJiigluNLxIBlrcyDe0"/><div class="flex flex-col truncate"><span class="font-headline-sm text-headline-sm text-primary font-medium tracking-tight truncate leading-none">Reading Journal</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate mt-0.5">Community</span></div></div><div class="flex items-center gap-space-xs shrink-0"><a aria-label="Chrome Extension" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors" data-path="extension-preview" href="#"><span class="material-symbols-outlined text-[22px]">extension</span></a><a aria-label="Reader Profile" class="w-11 h-11 flex items-center justify-center rounded-full" data-path="profile-settings" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover shadow-[0_2px_6px_rgba(36,35,32,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2gRn2gEo5xLfFtLoY2ENOcPwN_ufuqFvB6ZJrZxKPxGYUN10NJ8a5aQzklOw8EDKwut4eC1AIIie-Ps5694KBQRDak2xpS3qyVW6I_kltNV6h2bngHGYXd3t2z3BkVbpG6xjhVhbCYg7MnHYHlTTiM3ao71FdTE3FpwZOo1JCmi-zR7DHji0C3otVkimAmylaERo6B6w3XX8_OzBNTysXmVPeYTYYE8pZGU1svQI"/></a></div></div></header><main class="flex-1 w-full bg-surface pt-16 pb-24 px-margin"><div class="flex flex-col w-full pb-6 space-y-space-lg">
+<!-- Subtle Badge & Editorial Welcome -->
+<section class="flex flex-col space-y-space-xs pt-2">
+<div class="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm">Demo community • Supportive &amp; ad-free</span>
+</div>
+<div class="pt-1">
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">
+        Find your reading people.
+      </h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
+        Small reading moments feel better together.
+      </p>
+</div>
+</section>
+<!-- My Circles Section -->
+<section class="flex flex-col space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">My Circles</h2>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm" id="circle-count-badge">1</span>
+</div>
+<!-- Simulation Toggle Button -->
+<button aria-pressed="false" class="inline-flex items-center gap-1 font-label-md text-label-md text-secondary hover:text-on-secondary-container transition-colors py-1 px-2 rounded-lg hover:bg-surface-container" id="toggle-empty-state-btn" type="button">
+<span class="material-symbols-outlined text-[16px]">swap_horiz</span>
+<span id="toggle-state-text">Preview empty state</span>
+</button>
+</div>
+<!-- Active Circles View -->
+<div class="flex flex-col space-y-space-sm transition-all duration-300" id="joined-circles-container">
+<div class="relative overflow-hidden bg-surface-container rounded-xl p-space-md shadow-sm">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high shrink-0 overflow-hidden flex items-center justify-center relative shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Close up photograph of a vintage ceramic coffee mug sitting atop an open clothbound book with sunlit warm shadows on textured paper, soothing cozy atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsVV4WEzYmGQaE6Kopg7eiIEfqV77V4OVIAuQpFcmsE4bXfgkdsXKAEPIXPABNmD1fU70psTcLaMZVkNnDPaQDWg4_sys4p4k_xkfK9LeOLk-LU--1e3xheyMgLNJ2UNj1uHjK4o_dPitlIPhmXQWOJGL5ADaqZDPaMazwbfpPMWmkUsvOx5TaqrxCrlhXQwL_qJ2f99w_p4X2tel2q3uRE-nXy5Tgg_eK0tu3t74"/>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-sm text-headline-sm text-primary truncate">The 10-Minute Reading Habit</h3>
+<span class="w-2 h-2 rounded-full bg-secondary shrink-0" title="New updates available"></span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-0.5">
+                A little reading, a little encouragement.
+              </p>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-surface-container-highest text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px] text-primary">alarm</span> Habit
+            </span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">
+              Daily
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-1">
+              412 readers
+            </span>
+</div>
+<a class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-tertiary-container transition-all active:scale-[0.98] shadow-sm shrink-0" href="#">
+<span>Open</span>
+<span class="inline-flex items-center justify-center px-1.5 py-0.2 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-[10px] leading-tight">3 new</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Empty State View (Toggled / Initially Hidden) -->
+<div class="hidden flex-col items-center text-center p-space-lg bg-surface-container-low rounded-xl" id="empty-circles-container">
+<div class="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center text-primary mb-2 shadow-sm">
+<span class="material-symbols-outlined text-[28px]">eco</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary">No Circles Yet</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mt-1">
+        You haven't joined any circles yet. Find a low-pressure group below to share gentle milestones!
+      </p>
+<button class="mt-space-md inline-flex items-center gap-1.5 text-primary hover:text-tertiary font-label-md text-label-md py-1 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors" id="explore-circles-anchor" type="button">
+<span>Browse peaceful groups</span>
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</button>
+</div>
+</section>
+<!-- Discover Circles Section -->
+<section class="flex flex-col space-y-space-md pt-1" id="discover-section">
+<div class="flex flex-col space-y-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Discover Circles</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Gatherings centered around cadence, shared curiosities, and gentle pace.</p>
+</div>
+<!-- Topic & Goal Filter Chips -->
+<div aria-label="Circle Categories" class="flex items-center gap-2 overflow-x-auto pb-1 -mx-margin px-margin scrollbar-none" role="tablist">
+<button class="filter-chip active-filter shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-all bg-primary text-on-primary shadow-sm" data-category="all" type="button">
+        All Topics
+      </button>
+<button class="filter-chip shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-all bg-surface-container text-on-surface hover:bg-surface-container-high" data-category="fiction" type="button">
+        Fiction
+      </button>
+<button class="filter-chip shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-all bg-surface-container text-on-surface hover:bg-surface-container-high" data-category="habit" type="button">
+        Daily Habit
+      </button>
+<button class="filter-chip shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-all bg-surface-container text-on-surface hover:bg-surface-container-high" data-category="philosophy" type="button">
+        Philosophy
+      </button>
+<button class="filter-chip shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-all bg-surface-container text-on-surface hover:bg-surface-container-high" data-category="memoir" type="button">
+        Memoir
+      </button>
+</div>
+<!-- Personalization / Interest Callout Anchor -->
+<div class="flex items-start gap-2.5 p-3 rounded-lg bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-secondary mt-0.5 shrink-0" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<p class="font-body-sm text-body-sm leading-snug">
+        Because you selected <span class="text-primary font-medium">Fiction</span> in your reading setup, we prioritized slow-paced literary circles for your shelf.
+      </p>
+</div>
+<!-- Discover Cards List -->
+<div class="flex flex-col space-y-space-md">
+<!-- Card 1: Quiet Fiction Club -->
+<article class="circle-card flex flex-col bg-surface-container rounded-xl p-space-md shadow-sm transition-all" data-category="fiction">
+<div class="flex items-start gap-space-md">
+<div class="w-16 h-20 rounded-lg bg-surface-container-high shrink-0 overflow-hidden shadow-sm relative">
+<img class="w-full h-full object-cover" data-alt="Stack of vintage hardbound classic novels with warm cream cloth covers resting beside an olive green bookmark and dry eucalyptus sprig in warm morning light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMwvm-FTOQNxWYdk3gFt2HzsRPC-V_sErlsBN6LaWO-ot39IeFjK8dwsAmmd9GnHL-9pQYnES4XUKsArQAwh7Vi9nA9AuLGwe0D3khBCVextt4f-5Im-fatS7SgrGFvSu9psjIcDaUdyhP79-5Ddm6yrnWoBDgel2ylcN-8u0-wr2jmidPnF3fYRemaAtklaAY6Eh5YU0pfNriOpLF606zbk3Eh5pd5sPoZKOvOMU"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-start justify-between gap-1">
+<h3 class="font-headline-sm text-headline-sm text-primary leading-tight">Quiet Fiction Club</h3>
+<span class="px-2 py-0.5 rounded text-[11px] font-label-sm bg-secondary-fixed text-on-secondary-fixed-variant shrink-0">Featured</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1.5 leading-snug">
+              Stories, characters, and thoughtful conversations without the rush.
+            </p>
+</div>
+</div>
+<div class="mt-space-md pt-2 flex items-center justify-between gap-2 flex-wrap">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-md bg-surface-container-highest text-on-surface font-label-sm text-label-sm">
+              Fiction
+            </span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">
+              Slow Reading
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-0.5">
+              628 members
+            </span>
+</div>
+<button class="join-circle-btn inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-tertiary-container active:scale-[0.98] transition-all shadow-sm" data-joined="false" data-title="Quiet Fiction Club" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Join Circle</span>
+</button>
+</div>
+</article>
+<!-- Card 2: Philosophy & Ideas -->
+<article class="circle-card flex flex-col bg-surface-container rounded-xl p-space-md shadow-sm transition-all" data-category="philosophy">
+<div class="mb-2 inline-flex items-center gap-1.5 self-start px-2 py-0.5 rounded-md bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px] text-secondary">verified</span>
+<span>Matches your preference for Philosophy</span>
+</div>
+<div class="flex items-start gap-space-md">
+<div class="w-16 h-20 rounded-lg bg-surface-container-high shrink-0 overflow-hidden shadow-sm relative">
+<img class="w-full h-full object-cover" data-alt="Overhead aesthetic of an open notebook containing handwritten marginalia notes in sepia fountain pen ink next to reading glasses and linen-bound essays." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNehPD8vJCNosq0bLroxhE-7c-GqWpcRUhnmfrXNrlsUf6rSE4JUzoF8KwJTO1Hlj-y_wFOUfMBM0fxgqWG5ZVdCooahpLzDu0ZM8qU2vEVbnSas8-zWFTspBT7N-x7Z60LyaOSZyweFvFkZLOjQuOC_eA0A2V8Y20932xByg9WVnLH_8Jv7DxVXnRQ9M5si-elWnon189n6RMys57nRtjsRT5KeGOWNFdLRp5ykQ"/>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-sm text-headline-sm text-primary leading-tight">Philosophy &amp; Ideas</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 leading-snug">
+              Big questions, one chapter at a time. Beginners warmly welcome.
+            </p>
+</div>
+</div>
+<div class="mt-space-md pt-2 flex items-center justify-between gap-2 flex-wrap">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-md bg-surface-container-highest text-on-surface font-label-sm text-label-sm">
+              Nonfiction
+            </span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">
+              Deep Reading
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-0.5">
+              285 members
+            </span>
+</div>
+<button class="join-circle-btn inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-tertiary-container active:scale-[0.98] transition-all shadow-sm" data-joined="false" data-title="Philosophy &amp; Ideas" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Join Circle</span>
+</button>
+</div>
+</article>
+<!-- Card 3: The 10-Minute Reading Habit -->
+<article class="circle-card flex flex-col bg-surface-container rounded-xl p-space-md shadow-sm transition-all" data-category="habit">
+<div class="flex items-start gap-space-md">
+<div class="w-16 h-20 rounded-lg bg-surface-container-high shrink-0 overflow-hidden shadow-sm relative">
+<img class="w-full h-full object-cover" data-alt="Warm atmospheric still life of a small wooden bedside table with a paperback novel and an hourglass timer tracking quiet reading moments." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvwOxVj4jiWv-Jyt_MzmugiimejD46EwJHj0h7Zsw18IjEsdFtcG4XqyXG3bsLGdMeFHbqpl99u_lW2yhege-7XJsAfxxuqyQ2e1YOWRxj-f4tclg0l3sl9kPLPnOLWz-wHCGJolcfmHABrRX6PfpSrJzGBrq9tJGxymsXkwg8VIW4_2wbk62Dyyc89keU2F4oYgBOSVpn3ZlbkmdHQQ7EB5JuQ5ns39zF1Vjc93Y"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-primary leading-tight">The 10-Minute Reading Habit</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 leading-snug">
+              A little reading, a little encouragement. For busy readers.
+            </p>
+</div>
+</div>
+<div class="mt-space-md pt-2 flex items-center justify-between gap-2 flex-wrap">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-md bg-surface-container-highest text-on-surface font-label-sm text-label-sm">
+              Micro-Habit
+            </span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">
+              All Formats
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-0.5">
+              412 members
+            </span>
+</div>
+<div class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-lg bg-surface-container-highest text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>Joined</span>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- Community Guidelines Callout -->
+<section class="mt-space-sm">
+<div class="rounded-xl bg-surface-container-high p-space-md flex items-start gap-space-sm shadow-sm relative overflow-hidden">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center shrink-0 text-secondary">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<div class="flex flex-col min-w-0">
+<h4 class="font-headline-sm text-headline-sm text-primary">A quiet sanctuary for readers</h4>
+<p class="font-quote-editorial text-quote-editorial text-on-surface-variant italic mt-1 leading-snug">
+          “No public streak pressure, no speed comparisons, only mutual warmth.”
+        </p>
+<span class="font-label-sm text-label-sm text-outline mt-2">
+          Read with curiosity • Comment when inspired
+        </span>
+</div>
+</div>
+</section>
+</div>
+<script>
+  (function initCommunityHome() {
+    // 1. Simulation Toggle for Empty State
+    const toggleBtn = document.getElementById('toggle-empty-state-btn');
+    const toggleText = document.getElementById('toggle-state-text');
+    const joinedContainer = document.getElementById('joined-circles-container');
+    const emptyContainer = document.getElementById('empty-circles-container');
+    const countBadge = document.getElementById('circle-count-badge');
+    let isEmptyPreview = false;
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        isEmptyPreview = !isEmptyPreview;
+        toggleBtn.setAttribute('aria-pressed', isEmptyPreview ? 'true' : 'false');
+        
+        if (isEmptyPreview) {
+          joinedContainer.classList.add('hidden');
+          emptyContainer.classList.remove('hidden');
+          emptyContainer.classList.add('flex');
+          toggleText.textContent = 'Restore my circle';
+          countBadge.textContent = '0';
+          countBadge.className = 'px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm';
+        } else {
+          joinedContainer.classList.remove('hidden');
+          emptyContainer.classList.add('hidden');
+          emptyContainer.classList.remove('flex');
+          toggleText.textContent = 'Preview empty state';
+          countBadge.textContent = '1';
+          countBadge.className = 'px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm';
+        }
+      });
+    }
+
+    // Anchor scroll for empty state button
+    const exploreAnchor = document.getElementById('explore-circles-anchor');
+    if (exploreAnchor) {
+      exploreAnchor.addEventListener('click', () => {
+        const discoverSec = document.getElementById('discover-section');
+        if (discoverSec) {
+          discoverSec.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+
+    // 2. Interactive "Join Circle" toggle
+    const joinBtns = document.querySelectorAll('.join-circle-btn');
+    joinBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const isJoined = btn.getAttribute('data-joined') === 'true';
+        if (!isJoined) {
+          btn.setAttribute('data-joined', 'true');
+          btn.className = 'join-circle-btn inline-flex items-center gap-1 px-3.5 py-1.5 rounded-lg bg-surface-container-highest text-primary font-label-md text-label-md transition-all';
+          btn.innerHTML = '<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: \'FILL\' 1;">check_circle</span><span>Joined &#10003;</span>';
+          
+          // Toast or gentle tactile feedback
+          btn.style.transform = 'scale(0.96)';
+          setTimeout(() => { btn.style.transform = ''; }, 120);
+        } else {
+          btn.setAttribute('data-joined', 'false');
+          btn.className = 'join-circle-btn inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-tertiary-container active:scale-[0.98] transition-all shadow-sm';
+          btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">add</span><span>Join Circle</span>';
+        }
+      });
+    });
+
+    // 3. Category Filter Chips interaction
+    const filterChips = document.querySelectorAll('.filter-chip');
+    const circleCards = document.querySelectorAll('.circle-card');
+
+    filterChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        filterChips.forEach(c => {
+          c.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+          c.classList.add('bg-surface-container', 'text-on-surface');
+        });
+
+        chip.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+        chip.classList.remove('bg-surface-container', 'text-on-surface');
+
+        const cat = chip.getAttribute('data-category');
+        circleCards.forEach(card => {
+          const cardCat = card.getAttribute('data-category');
+          if (cat === 'all' || cardCat === cat) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  })();
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_16px_rgba(36,35,32,0.05)]" data-active-classes="text-primary font-semibold"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center gap-0.5 min-w-[56px] h-12 text-on-surface-variant hover:text-primary transition-colors group" data-path="bookshelf" href="#"><span class="material-symbols-outlined text-[24px]">local_library</span><span class="font-label-sm text-label-sm tracking-wide">Bookshelf</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[56px] h-12 text-on-surface-variant hover:text-primary transition-colors group" data-path="reading-insights" href="#"><span class="material-symbols-outlined text-[24px]">insights</span><span class="font-label-sm text-label-sm tracking-wide">Insights</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[56px] h-12 text-on-surface-variant hover:text-primary transition-colors group" data-path="for-you" href="#"><span class="material-symbols-outlined text-[24px]">auto_stories</span><span class="font-label-sm text-label-sm tracking-wide">For You</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 min-w-[56px] h-12 transition-colors group text-primary font-semibold" data-path="community" href="#"><span class="material-symbols-outlined text-[24px]">groups</span><span class="font-label-sm text-label-sm tracking-wide">Community</span></a></div></nav></body></html>

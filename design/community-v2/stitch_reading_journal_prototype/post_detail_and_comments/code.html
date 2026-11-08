@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary-fixed": "#b8efce", "on-secondary": "#ffffff", "on-surface": "#1c1b19", "on-tertiary-fixed-variant": "#1b5038", "secondary": "#9c4328", "inverse-surface": "#31302d", "inverse-primary": "#a1d1b4", "secondary-container": "#ff8f6e", "surface-tint": "#3a674f", "on-primary-fixed": "#002112", "tertiary": "#0b432c", "surface-dim": "#ddd9d4", "on-tertiary-container": "#9bd1b1", "secondary-fixed": "#ffdbd1", "on-secondary-fixed-variant": "#7d2c13", "surface-container": "#f2ede8", "surface": "#fdf9f3", "primary-fixed": "#bceecf", "outline": "#717973", "on-primary-fixed-variant": "#224f39", "on-background": "#1c1b19", "surface-container-highest": "#e6e2dd", "error-container": "#ffdad6", "tertiary-container": "#285b42", "background": "#fdf9f3", "surface-container-high": "#ece7e2", "on-error-container": "#93000a", "surface-container-lowest": "#ffffff", "error": "#ba1a1a", "inverse-on-surface": "#f4f0eb", "primary": "#14422d", "on-surface-variant": "#414943", "on-primary": "#ffffff", "secondary-fixed-dim": "#ffb59f", "tertiary-fixed-dim": "#9cd2b3", "surface-container-low": "#f7f3ee", "on-primary-container": "#9fcfb2", "on-secondary-fixed": "#3a0a00", "surface-bright": "#fdf9f3", "primary-container": "#2d5a43", "on-tertiary-fixed": "#002113", "outline-variant": "#c0c9c1", "on-tertiary": "#ffffff", "surface-variant": "#e6e2dd", "on-error": "#ffffff", "primary-fixed-dim": "#a1d1b4", "on-secondary-container": "#76270e" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-mobile": "0.75rem", "space-sm": "0.5rem", "gutter": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "margin-tablet": "2rem", "space-xl": "2.25rem", "space-lg": "1.5rem", "margin": "1.25rem" }, fontFamily: { "quote-editorial": ["Newsreader"], "body-md": ["Plus Jakarta Sans"], "display-lg-mobile": ["Newsreader"], "label-sm": ["Plus Jakarta Sans"], "display-lg": ["Newsreader"], "headline-lg": ["Newsreader"], "body-sm": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Newsreader"], "headline-md": ["Newsreader"], "label-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"] }, fontSize: { "quote-editorial": ["18px", { lineHeight: "28px", fontWeight: "400" }], "body-md": ["15px", { lineHeight: "22px", fontWeight: "400" }], "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.015em", fontWeight: "400" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }], "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "400" }], "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "400" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "headline-sm": ["19px", { lineHeight: "26px", fontWeight: "500" }], "headline-md": ["22px", { lineHeight: "30px", letterSpacing: "-0.01em", fontWeight: "500" }], "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }], "body-lg": ["17px", { lineHeight: "26px", fontWeight: "400" }] } } } };</script><style>@layer base { html, body { min-height: 100%; margin: 0; padding: 0; background-color: #fdf9f3; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(36,35,32,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs min-w-0"><button aria-label="Back" class="w-11 h-11 -ml-space-xs flex items-center justify-center rounded-full text-on-surface hover:text-primary transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Reading Journal Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1XmpIVW6LuvbZeFkkI1L8AuaPbvGzCj0RmrWCRS2p5G3gTnnH67w3QDBJwF4AzA7uIEfpMYHRKZPNOhRaCfcNNm3kdNvyPyPo-FhN0OXiNnumu_-iCKMM5C7rPv7qywL2cxMd8H4Pgmtnk4GsFAE4955puVxn_IIkvfMFVxQUJa4LcLwAzX3tletpLhIzR2T01sgwFsSB_WoR0vHigN_GF3VaJiigluNLxIBlrcyDe0"/><div class="flex flex-col truncate"><span class="font-headline-sm text-headline-sm text-primary font-medium tracking-tight truncate leading-none">Reading Journal</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate mt-0.5">Book Details</span></div></div><div class="flex items-center gap-space-xs shrink-0"><a aria-label="Chrome Extension" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors" data-path="extension-preview" href="#"><span class="material-symbols-outlined text-[22px]">extension</span></a><a aria-label="Reader Profile" class="w-11 h-11 flex items-center justify-center rounded-full" data-path="profile-settings" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover shadow-[0_2px_6px_rgba(36,35,32,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2gRn2gEo5xLfFtLoY2ENOcPwN_ufuqFvB6ZJrZxKPxGYUN10NJ8a5aQzklOw8EDKwut4eC1AIIie-Ps5694KBQRDak2xpS3qyVW6I_kltNV6h2bngHGYXd3t2z3BkVbpG6xjhVhbCYg7MnHYHlTTiM3ao71FdTE3FpwZOo1JCmi-zR7DHji0C3otVkimAmylaERo6B6w3XX8_OzBNTysXmVPeYTYYE8pZGU1svQI"/></a></div></div></header><main class="flex-1 w-full bg-surface pt-16 pb-safe px-margin"><div class="flex flex-col w-full pb-24">
+<!-- Post Context Bar & Quick Actions Menu -->
+<div class="flex items-center justify-between py-space-sm mb-space-xs">
+<a class="inline-flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-[18px] group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+<span class="font-label-md text-label-md">Quiet Fiction Club</span>
+</a>
+<!-- Overflow Dropdown Menu Container -->
+<div class="relative">
+<button aria-label="More options" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors" id="postMenuBtn">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+<!-- Dropdown Popover -->
+<div class="hidden absolute right-0 top-11 w-52 bg-surface-container-lowest rounded-xl shadow-xl z-30 py-1.5 flex-col overflow-hidden animate-fade-in" id="postDropdown">
+<button class="w-full px-4 py-2.5 flex items-center gap-2.5 text-left text-on-surface hover:bg-surface-container text-body-sm font-body-sm transition-colors" onclick="alert('Post muted')">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">notifications_off</span>
+<span>Mute notifications</span>
+</button>
+<button class="w-full px-4 py-2.5 flex items-center gap-2.5 text-left text-on-surface hover:bg-surface-container text-body-sm font-body-sm transition-colors" onclick="alert('Post reported for review')">
+<span class="material-symbols-outlined text-[18px] text-secondary">flag</span>
+<span>Report post</span>
+</button>
+<button class="w-full px-4 py-2.5 flex items-center gap-2.5 text-left text-on-surface hover:bg-surface-container text-body-sm font-body-sm transition-colors" onclick="alert('User blocked')">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">block</span>
+<span>Block user</span>
+</button>
+<div class="h-[1px] bg-surface-container-highest my-1"></div>
+<button class="w-full px-4 py-2.5 flex items-center gap-2.5 text-left text-error hover:bg-error-container/40 text-body-sm font-body-sm transition-colors" onclick="alert('Post deletion confirmed')">
+<span class="material-symbols-outlined text-[18px] text-error">delete_outline</span>
+<span>Delete post</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Primary Journal Entry Card -->
+<article class="bg-surface-container rounded-xl shadow-sm p-margin flex flex-col gap-space-md relative overflow-hidden">
+<!-- Post Header: Avatar, Author, Community Tag -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<div class="relative shrink-0">
+<img class="w-11 h-11 rounded-full object-cover shadow-sm" data-alt="Warm intimate candid portrait of Maya, an avid reader with soft warm rim lighting, sipping tea by a sunlit bookshelf in an archival library room, editorial photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHB_PzBjZc27S5sqmOX-Nquy_txL3k3f3nHLBG30BXT8_CafLHJUW6qxjn-5AJVnvXBqpDbfU6hH70AiQAy9iQlFEWGQ05qKGrZE5LsEE2BNkjLuKRp6lw1J2hkinQ1oFInHH_1ips5kJTfAzpm0GB0M8-XfPU7tcA0yDpKdiNNEi7HY5IEWwfrxtWiuM-PAcTUJktHvdQtASW835dsVzYsHQMAKLjha7EeJJ3aSI"/>
+<span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[9px] text-on-primary font-bold">book</span>
+</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-label-lg text-label-lg text-on-surface">Maya S.</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">24m ago</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">groups</span> Quiet Fiction Club
+          </span>
+</div>
+</div>
+<span class="bg-primary/10 text-primary px-2.5 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1 shrink-0">
+<span class="material-symbols-outlined text-[13px]">bookmark_added</span> Reading Check-in
+      </span>
+</div>
+<!-- Book Highlight Tile -->
+<div class="bg-surface-container-lowest rounded-lg p-3 flex items-center gap-3.5 shadow-sm">
+<div class="w-12 h-16 rounded-DEFAULT overflow-hidden shrink-0 shadow-md relative bg-surface-dim">
+<img class="w-full h-full object-cover" data-alt="Classic vintage book cover of The Little Prince with golden stars, soft watercolor tones of dusty sand and turquoise sky, classic French literary aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTU5HjBkRdW-WaNN_yBmBWC5DbYnSnYdQWMORoRFwZ8a66SXtud1psjdjMGTZO1PkwIlm9ltnHSk82IGCmb8dCiAN_Y405xgDDQiMlkVcQkO2VAsXu1Gq-N4cbrnu6yXxUFmDb-miWsHPfBRo3l0sW0fsn5BSZGJbSIfyN5HxV_UTPtCF0Arj89bKu2ludeP_xYckhS6-fR2yIvoAIHhfQWXLR0D7HdULx2S7JV8s"/>
+</div>
+<div class="flex flex-col min-w-0">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate leading-tight">The Little Prince</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Antoine de Saint-Exupéry</p>
+<div class="flex items-center gap-1.5 mt-1 font-label-sm text-label-sm text-secondary">
+<span class="material-symbols-outlined text-[14px]">auto_stories</span>
+<span>Pages 20–36 <strong class="font-semibold text-secondary">(+16 pages)</strong></span>
+</div>
+</div>
+</div>
+<!-- Metrics Row -->
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-2 rounded-lg text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-primary">timelapse</span>
+<span class="font-label-md text-label-md text-on-surface">20 minutes read</span>
+<span class="text-outline-variant">•</span>
+<span class="font-body-sm text-body-sm">Gentle evening log</span>
+</div>
+<!-- Personal Reflection Quote -->
+<div class="relative pl-3.5">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary rounded-full"></div>
+<p class="font-quote-editorial text-quote-editorial text-on-surface italic leading-relaxed">
+        “Made a little time for reading today before bed. The drawing of the fox always comforts me.”
+      </p>
+</div>
+<!-- Encouragement Counter & Interactive Cheering Bar -->
+<div class="flex items-center justify-between pt-2">
+<button class="flex items-center gap-2 bg-surface-container-lowest hover:bg-surface-container-high px-3.5 py-2 rounded-full transition-all group shadow-sm active:scale-95" id="cheerBtn">
+<span class="material-symbols-outlined text-[18px] text-secondary group-hover:scale-110 transition-transform" id="cheerIcon">favorite</span>
+<span class="font-label-md text-label-md text-on-surface" id="cheerText">7 readers cheered</span>
+</button>
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">chat_bubble_outline</span>
+<span id="commentCountLabel">4 comments</span>
+</div>
+</div>
+</article>
+<!-- Interactive State View Switcher (Delight Demo Feature) -->
+<div class="flex items-center justify-between mt-space-lg mb-space-sm px-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-primary">Conversation</span>
+<span class="bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-label-sm text-label-sm">Chronological</span>
+</div>
+<button class="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors py-1 px-2 rounded-lg hover:bg-surface-container" id="toggleEmptyStateBtn">
+<span class="material-symbols-outlined text-[14px]">swap_horiz</span>
+<span id="toggleStateLabel">Simulate Empty</span>
+</button>
+</div>
+<!-- Empty Comments State Showcase -->
+<div class="hidden bg-surface-container-low rounded-xl p-space-lg flex flex-col items-center justify-center text-center gap-2.5 my-space-sm" id="emptyCommentsCard">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[24px]">coffee</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface">No comments yet</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">
+      The room is calm and quiet. Leave a warm thought to cheer Maya on!
+    </p>
+</div>
+<!-- Chronological Comments Stream -->
+<div class="flex flex-col gap-space-sm" id="commentsStream">
+<!-- Comment 1: Elena R. -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex gap-3 items-start transition-all hover:bg-surface-container">
+<img class="w-9 h-9 rounded-full object-cover shrink-0 shadow-sm" data-alt="Portrait of Elena, young female reader with vintage circular spectacles, looking up warmly with gentle smile, warm natural linen lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhgXWQPyJ7bRH7U_2oaMuccR1aKN0Xl5OeYmXQ983Mj4MMtQw3CayKEQ6FspuHwsAUTn0WMEdol5TkC7aTYT5SHE-1kjGORRx8uCH_6BmG_ILGFTwB-4Room8Nzmat-0jqemt8FpEOFtuVXm4_ZhYqUeLGccz76-s4eP0C0SJCejNu6sxWtLxD97ER-ND21aPrJhM2uzaRI3NAS3ytPGHlMXRfRkdV9aWaCKT1XXI"/>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-label-lg text-label-lg text-on-surface">Elena R.</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">18m ago</span>
+</div>
+<button class="comment-heart-btn flex items-center gap-1 text-on-surface-variant hover:text-secondary font-label-sm text-label-sm p-1 rounded-full hover:bg-surface-container transition-colors" data-count="2" data-liked="false">
+<span class="material-symbols-outlined text-[15px]">favorite_border</span>
+<span>2</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface mt-1 leading-snug">
+          Such a lovely chapter! Finding 20 minutes before sleep is the best gentle reset.
+        </p>
+</div>
+</div>
+<!-- Comment 2: Liam T. -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex gap-3 items-start transition-all hover:bg-surface-container">
+<img class="w-9 h-9 rounded-full object-cover shrink-0 shadow-sm" data-alt="Profile portrait of Liam, mature man with friendly crinkled eyes reading beside a wooden desk lantern, muted sage and umber colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0KOW-i0BOMbtONBY7R0rlwYsNEzMI16j9KnNn0sx12Lt_5m38kLckoyaKtJJM5XpxF1VoVtFxa6GiIElUXuvnzaM1HXMV7PxTFC3R1bGFNfsqax7kG9c4K6QoWxrQNTV462BWu4uZ1yUtOmYFuFFGuGTX69Yre_8Iqq7pScYWOS002U_qsugtq62DmaqbjcvyBIb9UdQpFA_0SsnQ1IVmAkGwnLdwislSHZNna18"/>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-label-lg text-label-lg text-on-surface">Liam T.</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">12m ago</span>
+</div>
+<button class="comment-heart-btn flex items-center gap-1 text-on-surface-variant hover:text-secondary font-label-sm text-label-sm p-1 rounded-full hover:bg-surface-container transition-colors" data-count="1" data-liked="false">
+<span class="material-symbols-outlined text-[15px]">favorite_border</span>
+<span>1</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface mt-1 leading-snug">
+          One of my all-time favorites. <em class="font-quote-editorial">“What is essential is invisible to the eye.”</em>
+</p>
+</div>
+</div>
+<!-- Comment 3: Sam W. -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex gap-3 items-start transition-all hover:bg-surface-container">
+<img class="w-9 h-9 rounded-full object-cover shrink-0 shadow-sm" data-alt="Candid headshot of Sam smiling softly wearing knit sweater, holding an open paperback in quiet ambient coffeehouse ambiance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsqxlFD_qF_LCn6cTXQrmM9AWwqp6nZ2xUPHh_XvrH0xMYAWrIMxn9mnIVIr_jCWyaa3xNFRxi_EF3dJuMANSeDErUcoSKywlTkNBr9ZVaMen-xYqFIqIC7nYSFlEIxuAQbOHqgj6OoQLBH8rZo3ZeCZKPMv2fcbF-3nuK63Nq3QHaKoUGPS7mOPW_rxQGAXSbyovEYCp_BgVADlRtVa0b6eQ-PNkvUVloJMKiryw"/>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-label-lg text-label-lg text-on-surface">Sam W.</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">5m ago</span>
+</div>
+<button class="comment-heart-btn flex items-center gap-1 text-on-surface-variant hover:text-secondary font-label-sm text-label-sm p-1 rounded-full hover:bg-surface-container transition-colors" data-count="0" data-liked="false">
+<span class="material-symbols-outlined text-[15px]">favorite_border</span>
+<span>0</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface mt-1 leading-snug">
+          Happy reading Maya! Cheering you on.
+        </p>
+</div>
+</div>
+<!-- Dynamic Newly Added Comments Container -->
+<div class="flex flex-col gap-space-sm" id="dynamicComments"></div>
+</div>
+<!-- Bottom Floating Interactive Comment Bar -->
+<div class="fixed bottom-0 inset-x-0 bg-surface/95 backdrop-blur-md px-margin py-3 z-40 pb-safe shadow-[0_-4px_16px_rgba(28,27,25,0.05)]">
+<div class="max-w-lg mx-auto flex flex-col gap-1.5">
+<form class="flex items-center gap-2" id="commentForm">
+<div class="relative flex-1">
+<input autocomplete="off" class="w-full bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant font-body-md text-body-md py-2.5 pl-4 pr-10 rounded-full focus:outline-none focus:bg-surface-container transition-all shadow-sm" id="commentInput" placeholder="Leave a little encouragement..." required="" type="text"/>
+<button aria-label="Insert heart" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-secondary transition-colors" onclick="const input = document.getElementById('commentInput'); input.value += ' ✨'; input.focus();" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_back_ios_new</span>
+</button>
+</div>
+<button aria-label="Send encouragement" class="w-11 h-11 rounded-full bg-primary hover:bg-primary-container text-on-primary flex items-center justify-center shrink-0 shadow-md transition-transform active:scale-95" type="submit">
+<span class="material-symbols-outlined text-[20px]">arrow_upward</span>
+</button>
+</form>
+<div class="flex items-center justify-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px] text-tertiary">spa</span>
+<span>Supportive, kind words only.</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function initCommunityPost() {
+    // Dropdown toggle
+    const menuBtn = document.getElementById('postMenuBtn');
+    const dropdown = document.getElementById('postDropdown');
+    
+    if (menuBtn && dropdown) {
+      menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('hidden');
+      });
+
+      document.addEventListener('click', () => {
+        if (!dropdown.classList.contains('hidden')) {
+          dropdown.classList.add('hidden');
+        }
+      });
+    }
+
+    // Cheer Counter Toggle
+    const cheerBtn = document.getElementById('cheerBtn');
+    const cheerIcon = document.getElementById('cheerIcon');
+    const cheerText = document.getElementById('cheerText');
+    let cheered = false;
+    let cheerCount = 7;
+
+    if (cheerBtn && cheerIcon && cheerText) {
+      cheerBtn.addEventListener('click', () => {
+        cheered = !cheered;
+        if (cheered) {
+          cheerCount++;
+          cheerIcon.textContent = 'favorite';
+          cheerIcon.style.fontVariationSettings = "'FILL' 1";
+          cheerIcon.classList.add('text-secondary');
+          cheerText.textContent = `${cheerCount} readers cheered!`;
+          cheerBtn.classList.add('bg-secondary-fixed');
+        } else {
+          cheerCount--;
+          cheerIcon.textContent = 'favorite';
+          cheerIcon.style.fontVariationSettings = "'FILL' 0";
+          cheerText.textContent = `${cheerCount} readers cheered`;
+          cheerBtn.classList.remove('bg-secondary-fixed');
+        }
+      });
+    }
+
+    // Toggle Empty State Simulation
+    const toggleEmptyBtn = document.getElementById('toggleEmptyStateBtn');
+    const emptyCard = document.getElementById('emptyCommentsCard');
+    const commentsStream = document.getElementById('commentsStream');
+    const toggleLabel = document.getElementById('toggleStateLabel');
+    let isEmpty = false;
+
+    if (toggleEmptyBtn && emptyCard && commentsStream && toggleLabel) {
+      toggleEmptyBtn.addEventListener('click', () => {
+        isEmpty = !isEmpty;
+        if (isEmpty) {
+          commentsStream.classList.add('hidden');
+          emptyCard.classList.remove('hidden');
+          toggleLabel.textContent = 'Show Comments';
+        } else {
+          commentsStream.classList.remove('hidden');
+          emptyCard.classList.add('hidden');
+          toggleLabel.textContent = 'Simulate Empty';
+        }
+      });
+    }
+
+    // Reply hearts
+    document.querySelectorAll('.comment-heart-btn').forEach((btn) => {
+      btn.addEventListener('click', function() {
+        let isLiked = this.getAttribute('data-liked') === 'true';
+        let count = parseInt(this.getAttribute('data-count'), 10);
+        const icon = this.querySelector('.material-symbols-outlined');
+        const countSpan = this.querySelector('span:last-child');
+
+        isLiked = !isLiked;
+        count = isLiked ? count + 1 : count - 1;
+
+        this.setAttribute('data-liked', isLiked);
+        this.setAttribute('data-count', count);
+        countSpan.textContent = count;
+
+        if (isLiked) {
+          icon.textContent = 'favorite';
+          icon.style.fontVariationSettings = "'FILL' 1";
+          this.classList.add('text-secondary');
+        } else {
+          icon.textContent = 'favorite_border';
+          icon.style.fontVariationSettings = "'FILL' 0";
+          this.classList.remove('text-secondary');
+        }
+      });
+    });
+
+    // Add new friendly comment inline
+    const commentForm = document.getElementById('commentForm');
+    const commentInput = document.getElementById('commentInput');
+    const dynamicComments = document.getElementById('dynamicComments');
+    const commentCountLabel = document.getElementById('commentCountLabel');
+    let totalComments = 4;
+
+    if (commentForm && commentInput && dynamicComments) {
+      commentForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const text = commentInput.value.trim();
+        if (!text) return;
+
+        totalComments++;
+        if (commentCountLabel) {
+          commentCountLabel.textContent = `${totalComments} comments`;
+        }
+
+        // If currently in empty state, restore stream
+        if (isEmpty) {
+          commentsStream.classList.remove('hidden');
+          emptyCard.classList.add('hidden');
+          toggleLabel.textContent = 'Simulate Empty';
+          isEmpty = false;
+        }
+
+        const newComment = document.createElement('div');
+        newComment.className = 'bg-surface-container-low rounded-xl p-space-md flex gap-3 items-start animate-fade-in border-l-2 border-primary';
+        newComment.innerHTML = `
+          <div class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed shrink-0 font-label-md">
+            You
+          </div>
+          <div class="flex flex-col flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="font-label-lg text-label-lg text-on-surface">You</span>
+                <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant">Just now</span>
+              </div>
+              <span class="font-label-sm text-label-sm text-tertiary">Cheering</span>
+            </div>
+            <p class="font-body-md text-body-md text-on-surface mt-1 leading-snug">
+              ${escapeHtml(text)}
+            </p>
+          </div>
+        `;
+
+        dynamicComments.appendChild(newComment);
+        commentInput.value = '';
+        newComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+  })();
+</script></main></body></html>

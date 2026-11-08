@@ -1,0 +1,418 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_stack" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary-fixed": "#b8efce", "on-secondary": "#ffffff", "on-surface": "#1c1b19", "on-tertiary-fixed-variant": "#1b5038", "secondary": "#9c4328", "inverse-surface": "#31302d", "inverse-primary": "#a1d1b4", "secondary-container": "#ff8f6e", "surface-tint": "#3a674f", "on-primary-fixed": "#002112", "tertiary": "#0b432c", "surface-dim": "#ddd9d4", "on-tertiary-container": "#9bd1b1", "secondary-fixed": "#ffdbd1", "on-secondary-fixed-variant": "#7d2c13", "surface-container": "#f2ede8", "surface": "#fdf9f3", "primary-fixed": "#bceecf", "outline": "#717973", "on-primary-fixed-variant": "#224f39", "on-background": "#1c1b19", "surface-container-highest": "#e6e2dd", "error-container": "#ffdad6", "tertiary-container": "#285b42", "background": "#fdf9f3", "surface-container-high": "#ece7e2", "on-error-container": "#93000a", "surface-container-lowest": "#ffffff", "error": "#ba1a1a", "inverse-on-surface": "#f4f0eb", "primary": "#14422d", "on-surface-variant": "#414943", "on-primary": "#ffffff", "secondary-fixed-dim": "#ffb59f", "tertiary-fixed-dim": "#9cd2b3", "surface-container-low": "#f7f3ee", "on-primary-container": "#9fcfb2", "on-secondary-fixed": "#3a0a00", "surface-bright": "#fdf9f3", "primary-container": "#2d5a43", "on-tertiary-fixed": "#002113", "outline-variant": "#c0c9c1", "on-tertiary": "#ffffff", "surface-variant": "#e6e2dd", "on-error": "#ffffff", "primary-fixed-dim": "#a1d1b4", "on-secondary-container": "#76270e" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-mobile": "0.75rem", "space-sm": "0.5rem", "gutter": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "margin-tablet": "2rem", "space-xl": "2.25rem", "space-lg": "1.5rem", "margin": "1.25rem" }, fontFamily: { "quote-editorial": ["Newsreader"], "body-md": ["Plus Jakarta Sans"], "display-lg-mobile": ["Newsreader"], "label-sm": ["Plus Jakarta Sans"], "display-lg": ["Newsreader"], "headline-lg": ["Newsreader"], "body-sm": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Newsreader"], "headline-md": ["Newsreader"], "label-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"] }, fontSize: { "quote-editorial": ["18px", { lineHeight: "28px", fontWeight: "400" }], "body-md": ["15px", { lineHeight: "22px", fontWeight: "400" }], "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.015em", fontWeight: "400" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }], "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "400" }], "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "400" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "headline-sm": ["19px", { lineHeight: "26px", fontWeight: "500" }], "headline-md": ["22px", { lineHeight: "30px", letterSpacing: "-0.01em", fontWeight: "500" }], "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }], "body-lg": ["17px", { lineHeight: "26px", fontWeight: "400" }] } } } };</script><style>@layer base { html, body { min-height: 100%; margin: 0; padding: 0; background-color: #fdf9f3; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(36,35,32,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs min-w-0"><button aria-label="Back" class="w-11 h-11 -ml-space-xs flex items-center justify-center rounded-full text-on-surface hover:text-primary transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Reading Journal Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1XmpIVW6LuvbZeFkkI1L8AuaPbvGzCj0RmrWCRS2p5G3gTnnH67w3QDBJwF4AzA7uIEfpMYHRKZPNOhRaCfcNNm3kdNvyPyPo-FhN0OXiNnumu_-iCKMM5C7rPv7qywL2cxMd8H4Pgmtnk4GsFAE4955puVxn_IIkvfMFVxQUJa4LcLwAzX3tletpLhIzR2T01sgwFsSB_WoR0vHigN_GF3VaJiigluNLxIBlrcyDe0"><div class="flex flex-col truncate"><span class="font-headline-sm text-headline-sm text-primary font-medium tracking-tight truncate leading-none">Reading Journal</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate mt-0.5">Reading Session</span></div></div><div class="flex items-center gap-space-xs shrink-0"><a aria-label="Chrome Extension" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors" data-path="extension-preview" href="#"><span class="material-symbols-outlined text-[22px]">extension</span></a><a aria-label="Reader Profile" class="w-11 h-11 flex items-center justify-center rounded-full" data-path="profile-settings" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover shadow-[0_2px_6px_rgba(36,35,32,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2gRn2gEo5xLfFtLoY2ENOcPwN_ufuqFvB6ZJrZxKPxGYUN10NJ8a5aQzklOw8EDKwut4eC1AIIie-Ps5694KBQRDak2xpS3qyVW6I_kltNV6h2bngHGYXd3t2z3BkVbpG6xjhVhbCYg7MnHYHlTTiM3ao71FdTE3FpwZOo1JCmi-zR7DHji0C3otVkimAmylaERo6B6w3XX8_OzBNTysXmVPeYTYYE8pZGU1svQI"></a></div></div></header><main class="flex-1 w-full bg-surface pt-16 pb-safe px-margin"><div class="flex flex-col w-full pb-8">
+<!-- Subtle Breathing Timer Ambient Glow Ring (Living SVG) -->
+<div class="relative w-full flex flex-col items-center justify-center pt-2 pb-6">
+<!-- Active Floating Book Context Card -->
+<section class="w-full bg-surface-container-low rounded-xl p-space-md shadow-sm mb-space-lg">
+<div class="flex items-center gap-space-md">
+<!-- Book Jacket Miniature with Spine Depth Shadow -->
+<div class="relative shrink-0 w-12 h-16 rounded shadow-md overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Editorial book cover of Tomorrow and Tomorrow and Tomorrow by Gabrielle Zevin with artistic vintage geometric woodblock waves, muted forest green and terracotta tones, warm cream background, tactile paper texture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADHut9T2eIrrUsMHcZIe-s_u9zZbmcJnj_HP67TiWEg6xQL-WPrkgZHG3_pv92STQrc15eT54tLemVqrZcchX8bUjeQbaRIu4hZ0cjODdIbnyB9m_MOhPwljt3OKeO0jTGlghVcAqNozOJ0m2c8zSqm6lmhjINjj_moHsVXr2IGW_vBb8GykOEQtVjIbMmGHyNNGPMdVn9N2FuXi8wOAW8aYgFANn33ouuTgwj78s">
+<div class="absolute inset-y-0 left-0 w-1 bg-gradient-to-r from-black/25 to-transparent"></div>
+</div>
+<!-- Book Metadata & Session Anchor -->
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+              In Progress
+            </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px] text-secondary">auto_stories</span>
+              From p. 256
+            </span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-primary font-medium tracking-tight truncate mt-0.5">Tomorrow, and Tomorrow, and Tomorrow</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Gabrielle Zevin</p>
+</div>
+<button aria-label="Toggle soothing tea lamp sound" class="shrink-0 w-10 h-10 rounded-full bg-surface-container-highest/60 hover:bg-surface-container-highest text-primary flex items-center justify-center transition-all" id="btn-quick-ambient">
+<span class="material-symbols-outlined text-[20px]" id="sound-icon">volume_off</span>
+</button>
+</div>
+</section>
+<!-- Centerpiece Calm Timer Canvas -->
+<div class="relative w-72 h-72 flex items-center justify-center my-2">
+<!-- Breathing SVG Rings -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" fill="none" viewBox="0 0 288 288">
+<defs>
+<radialGradient cx="50%" cy="50%" id="timer-glow" r="50%">
+<stop offset="0%" stop-color="#bceecf" stop-opacity="0.28"></stop>
+<stop offset="70%" stop-color="#bceecf" stop-opacity="0.06"></stop>
+<stop offset="100%" stop-color="#bceecf" stop-opacity="0"></stop>
+</radialGradient>
+</defs>
+<!-- Ambient outer halo -->
+<circle class="transition-all duration-1000 origin-center scale-95 opacity-80" cx="144" cy="144" fill="url(#timer-glow)" id="pulse-halo" r="130"></circle>
+<!-- Base Sand Track -->
+<circle cx="144" cy="144" r="118" stroke="#ece7e2" stroke-linecap="round" stroke-width="3"></circle>
+<!-- Animated Active Leaf Arc -->
+<circle class="transition-all duration-700 -rotate-90 origin-center" cx="144" cy="144" id="progress-arc" r="118" stroke="#2d5a43" stroke-dasharray="741.4" stroke-dashoffset="69.2" stroke-linecap="round" stroke-width="3.5"></circle>
+<!-- Subtle Leaf Marker Dot -->
+<circle cx="144" cy="26" fill="#9c4328" r="4.5"></circle>
+</svg>
+<!-- Central Editorial Time Display -->
+<div class="relative z-10 flex flex-col items-center text-center px-4">
+<!-- Mode Badge -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container mb-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping" id="status-dot"></span>
+<span class="font-label-sm text-label-sm uppercase text-primary font-semibold tracking-wider" id="session-status-text">Active Session</span>
+</div>
+<!-- Big Minimalist Timer Display -->
+<div class="font-display-lg text-display-lg text-primary tracking-tight select-none tabular-nums font-normal" id="timer-display">00:24:00</div>
+<!-- Micro Pace Estimate -->
+
+</div>
+</div>
+<!-- Reassurance Narrative Banner -->
+<div class="w-full max-w-sm mt-3 px-space-md py-2.5 rounded-xl bg-surface-container-low text-center">
+<p class="font-quote-editorial text-quote-editorial italic text-on-surface text-[15px] leading-relaxed">
+        “The timer continues gently while you read in Apple Books, Kindle, or paper. Put your phone face-down.”
+      </p>
+</div>
+<!-- Marginalia Quick Action Bar (Bookmark & Reflection Note) -->
+<div class="w-full mt-space-lg flex gap-space-sm">
+<button class="flex-1 h-12 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center gap-2 transition-colors active:scale-[0.99]" id="btn-quick-note">
+<span class="material-symbols-outlined text-[18px] text-secondary">stylus_note</span>
+<span class="font-label-md text-label-md">Marginalia &amp; Page</span>
+</button>
+<button class="h-12 px-4 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center gap-1.5 transition-colors active:scale-[0.99]" id="btn-quick-bookmark" title="Quick Bookmark Page">
+<span class="material-symbols-outlined text-[19px] text-secondary" id="bookmark-icon">bookmark_border</span>
+<span class="font-label-md text-label-md" id="bookmark-label">Save Mark</span>
+</button>
+</div>
+<!-- Expanded Marginalia Dropdown Drawer (Collapsible) -->
+<div class="hidden w-full mt-3 p-space-md bg-surface-container-low rounded-xl flex-col gap-3 shadow-sm transition-all duration-300" id="marginalia-drawer">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+          Session Marginalia
+        </span>
+<div class="flex items-center gap-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant" for="current-page-input">Page now:</label>
+<input class="w-16 h-8 text-center rounded bg-surface text-on-surface font-label-md text-label-md outline-none focus:ring-0 focus:border-0" id="current-page-input" max="416" min="256" type="number" value="274">
+</div>
+</div>
+<textarea class="w-full p-2.5 rounded bg-surface text-on-surface font-body-sm text-body-sm placeholder:text-on-surface-variant/60 resize-none outline-none" id="session-note-input" placeholder="Record an evocative sentence, character revelation, or feeling..." rows="2"></textarea>
+<div class="flex justify-end gap-2">
+<button class="px-3 py-1.5 rounded text-on-surface-variant font-label-sm text-label-sm hover:text-on-surface" id="btn-cancel-note">Cancel</button>
+<button class="px-3.5 py-1.5 rounded bg-primary text-on-primary font-label-sm text-label-sm shadow-sm" id="btn-save-note">Pin to Session</button>
+</div>
+</div>
+<!-- Primary Control Action Dock -->
+<div class="w-full mt-space-lg flex flex-col gap-space-sm">
+<div class="grid grid-cols-2 gap-space-sm w-full">
+<!-- Pause / Resume Toggle Button -->
+<button class="h-12 w-full rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center gap-2 transition-all active:scale-[0.98]" id="btn-toggle-pause">
+<span class="material-symbols-outlined text-[20px] text-primary" id="pause-icon">pause_circle</span>
+<span class="font-label-lg text-label-lg text-primary" id="pause-text">Pause Timer</span>
+</button>
+<!-- Finish & Complete Button -->
+<button class="h-12 w-full rounded-lg bg-primary hover:bg-primary-container text-on-primary flex items-center justify-center gap-2 shadow-sm transition-all active:scale-[0.98]" id="btn-finish-session">
+<span class="material-symbols-outlined text-[20px] text-tertiary-fixed">check_circle</span>
+<span class="font-label-lg text-label-lg text-on-primary">Finish &amp; Log</span>
+</button>
+</div>
+<!-- Cancel Session Discreet Action -->
+<div class="flex items-center justify-center mt-1">
+<button class="py-2 px-4 rounded-full text-on-surface-variant hover:text-secondary font-label-sm text-label-sm transition-colors flex items-center gap-1" id="btn-discard-session">
+<span class="material-symbols-outlined text-[15px]">close</span>
+          Discard this reading log
+        </button>
+</div>
+</div>
+<!-- Quiet Atmosphere Footnote Indicator -->
+<div class="w-full mt-space-xl pt-space-md flex items-center justify-center gap-2 text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+<p class="font-body-sm text-body-sm text-center">
+        Reading in quiet mode • Screen brightness dimmed to preserve atmosphere
+      </p>
+</div>
+</div>
+<!-- Finish & Save Session Modal Bottom Overlay -->
+<div class="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px] hidden items-end justify-center px-margin pb-safe" id="finish-modal">
+<div class="w-full max-w-lg bg-surface rounded-t-2xl p-space-lg shadow-2xl flex flex-col gap-space-md mb-2">
+<!-- Modal Header -->
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">bookmark_added</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary leading-tight">Session Completed</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Logged to your reading archive</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface" id="modal-close-btn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Quick Summary Stats Card -->
+<div class="bg-surface-container rounded-xl p-space-md flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Time Read</span>
+<span class="font-headline-md text-headline-md text-primary font-medium" id="final-session-duration">24m 38s</span>
+</div>
+<div class="w-px h-8 bg-surface-container-highest"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Start Page</span>
+<span class="font-headline-md text-headline-md text-on-surface font-medium">p. 256</span>
+</div>
+<div class="w-px h-8 bg-surface-container-highest"></div>
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Finished At</span>
+<span class="font-headline-md text-headline-md text-secondary font-medium" id="modal-end-page">p. 278</span>
+</div>
+</div>
+<!-- Page Ending Counter Picker -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="ending-page-field">Confirm Ending Page</label>
+<div class="flex items-center gap-2">
+<button class="w-11 h-11 rounded-lg bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-primary font-bold text-lg active:scale-95" id="page-decrement">−</button>
+<input class="flex-1 h-11 text-center bg-surface-container-low rounded-lg font-headline-sm text-headline-sm text-primary outline-none" id="ending-page-field" type="number" value="278">
+<button class="w-11 h-11 rounded-lg bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-primary font-bold text-lg active:scale-95" id="page-increment">+</button>
+</div>
+</div>
+<!-- How did it feel? (Micro Delight Mood Selector) -->
+<div class="flex flex-col gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Session Atmosphere</span>
+<div class="grid grid-cols-4 gap-2">
+<button class="mood-pill py-2 px-1 rounded-lg bg-surface-container text-center hover:bg-tertiary-fixed transition-colors active:scale-95">
+<span class="block text-base leading-none mb-1">🌿</span>
+<span class="font-label-sm text-label-sm text-on-surface block truncate">Immersive</span>
+</button>
+<button class="mood-pill py-2 px-1 rounded-lg bg-surface-container text-center hover:bg-tertiary-fixed transition-colors active:scale-95">
+<span class="block text-base leading-none mb-1">🕯️</span>
+<span class="font-label-sm text-label-sm text-on-surface block truncate">Cozy</span>
+</button>
+<button class="mood-pill py-2 px-1 rounded-lg bg-surface-container text-center hover:bg-tertiary-fixed transition-colors active:scale-95">
+<span class="block text-base leading-none mb-1">⚡</span>
+<span class="font-label-sm text-label-sm text-on-surface block truncate">Gripping</span>
+</button>
+<button class="mood-pill py-2 px-1 rounded-lg bg-surface-container text-center hover:bg-tertiary-fixed transition-colors active:scale-95">
+<span class="block text-base leading-none mb-1">🍵</span>
+<span class="font-label-sm text-label-sm text-on-surface block truncate">Reflective</span>
+</button>
+</div>
+</div>
+<!-- Confirm Save Session Button -->
+<button class="w-full h-12 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 mt-2 shadow-sm transition-all" id="btn-confirm-save">
+<span class="material-symbols-outlined text-[20px]">save</span>
+        Save &amp; Return to Shelf
+      </button>
+</div>
+</div>
+</div>
+<script>
+  (() => {
+    // Timer state management
+    let seconds = 24 * 60 + 38; // starting at 00:24:38
+    let isRunning = true;
+    let timerInterval = null;
+
+    const timerDisplay = document.getElementById('timer-display');
+    const btnTogglePause = document.getElementById('btn-toggle-pause');
+    const pauseIcon = document.getElementById('pause-icon');
+    const pauseText = document.getElementById('pause-text');
+    const statusDot = document.getElementById('status-dot');
+    const statusText = document.getElementById('session-status-text');
+    const pulseHalo = document.getElementById('pulse-halo');
+    const progressArc = document.getElementById('progress-arc');
+
+    const btnQuickNote = document.getElementById('btn-quick-note');
+    const marginaliaDrawer = document.getElementById('marginalia-drawer');
+    const btnCancelNote = document.getElementById('btn-cancel-note');
+    const btnSaveNote = document.getElementById('btn-save-note');
+
+    const btnQuickBookmark = document.getElementById('btn-quick-bookmark');
+    const bookmarkIcon = document.getElementById('bookmark-icon');
+    const bookmarkLabel = document.getElementById('bookmark-label');
+
+    const btnFinishSession = document.getElementById('btn-finish-session');
+    const finishModal = document.getElementById('finish-modal');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const btnConfirmSave = document.getElementById('btn-confirm-save');
+    const finalSessionDuration = document.getElementById('final-session-duration');
+    const endingPageField = document.getElementById('ending-page-field');
+    const modalEndPage = document.getElementById('modal-end-page');
+    const pageDecrement = document.getElementById('page-decrement');
+    const pageIncrement = document.getElementById('page-increment');
+    const btnDiscardSession = document.getElementById('btn-discard-session');
+    const btnQuickAmbient = document.getElementById('btn-quick-ambient');
+    const soundIcon = document.getElementById('sound-icon');
+
+    // Format helper
+    function formatTime(totalSecs) {
+      const hrs = Math.floor(totalSecs / 3600);
+      const mins = Math.floor((totalSecs % 3600) / 60);
+      const secs = totalSecs % 60;
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+    }
+
+    // Start timer interval
+    function runTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (isRunning) {
+          seconds++;
+          timerDisplay.textContent = formatTime(seconds);
+          
+          // Animate dash offset for calm breathing visualization
+          const circumference = 741.4;
+          const cycleSecs = 1800; // 30 min loop for full ring
+          const currentOffset = circumference - ((seconds % cycleSecs) / cycleSecs) * circumference;
+          progressArc.setAttribute('stroke-dashoffset', currentOffset.toFixed(1));
+        }
+      }, 1000);
+    }
+
+    // Toggle Pause/Resume
+    btnTogglePause.addEventListener('click', () => {
+      isRunning = !isRunning;
+      if (isRunning) {
+        pauseIcon.textContent = 'pause_circle';
+        pauseText.textContent = 'Pause Timer';
+        statusText.textContent = 'Active Session';
+        statusDot.className = 'w-2 h-2 rounded-full bg-primary animate-ping';
+        pulseHalo.classList.remove('opacity-20');
+        pulseHalo.classList.add('opacity-80');
+      } else {
+        pauseIcon.textContent = 'play_circle';
+        pauseText.textContent = 'Resume Reading';
+        statusText.textContent = 'Paused Calmly';
+        statusDot.className = 'w-2 h-2 rounded-full bg-secondary';
+        pulseHalo.classList.remove('opacity-80');
+        pulseHalo.classList.add('opacity-20');
+      }
+    });
+
+    // Expand Marginalia quick note
+    btnQuickNote.addEventListener('click', () => {
+      const isHidden = marginaliaDrawer.classList.contains('hidden');
+      if (isHidden) {
+        marginaliaDrawer.classList.remove('hidden');
+        marginaliaDrawer.classList.add('flex');
+        document.getElementById('session-note-input').focus();
+      } else {
+        marginaliaDrawer.classList.add('hidden');
+        marginaliaDrawer.classList.remove('flex');
+      }
+    });
+
+    btnCancelNote.addEventListener('click', () => {
+      marginaliaDrawer.classList.add('hidden');
+      marginaliaDrawer.classList.remove('flex');
+    });
+
+    btnSaveNote.addEventListener('click', () => {
+      marginaliaDrawer.classList.add('hidden');
+      marginaliaDrawer.classList.remove('flex');
+      btnQuickNote.classList.add('bg-tertiary-fixed', 'text-on-tertiary-fixed-variant');
+      setTimeout(() => {
+        btnQuickNote.classList.remove('bg-tertiary-fixed', 'text-on-tertiary-fixed-variant');
+      }, 2500);
+    });
+
+    // Quick Bookmark action
+    let bookmarked = false;
+    btnQuickBookmark.addEventListener('click', () => {
+      bookmarked = !bookmarked;
+      if (bookmarked) {
+        bookmarkIcon.textContent = 'bookmark';
+        bookmarkIcon.classList.add('text-secondary');
+        bookmarkLabel.textContent = 'Marked';
+        btnQuickBookmark.classList.add('bg-secondary-fixed');
+      } else {
+        bookmarkIcon.textContent = 'bookmark_border';
+        bookmarkLabel.textContent = 'Save Mark';
+        btnQuickBookmark.classList.remove('bg-secondary-fixed');
+      }
+    });
+
+    // Ambient sound icon toggle micro-delight
+    let soundActive = false;
+    btnQuickAmbient.addEventListener('click', () => {
+      soundActive = !soundActive;
+      if (soundActive) {
+        soundIcon.textContent = 'air';
+        btnQuickAmbient.classList.add('bg-tertiary-fixed', 'text-on-tertiary-fixed-variant');
+      } else {
+        soundIcon.textContent = 'volume_off';
+        btnQuickAmbient.classList.remove('bg-tertiary-fixed', 'text-on-tertiary-fixed-variant');
+      }
+    });
+
+    // Open Completion Modal
+    btnFinishSession.addEventListener('click', () => {
+      isRunning = false;
+      const hrs = Math.floor(seconds / 3600);
+      const mins = Math.floor((seconds % 3600) / 60);
+      const secs = seconds % 60;
+      finalSessionDuration.textContent = hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m ${secs}s`;
+      finishModal.classList.remove('hidden');
+      finishModal.classList.add('flex');
+    });
+
+    // Close Modal
+    modalCloseBtn.addEventListener('click', () => {
+      finishModal.classList.add('hidden');
+      finishModal.classList.remove('flex');
+      isRunning = true;
+      pauseIcon.textContent = 'pause_circle';
+      pauseText.textContent = 'Pause Timer';
+    });
+
+    // Page Stepper in Modal
+    pageDecrement.addEventListener('click', () => {
+      let val = parseInt(endingPageField.value, 10) || 278;
+      if (val > 256) val--;
+      endingPageField.value = val;
+      modalEndPage.textContent = `p. ${val}`;
+    });
+
+    pageIncrement.addEventListener('click', () => {
+      let val = parseInt(endingPageField.value, 10) || 278;
+      if (val < 416) val++;
+      endingPageField.value = val;
+      modalEndPage.textContent = `p. ${val}`;
+    });
+
+    endingPageField.addEventListener('input', (e) => {
+      modalEndPage.textContent = `p. ${e.target.value}`;
+    });
+
+    // Mood Selector in Modal
+    document.querySelectorAll('.mood-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mood-pill').forEach(b => b.classList.remove('bg-tertiary-fixed', 'text-on-tertiary-fixed-variant'));
+        btn.classList.add('bg-tertiary-fixed', 'text-on-tertiary-fixed-variant');
+      });
+    });
+
+    // Confirm save redirect back
+    btnConfirmSave.addEventListener('click', () => {
+      finishModal.classList.add('hidden');
+      finishModal.classList.remove('flex');
+      if (window.history.length > 1) {
+        window.history.back();
+      }
+    });
+
+    // Discard session confirmation
+    btnDiscardSession.addEventListener('click', () => {
+      if (confirm('Discard current reading session without saving progress?')) {
+        window.history.back();
+      }
+    });
+
+    // Initialize clock loop
+    runTimer();
+  })();
+</script></main>
+
+</body></html>

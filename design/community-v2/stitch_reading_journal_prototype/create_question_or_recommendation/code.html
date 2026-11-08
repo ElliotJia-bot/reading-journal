@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary-fixed": "#b8efce", "on-secondary": "#ffffff", "on-surface": "#1c1b19", "on-tertiary-fixed-variant": "#1b5038", "secondary": "#9c4328", "inverse-surface": "#31302d", "inverse-primary": "#a1d1b4", "secondary-container": "#ff8f6e", "surface-tint": "#3a674f", "on-primary-fixed": "#002112", "tertiary": "#0b432c", "surface-dim": "#ddd9d4", "on-tertiary-container": "#9bd1b1", "secondary-fixed": "#ffdbd1", "on-secondary-fixed-variant": "#7d2c13", "surface-container": "#f2ede8", "surface": "#fdf9f3", "primary-fixed": "#bceecf", "outline": "#717973", "on-primary-fixed-variant": "#224f39", "on-background": "#1c1b19", "surface-container-highest": "#e6e2dd", "error-container": "#ffdad6", "tertiary-container": "#285b42", "background": "#fdf9f3", "surface-container-high": "#ece7e2", "on-error-container": "#93000a", "surface-container-lowest": "#ffffff", "error": "#ba1a1a", "inverse-on-surface": "#f4f0eb", "primary": "#14422d", "on-surface-variant": "#414943", "on-primary": "#ffffff", "secondary-fixed-dim": "#ffb59f", "tertiary-fixed-dim": "#9cd2b3", "surface-container-low": "#f7f3ee", "on-primary-container": "#9fcfb2", "on-secondary-fixed": "#3a0a00", "surface-bright": "#fdf9f3", "primary-container": "#2d5a43", "on-tertiary-fixed": "#002113", "outline-variant": "#c0c9c1", "on-tertiary": "#ffffff", "surface-variant": "#e6e2dd", "on-error": "#ffffff", "primary-fixed-dim": "#a1d1b4", "on-secondary-container": "#76270e" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-mobile": "0.75rem", "space-sm": "0.5rem", "gutter": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "margin-tablet": "2rem", "space-xl": "2.25rem", "space-lg": "1.5rem", "margin": "1.25rem" }, fontFamily: { "quote-editorial": ["Newsreader"], "body-md": ["Plus Jakarta Sans"], "display-lg-mobile": ["Newsreader"], "label-sm": ["Plus Jakarta Sans"], "display-lg": ["Newsreader"], "headline-lg": ["Newsreader"], "body-sm": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Newsreader"], "headline-md": ["Newsreader"], "label-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"] }, fontSize: { "quote-editorial": ["18px", { lineHeight: "28px", fontWeight: "400" }], "body-md": ["15px", { lineHeight: "22px", fontWeight: "400" }], "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.015em", fontWeight: "400" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }], "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "400" }], "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "400" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "headline-sm": ["19px", { lineHeight: "26px", fontWeight: "500" }], "headline-md": ["22px", { lineHeight: "30px", letterSpacing: "-0.01em", fontWeight: "500" }], "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }], "body-lg": ["17px", { lineHeight: "26px", fontWeight: "400" }] } } } };</script><style>@layer base { html, body { min-height: 100%; margin: 0; padding: 0; background-color: #fdf9f3; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(36,35,32,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs min-w-0"><button aria-label="Back" class="w-11 h-11 -ml-space-xs flex items-center justify-center rounded-full text-on-surface hover:text-primary transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Reading Journal Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1XmpIVW6LuvbZeFkkI1L8AuaPbvGzCj0RmrWCRS2p5G3gTnnH67w3QDBJwF4AzA7uIEfpMYHRKZPNOhRaCfcNNm3kdNvyPyPo-FhN0OXiNnumu_-iCKMM5C7rPv7qywL2cxMd8H4Pgmtnk4GsFAE4955puVxn_IIkvfMFVxQUJa4LcLwAzX3tletpLhIzR2T01sgwFsSB_WoR0vHigN_GF3VaJiigluNLxIBlrcyDe0"/><div class="flex flex-col truncate"><span class="font-headline-sm text-headline-sm text-primary font-medium tracking-tight truncate leading-none">Reading Journal</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate mt-0.5">Book Details</span></div></div><div class="flex items-center gap-space-xs shrink-0"><a aria-label="Chrome Extension" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors" data-path="extension-preview" href="#"><span class="material-symbols-outlined text-[22px]">extension</span></a><a aria-label="Reader Profile" class="w-11 h-11 flex items-center justify-center rounded-full" data-path="profile-settings" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover shadow-[0_2px_6px_rgba(36,35,32,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2gRn2gEo5xLfFtLoY2ENOcPwN_ufuqFvB6ZJrZxKPxGYUN10NJ8a5aQzklOw8EDKwut4eC1AIIie-Ps5694KBQRDak2xpS3qyVW6I_kltNV6h2bngHGYXd3t2z3BkVbpG6xjhVhbCYg7MnHYHlTTiM3ao71FdTE3FpwZOo1JCmi-zR7DHji0C3otVkimAmylaERo6B6w3XX8_OzBNTysXmVPeYTYYE8pZGU1svQI"/></a></div></div></header><main class="flex-1 w-full bg-surface pt-16 pb-safe px-margin"><div class="flex flex-col w-full pb-10">
+<!-- Top App Bar / Actions Strip -->
+<div class="flex items-center justify-between py-space-sm mb-space-sm">
+<button aria-label="Cancel and exit" class="flex items-center gap-space-xs text-on-surface-variant hover:text-on-surface transition-colors py-1.5 px-2 rounded-lg" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+<span class="font-label-lg text-label-lg">Cancel</span>
+</button>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container">
+<span class="w-2 h-2 rounded-full bg-surface-tint"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Draft autosaved</span>
+</div>
+<button class="bg-primary text-on-primary font-label-lg text-label-lg px-space-md py-2 rounded-lg shadow-sm hover:opacity-90 active:scale-95 transition-all flex items-center gap-1" id="post-header-btn" type="button">
+<span>Post</span>
+<span class="material-symbols-outlined text-[18px]">north_east</span>
+</button>
+</div>
+<!-- Notification / Alert simulation container -->
+<div class="w-full mb-space-md hidden" id="status-banner-slot"></div>
+<!-- Post Type Segmented Tab Control -->
+<div class="bg-surface-container-high p-1 rounded-xl flex items-center justify-between mb-space-lg shadow-inner">
+<button class="flex-1 py-2 px-1 text-center rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all flex items-center justify-center gap-1" id="tab-checkin" onclick="switchPostType('checkin')" type="button">
+<span class="material-symbols-outlined text-[16px]">menu_book</span>
+<span>Check-in</span>
+</button>
+<button class="flex-1 py-2 px-1 text-center rounded-lg font-label-md text-label-md bg-surface-container-lowest text-primary shadow-sm transition-all flex items-center justify-center gap-1 font-semibold" id="tab-question" onclick="switchPostType('question')" type="button">
+<span class="material-symbols-outlined text-[16px]">help_center</span>
+<span>Question</span>
+</button>
+<button class="flex-1 py-2 px-1 text-center rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all flex items-center justify-center gap-1" id="tab-recommendation" onclick="switchPostType('recommendation')" type="button">
+<span class="material-symbols-outlined text-[16px]">auto_stories</span>
+<span>Recommend</span>
+</button>
+</div>
+<!-- Circle Destination Selector -->
+<div class="bg-surface-container-low rounded-xl p-space-md mb-space-lg">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1.5 uppercase tracking-wider" for="circle-select">
+      Publishing into Reading Circle
+    </label>
+<div class="relative flex items-center">
+<div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mr-space-sm shrink-0">
+<span class="material-symbols-outlined text-[18px]">groups</span>
+</div>
+<select class="w-full bg-surface-container-lowest text-on-surface font-body-md text-body-md py-2.5 pl-3 pr-9 rounded-lg appearance-none focus:outline-none focus:ring-0 shadow-sm cursor-pointer" id="circle-select" onchange="updateCirclePreview(this.value)">
+<option selected="" value="Quiet Fiction Club">Quiet Fiction Club · 420 readers</option>
+<option value="The 10-Minute Reading Habit">The 10-Minute Reading Habit · 1.2k readers</option>
+<option value="Philosophy &amp; Ideas">Philosophy &amp; Ideas · 890 readers</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 pointer-events-none text-on-surface-variant text-[20px]">unfold_more</span>
+</div>
+</div>
+<!-- FORM 1: Question Form (Active in Demo) -->
+<section class="flex flex-col gap-space-md mb-space-xl" id="form-question">
+<!-- Field 1: Question Title -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface flex items-center gap-1" for="question-title-input">
+<span>What would you like to ask the circle?</span>
+<span class="text-secondary font-bold">*</span>
+</label>
+<span class="font-label-sm text-label-sm text-on-surface-variant" id="title-char-count">67/140</span>
+</div>
+<input class="w-full bg-surface-container-lowest text-on-surface font-headline-sm text-headline-sm px-space-md py-3 rounded-xl shadow-sm focus:outline-none placeholder:text-on-surface-variant/40" id="question-title-input" oninput="handleQuestionInput()" placeholder="e.g. Which translation of The Odyssey captured you most?" type="text" value="Do you prefer reading one book at a time or juggling multiple?"/>
+</div>
+<!-- Field 2: Supporting thoughts -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-lg text-label-lg text-on-surface" for="question-context-input">
+        Add a little context <span class="font-body-sm text-body-sm text-on-surface-variant font-normal">(optional)</span>
+</label>
+<textarea class="w-full bg-surface-container-lowest text-on-surface font-body-md text-body-md p-space-md rounded-xl shadow-sm focus:outline-none resize-none leading-relaxed placeholder:text-on-surface-variant/40" id="question-context-input" oninput="handleQuestionInput()" placeholder="Share why this is on your mind or how your current read made you think of it..." rows="4">I used to feel guilty having two books on my nightstand, but switching by mood has actually helped me read more consistently.</textarea>
+</div>
+<!-- Attached Current Reading Tag -->
+<div class="bg-surface-container rounded-xl p-space-md flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-14 bg-surface-container-highest rounded-lg overflow-hidden shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Cover of the novel Piranesi by Susanna Clarke showing an ethereal classical statue hall with tides of ocean water surging through stone arches in calm painterly earth tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIkfQ2rg_KtKwiqZTHyQHZm4X7JMneAC0AEKozYVdwxJnbHBhBZBfrSKWdR9jjlkIerk7zsMgiQz8GBHvzoZcQo6zHB7zdbHICP08mZeyPnR8CztgHhABn1HfR1DfSg8H-D3P6mT4qfDS9hEg7ySyeSzgE-Z3sRheOtR_PIHU0HOEOowrIvxZe0odWlolCNcHoT0yyxFWha5El-NjYu8oGo7AxnNCoPtJjaSLArqQ"/>
+</div>
+<div class="flex flex-col truncate">
+<span class="font-label-sm text-label-sm text-secondary uppercase font-semibold">Referencing Current Read</span>
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Piranesi</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Susanna Clarke · Page 184</span>
+</div>
+</div>
+<button aria-label="Detach book reference" class="w-9 h-9 rounded-full bg-surface-container-high text-on-surface-variant hover:text-error flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</section>
+<!-- FORM 2: Book Recommendation Form (Hidden by default, toggleable) -->
+<section class="flex flex-col gap-space-md mb-space-xl hidden" id="form-recommendation">
+<!-- Book Title & Author -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-lg text-label-lg text-on-surface flex items-center gap-1" for="rec-book-title">
+<span>Book Title &amp; Author</span>
+<span class="text-secondary font-bold">*</span>
+</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest text-on-surface font-headline-sm text-headline-sm pl-space-md pr-10 py-3 rounded-xl shadow-sm focus:outline-none placeholder:text-on-surface-variant/40" id="rec-book-title" oninput="handleRecInput()" placeholder="Search by title or author..." type="text" value="Piranesi by Susanna Clarke"/>
+<span class="material-symbols-outlined absolute right-3 top-3.5 text-on-surface-variant text-[20px]">search</span>
+</div>
+</div>
+<!-- Cover attach thumbnail selector -->
+<div class="bg-surface-container rounded-xl p-space-md flex items-center gap-space-md">
+<div class="w-14 h-20 bg-surface-container-highest rounded-lg overflow-hidden shrink-0 shadow-sm relative group">
+<img class="w-full h-full object-cover" data-alt="Atmospheric book cover artwork for Piranesi with muted ivory marble pillars, calm sea spray, and intricate gold foil titling on deep forest linen" id="rec-cover-preview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBct0-LaktLGMga9UbFAtX2sh8jNgNct-2rVL-NxwQYtBQ2PbPjd-FOI9CsbtosSoqEn-bmwIwE02LOPW70R-JMhDe1cPD8ah482yYxZCM4O6V8-CTOScr-8EkviUxd15T-2WpHSRbOE4bz2y17GqvPEA081R2yBoYQkSMDGpPLn2U2-1Vk0fuvc9CV6qrPwSTx_7ZalE6vz5SZXfDa3R3BTGx0C7CfEN1NTBlSQgc"/>
+<div class="absolute inset-0 bg-primary/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-surface-container-lowest text-[18px]">edit</span>
+</div>
+</div>
+<div class="flex flex-col justify-center gap-1 flex-1">
+<span class="font-label-lg text-label-lg text-on-surface">Book jacket found</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Bloomsbury Publishing (2020)</span>
+<div class="flex items-center gap-2 mt-1">
+<button class="font-label-sm text-label-sm text-primary underline underline-offset-2" type="button">Replace artwork</button>
+<span class="text-outline-variant text-[10px]">●</span>
+<button class="font-label-sm text-label-sm text-on-surface-variant" type="button">Upload scan</button>
+</div>
+</div>
+</div>
+<!-- Rating / Affinity badges -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-lg text-label-lg text-on-surface">Pacing &amp; Atmosphere</label>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">bedtime</span> Atmospheric
+        </span>
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">waves</span> Quiet Pace
+        </span>
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">psychology</span> Philosophical
+        </span>
+<button class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm hover:text-on-surface" type="button">
+          + Add tag
+        </button>
+</div>
+</div>
+<!-- Why recommend field -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-lg text-label-lg text-on-surface flex items-center gap-1" for="rec-note-input">
+<span>Why would you recommend it?</span>
+<span class="text-secondary font-bold">*</span>
+</label>
+<textarea class="w-full bg-surface-container-lowest text-on-surface font-body-md text-body-md p-space-md rounded-xl shadow-sm focus:outline-none resize-none leading-relaxed placeholder:text-on-surface-variant/40" id="rec-note-input" oninput="handleRecInput()" placeholder="Describe the feeling, who it's for, or what made it memorable..." rows="4">A gentle, atmospheric labyrinth of a book. Perfect if you want something quiet and magical that invites you to walk its halls with reverence rather than haste.</textarea>
+</div>
+</section>
+<!-- FORM 3: Check-in Form (Placeholder for full segmented control) -->
+<section class="flex flex-col gap-space-md mb-space-xl hidden" id="form-checkin">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-lg text-label-lg text-on-surface">Where are you today?</label>
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Current Page</span>
+<input class="w-full font-headline-md text-headline-md text-primary bg-transparent focus:outline-none" type="number" value="184"/>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Total Pages</span>
+<input class="w-full font-headline-md text-headline-md text-on-surface-variant bg-transparent focus:outline-none" type="number" value="245"/>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-lg text-label-lg text-on-surface">Brief session thought</label>
+<textarea class="w-full bg-surface-container-lowest text-on-surface font-body-md text-body-md p-space-md rounded-xl shadow-sm focus:outline-none resize-none" placeholder="A line or passage that lingered..." rows="3">Savoring the quiet descriptions of the halls and tidal rhythms. Only 60 pages left.</textarea>
+</div>
+</section>
+<!-- Section 5: Live Post Preview Accordion / Card -->
+<div class="bg-surface-container rounded-2xl p-space-md mb-space-xl shadow-sm">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">visibility</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Live Preview</h2>
+</div>
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-surface-container-highest text-on-surface-variant" id="preview-circle-badge">
+        Quiet Fiction Club
+      </span>
+</div>
+<!-- Feed Card Render -->
+<article class="bg-surface-container-lowest rounded-xl p-space-md shadow-[0_2px_12px_-2px_rgba(62,59,54,0.06)]">
+<!-- Author row -->
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-secondary-fixed flex items-center justify-center font-headline-sm text-headline-sm text-secondary font-medium">
+            M
+          </div>
+<div class="flex flex-col leading-tight">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Maya Lin</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Just now · Avid Reader</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant font-medium" id="preview-type-pill">
+          Question
+        </span>
+</div>
+<!-- Preview Body (Swapped dynamically based on state) -->
+<div class="flex flex-col gap-2" id="preview-question-content">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold leading-snug" id="preview-q-title">
+          Do you prefer reading one book at a time or juggling multiple?
+        </h3>
+<p class="font-quote-editorial text-quote-editorial text-on-surface-variant italic pl-3 border-l-2 border-secondary/60" id="preview-q-context">
+          "I used to feel guilty having two books on my nightstand, but switching by mood has actually helped me read more consistently."
+        </p>
+<div class="mt-2 pt-2 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">forum</span> 0 replies yet
+          </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">bookmark_border</span> Save
+          </span>
+</div>
+</div>
+<div class="flex flex-col gap-2.5 hidden" id="preview-rec-content">
+<div class="flex items-start gap-space-sm">
+<div class="w-12 h-16 bg-surface-container rounded overflow-hidden shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Intricate book spine and jacket mock on warm archival textured background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs7lIa_RiWaVnkr36Ch8uThyqGePVMBuv2HxR2qbXr70TPpKJHO8riEuUIyQwkM0XAMquLvMrpqwU_Uv_FeCJC_Qrq5RHLOvge9b0to7PRsknWnhe1x7fPLqX1VmRbGLSNfg48HYTDJx6J-i8-ugK7rrEnOofzJI7_MS_76aEhWLgAnIs1zxy2paFs2By3gZsIu6uhkUdQFF1dcoQxpt7gTHr_LxVti_bEYZGxLl0"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary uppercase font-semibold">Recommended Book</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold" id="preview-r-title">Piranesi by Susanna Clarke</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Fantasy · Literary · 245 pages</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed mt-1" id="preview-r-note">
+          A gentle, atmospheric labyrinth of a book. Perfect if you want something quiet and magical that invites you to walk its halls with reverence rather than haste.
+        </p>
+</div>
+</article>
+</div>
+<!-- Primary Post Button & Simulation Testing Tray -->
+<div class="flex flex-col gap-space-md">
+<button class="w-full h-12 bg-primary text-on-primary rounded-xl font-label-lg text-label-lg font-semibold shadow-md hover:bg-tertiary transition-all flex items-center justify-center gap-2 active:scale-[0.99]" id="main-publish-btn" onclick="simulatePublishSuccess()" type="button">
+<span class="material-symbols-outlined text-[20px]">send</span>
+<span>Publish to Circle</span>
+</button>
+<!-- Simulation State Controls -->
+<div class="bg-surface-container-high rounded-xl p-space-md flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">
+        Interactive Prototype Controls
+      </span>
+<div class="grid grid-cols-2 gap-space-sm">
+<button class="py-2.5 px-3 rounded-lg bg-surface-container-lowest text-secondary font-label-sm text-label-sm hover:bg-surface-container flex items-center justify-center gap-1.5 transition-colors shadow-sm" onclick="simulateNetworkError()" type="button">
+<span class="material-symbols-outlined text-[16px]">cloud_off</span>
+<span>Simulate Network Error</span>
+</button>
+<button class="py-2.5 px-3 rounded-lg bg-surface-container-lowest text-primary font-label-sm text-label-sm hover:bg-surface-container flex items-center justify-center gap-1.5 transition-colors shadow-sm" onclick="simulatePublishSuccess()" type="button">
+<span class="material-symbols-outlined text-[16px]">task_alt</span>
+<span>Simulate Success</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  let currentPostType = 'question';
+
+  function switchPostType(type) {
+    currentPostType = type;
+    
+    // Reset tabs
+    const tabs = ['checkin', 'question', 'recommendation'];
+    tabs.forEach(t => {
+      const btn = document.getElementById('tab-' + t);
+      const form = document.getElementById('form-' + t);
+      if (t === type) {
+        btn.className = "flex-1 py-2 px-1 text-center rounded-lg font-label-md text-label-md bg-surface-container-lowest text-primary shadow-sm transition-all flex items-center justify-center gap-1 font-semibold";
+        form.classList.remove('hidden');
+      } else {
+        btn.className = "flex-1 py-2 px-1 text-center rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all flex items-center justify-center gap-1";
+        form.classList.add('hidden');
+      }
+    });
+
+    // Update preview mode
+    const pill = document.getElementById('preview-type-pill');
+    const qContent = document.getElementById('preview-question-content');
+    const rContent = document.getElementById('preview-rec-content');
+
+    if (type === 'question') {
+      pill.textContent = 'Question';
+      pill.className = "font-label-sm text-label-sm px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant font-medium";
+      qContent.classList.remove('hidden');
+      rContent.classList.add('hidden');
+      validateQuestionForm();
+    } else if (type === 'recommendation') {
+      pill.textContent = 'Recommendation';
+      pill.className = "font-label-sm text-label-sm px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed-variant font-medium";
+      qContent.classList.add('hidden');
+      rContent.classList.remove('hidden');
+      validateRecForm();
+    } else {
+      pill.textContent = 'Reading Check-in';
+      pill.className = "font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium";
+      qContent.classList.remove('hidden');
+      rContent.classList.add('hidden');
+    }
+  }
+
+  function handleQuestionInput() {
+    const titleVal = document.getElementById('question-title-input').value;
+    const contextVal = document.getElementById('question-context-input').value;
+    
+    // Update char counter
+    const counter = document.getElementById('title-char-count');
+    if (counter) {
+      counter.textContent = `${titleVal.length}/140`;
+    }
+
+    // Update Live Preview
+    const pTitle = document.getElementById('preview-q-title');
+    const pContext = document.getElementById('preview-q-context');
+    if (pTitle) {
+      pTitle.textContent = titleVal.trim() || 'Your question will appear here...';
+    }
+    if (pContext) {
+      pContext.textContent = contextVal.trim() ? `"${contextVal.trim()}"` : 'Supporting reflections or book passages...';
+    }
+
+    validateQuestionForm();
+  }
+
+  function handleRecInput() {
+    const bookTitleVal = document.getElementById('rec-book-title').value;
+    const noteVal = document.getElementById('rec-note-input').value;
+
+    const pTitle = document.getElementById('preview-r-title');
+    const pNote = document.getElementById('preview-r-note');
+
+    if (pTitle) {
+      pTitle.textContent = bookTitleVal.trim() || 'Selected Book Title';
+    }
+    if (pNote) {
+      pNote.textContent = noteVal.trim() || 'Your recommendation reflections...';
+    }
+
+    validateRecForm();
+  }
+
+  function validateQuestionForm() {
+    const titleVal = document.getElementById('question-title-input').value.trim();
+    const isValid = titleVal.length > 0;
+    setPublishEnabled(isValid);
+  }
+
+  function validateRecForm() {
+    const bookVal = document.getElementById('rec-book-title').value.trim();
+    const noteVal = document.getElementById('rec-note-input').value.trim();
+    const isValid = bookVal.length > 0 && noteVal.length > 0;
+    setPublishEnabled(isValid);
+  }
+
+  function setPublishEnabled(enabled) {
+    const mainBtn = document.getElementById('main-publish-btn');
+    const headerBtn = document.getElementById('post-header-btn');
+    
+    if (enabled) {
+      mainBtn.removeAttribute('disabled');
+      mainBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      headerBtn.removeAttribute('disabled');
+      headerBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    } else {
+      mainBtn.setAttribute('disabled', 'true');
+      mainBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      headerBtn.setAttribute('disabled', 'true');
+      headerBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+  }
+
+  function updateCirclePreview(circleName) {
+    const badge = document.getElementById('preview-circle-badge');
+    if (badge) {
+      badge.textContent = circleName;
+    }
+  }
+
+  function simulateNetworkError() {
+    const slot = document.getElementById('status-banner-slot');
+    slot.innerHTML = `
+      <div class="bg-secondary-fixed-dim/30 border-l-4 border-secondary p-space-md rounded-xl flex items-start justify-between gap-space-sm animate-fade-in shadow-sm">
+        <div class="flex items-start gap-space-xs">
+          <span class="material-symbols-outlined text-secondary text-[22px] shrink-0 mt-0.5">cloud_off</span>
+          <div class="flex flex-col">
+            <span class="font-label-lg text-label-lg text-on-surface font-semibold">Unable to publish right now</span>
+            <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Don't worry, your text has been saved safely in your drafts.</p>
+          </div>
+        </div>
+        <button type="button" onclick="simulatePublishSuccess()" class="bg-secondary text-on-secondary px-3 py-1.5 rounded-lg font-label-sm text-label-sm font-semibold shrink-0 shadow-sm hover:opacity-90">
+          Retry
+        </button>
+      </div>
+    `;
+    slot.classList.remove('hidden');
+  }
+
+  function simulatePublishSuccess() {
+    const slot = document.getElementById('status-banner-slot');
+    const circleName = document.getElementById('circle-select').value;
+    slot.innerHTML = `
+      <div class="bg-tertiary-fixed/40 border-l-4 border-primary p-space-md rounded-xl flex items-center justify-between gap-space-sm shadow-sm animate-fade-in">
+        <div class="flex items-center gap-space-xs">
+          <span class="material-symbols-outlined text-primary text-[22px] shrink-0">celebration</span>
+          <div class="flex flex-col">
+            <span class="font-label-lg text-label-lg text-on-surface font-semibold">Published to ${circleName}! 🎉</span>
+            <span class="font-body-sm text-body-sm text-on-surface-variant">Your fellow readers will see it now.</span>
+          </div>
+        </div>
+        <button type="button" onclick="slot.classList.add('hidden')" class="bg-primary text-on-primary px-3 py-1.5 rounded-lg font-label-sm text-label-sm font-semibold shrink-0 shadow-sm hover:opacity-90">
+          View in Feed
+        </button>
+      </div>
+    `;
+    slot.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Initial validation
+  validateQuestionForm();
+</script></main></body></html>

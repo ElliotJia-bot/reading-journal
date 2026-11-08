@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary-fixed": "#b8efce", "on-secondary": "#ffffff", "on-surface": "#1c1b19", "on-tertiary-fixed-variant": "#1b5038", "secondary": "#9c4328", "inverse-surface": "#31302d", "inverse-primary": "#a1d1b4", "secondary-container": "#ff8f6e", "surface-tint": "#3a674f", "on-primary-fixed": "#002112", "tertiary": "#0b432c", "surface-dim": "#ddd9d4", "on-tertiary-container": "#9bd1b1", "secondary-fixed": "#ffdbd1", "on-secondary-fixed-variant": "#7d2c13", "surface-container": "#f2ede8", "surface": "#fdf9f3", "primary-fixed": "#bceecf", "outline": "#717973", "on-primary-fixed-variant": "#224f39", "on-background": "#1c1b19", "surface-container-highest": "#e6e2dd", "error-container": "#ffdad6", "tertiary-container": "#285b42", "background": "#fdf9f3", "surface-container-high": "#ece7e2", "on-error-container": "#93000a", "surface-container-lowest": "#ffffff", "error": "#ba1a1a", "inverse-on-surface": "#f4f0eb", "primary": "#14422d", "on-surface-variant": "#414943", "on-primary": "#ffffff", "secondary-fixed-dim": "#ffb59f", "tertiary-fixed-dim": "#9cd2b3", "surface-container-low": "#f7f3ee", "on-primary-container": "#9fcfb2", "on-secondary-fixed": "#3a0a00", "surface-bright": "#fdf9f3", "primary-container": "#2d5a43", "on-tertiary-fixed": "#002113", "outline-variant": "#c0c9c1", "on-tertiary": "#ffffff", "surface-variant": "#e6e2dd", "on-error": "#ffffff", "primary-fixed-dim": "#a1d1b4", "on-secondary-container": "#76270e" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-mobile": "0.75rem", "space-sm": "0.5rem", "gutter": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "margin-tablet": "2rem", "space-xl": "2.25rem", "space-lg": "1.5rem", "margin": "1.25rem" }, fontFamily: { "quote-editorial": ["Newsreader"], "body-md": ["Plus Jakarta Sans"], "display-lg-mobile": ["Newsreader"], "label-sm": ["Plus Jakarta Sans"], "display-lg": ["Newsreader"], "headline-lg": ["Newsreader"], "body-sm": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Newsreader"], "headline-md": ["Newsreader"], "label-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"] }, fontSize: { "quote-editorial": ["18px", { lineHeight: "28px", fontWeight: "400" }], "body-md": ["15px", { lineHeight: "22px", fontWeight: "400" }], "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.015em", fontWeight: "400" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }], "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "400" }], "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "400" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "headline-sm": ["19px", { lineHeight: "26px", fontWeight: "500" }], "headline-md": ["22px", { lineHeight: "30px", letterSpacing: "-0.01em", fontWeight: "500" }], "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }], "body-lg": ["17px", { lineHeight: "26px", fontWeight: "400" }] } } } };</script><style>@layer base { html, body { min-height: 100%; margin: 0; padding: 0; background-color: #fdf9f3; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(36,35,32,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs min-w-0"><button aria-label="Back" class="w-11 h-11 -ml-space-xs flex items-center justify-center rounded-full text-on-surface hover:text-primary transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Reading Journal Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1XmpIVW6LuvbZeFkkI1L8AuaPbvGzCj0RmrWCRS2p5G3gTnnH67w3QDBJwF4AzA7uIEfpMYHRKZPNOhRaCfcNNm3kdNvyPyPo-FhN0OXiNnumu_-iCKMM5C7rPv7qywL2cxMd8H4Pgmtnk4GsFAE4955puVxn_IIkvfMFVxQUJa4LcLwAzX3tletpLhIzR2T01sgwFsSB_WoR0vHigN_GF3VaJiigluNLxIBlrcyDe0"/><div class="flex flex-col truncate"><span class="font-headline-sm text-headline-sm text-primary font-medium tracking-tight truncate leading-none">Reading Journal</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate mt-0.5">Scan A Book</span></div></div><div class="flex items-center gap-space-xs shrink-0"><a aria-label="Chrome Extension" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors" data-path="extension-preview" href="#"><span class="material-symbols-outlined text-[22px]">extension</span></a><a aria-label="Reader Profile" class="w-11 h-11 flex items-center justify-center rounded-full" data-path="profile-settings" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover shadow-[0_2px_6px_rgba(36,35,32,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2gRn2gEo5xLfFtLoY2ENOcPwN_ufuqFvB6ZJrZxKPxGYUN10NJ8a5aQzklOw8EDKwut4eC1AIIie-Ps5694KBQRDak2xpS3qyVW6I_kltNV6h2bngHGYXd3t2z3BkVbpG6xjhVhbCYg7MnHYHlTTiM3ao71FdTE3FpwZOo1JCmi-zR7DHji0C3otVkimAmylaERo6B6w3XX8_OzBNTysXmVPeYTYYE8pZGU1svQI"/></a></div></div></header><main class="flex-1 w-full bg-surface pt-16 pb-safe px-margin"><div class="flex flex-col w-full pb-8">
+<!-- Interactive View State Bar -->
+<div class="flex items-center justify-between py-space-xs mb-space-sm">
+<button aria-label="Cancel scan" class="w-11 h-11 flex items-center justify-center rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors" id="btn-close">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+<!-- Mode Switcher -->
+<div class="inline-flex items-center bg-surface-container p-1 rounded-full shadow-sm">
+<button class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md transition-all" id="mode-cover">
+<span class="material-symbols-outlined text-[16px]">menu_book</span>
+<span>Cover</span>
+</button>
+<button class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all" id="mode-barcode">
+<span class="material-symbols-outlined text-[16px]">barcode_scanner</span>
+<span>Barcode</span>
+</button>
+</div>
+<!-- Torch Toggle -->
+<button aria-label="Toggle flashlight" class="w-11 h-11 flex items-center justify-center rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors" id="btn-torch">
+<span class="material-symbols-outlined text-[20px]" id="torch-icon">flashlight_on</span>
+</button>
+</div>
+<!-- Camera Viewport Area -->
+<div class="relative w-full rounded-xl overflow-hidden bg-inverse-surface shadow-xl flex flex-col items-center justify-center aspect-[4/5] max-h-[460px]">
+<!-- Ambient Camera Background Simulation -->
+<div class="absolute inset-0 bg-gradient-to-b from-stone-900 via-neutral-900 to-stone-950 flex items-center justify-center opacity-95">
+<img class="w-full h-full object-cover opacity-40 scale-105" data-alt="A warm atmospheric perspective photograph of a vintage wooden study desk holding a beautiful hardcover novel with natural soft window sidelight, tactile linen cloth, and warm ivory paper tones in deep focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2ZbRMjLXRbRtmY6O49lHytwnotpBvi5cBuyZRO3Uxqsd7lMjjXJZK32r0GzMddhunnMr9CmCAkGIzEnJLp8HuOZPsx3hyNOYiJb9KnLpwp2_pxSkCcY_Flmk5JtOeYQ1f7INVoOVdQDBJBMrmVfP5ODAN3p7jXw0WjyBlEzfm87jmvVSO1tN1jscjWukJYFXYz0iWQK3BUQNvZ87p8HEliThJfHadiIU_3503M34"/>
+</div>
+<!-- Soft Dark Vignette -->
+<div class="absolute inset-0 bg-radial from-transparent via-black/40 to-black/80 pointer-events-none"></div>
+<!-- Viewfinder Reticle / Framing Brackets -->
+<div class="relative z-10 w-[78%] h-[74%] flex flex-col justify-between p-3 transition-all duration-300" id="reticle-box">
+<!-- Top corners -->
+<div class="flex justify-between items-start w-full">
+<div class="w-7 h-7 border-t-2 border-l-2 border-primary-fixed rounded-tl-lg shadow-sm"></div>
+<div class="w-7 h-7 border-t-2 border-r-2 border-primary-fixed rounded-tr-lg shadow-sm"></div>
+</div>
+<!-- Animated Scanning Line Sweep -->
+<div class="relative w-full h-0.5 overflow-visible">
+<div class="w-full h-[2px] bg-gradient-to-r from-transparent via-primary-fixed to-transparent shadow-[0_0_12px_#bceecf] animate-[pulse_2.2s_ease-in-out_infinite]"></div>
+</div>
+<!-- Bottom corners -->
+<div class="flex justify-between items-end w-full">
+<div class="w-7 h-7 border-b-2 border-l-2 border-primary-fixed rounded-bl-lg shadow-sm"></div>
+<div class="w-7 h-7 border-b-2 border-r-2 border-primary-fixed rounded-br-lg shadow-sm"></div>
+</div>
+</div>
+<!-- Viewfinder Instructions Badge -->
+<div class="absolute bottom-4 inset-x-4 z-20 flex justify-center pointer-events-none">
+<div class="bg-inverse-surface/85 backdrop-blur-md px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-md">
+<span class="material-symbols-outlined text-primary-fixed text-[16px]">crop_free</span>
+<span class="font-label-sm text-label-sm text-inverse-on-surface tracking-wide" id="scan-hint">Align the book cover within frame</span>
+</div>
+</div>
+</div>
+<!-- Manual Shutter & Gallery Controls -->
+<div class="flex items-center justify-around px-space-md pt-space-md pb-space-sm">
+<!-- Gallery Upload Button -->
+<button class="flex flex-col items-center gap-1 group text-on-surface-variant hover:text-primary transition-colors" id="btn-gallery">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center shadow-sm group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[22px]">photo_library</span>
+</div>
+<span class="font-label-sm text-label-sm">Photo Library</span>
+</button>
+<!-- Main Shutter Button -->
+<button aria-label="Trigger scan" class="relative flex items-center justify-center w-18 h-18 group" id="btn-shutter">
+<span class="absolute inset-0 rounded-full bg-primary-container/20 scale-110 group-active:scale-95 transition-transform duration-150"></span>
+<div class="w-16 h-16 rounded-full bg-surface-container-lowest flex items-center justify-center p-1 shadow-md">
+<div class="w-full h-full rounded-full bg-primary flex items-center justify-center text-on-primary group-hover:bg-tertiary transition-all">
+<span class="material-symbols-outlined text-[24px]">filter_center_focus</span>
+</div>
+</div>
+</button>
+<!-- Sim Error / Retry Switch for User Testing -->
+<button class="flex flex-col items-center gap-1 group text-on-surface-variant hover:text-secondary transition-colors" id="btn-toggle-fail">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center shadow-sm group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[22px]">restart_alt</span>
+</div>
+<span class="font-label-sm text-label-sm">Test Failed</span>
+</button>
+</div>
+<!-- Dynamic Drawer / Detection Results Section -->
+<div class="mt-space-sm flex flex-col gap-space-sm">
+<!-- State 1: Match Found (Default Active) -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl p-space-md shadow-md transition-all duration-300" id="drawer-success">
+<!-- Status pill -->
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Identified from Cover</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">High confidence • 99%</span>
+</div>
+<!-- Book Preview Card -->
+<div class="flex gap-space-md items-start pt-space-xs">
+<!-- Physical Book Jacket Display -->
+<div class="relative shrink-0 w-20 aspect-[2/3] rounded-lg overflow-hidden bg-surface-container shadow-[2px_4px_12px_rgba(36,35,32,0.14)]">
+<img class="w-full h-full object-cover" data-alt="Cover of the novel Tomorrow and Tomorrow and Tomorrow showing modern wave graphic art inspired by Hokusai with pastel seafoam green, red, and cream typography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIhTadBOWcvRf4ud31MG7bonHmkDZkHWxQs9KqlISI1-QYv_3d8Iyq3uJG2R6bxXPQ-9yvau6jy2qKxGaRMAtvhYnjlaHNWDpzmrg92VVi2AWcEcrAy-XTkF6roSjncfHGdTJxqb_ZWgcJtenLs3nfEV5VbTHNf0oHuYWB4PBDHyqmMAMma9RRYzxobC186-9Hsw-JGjs9epZXChYqz4eQbyPxY2c068rtS5bye0g"/>
+<div class="absolute inset-y-0 left-0 w-1 bg-black/15"></div>
+</div>
+<!-- Book Details Metadata -->
+<div class="flex flex-col min-w-0 flex-1">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-medium truncate">Tomorrow, and Tomorrow, and Tomorrow</h2>
+<p class="font-body-md text-body-md text-on-surface-variant font-medium mt-0.5">Gabrielle Zevin</p>
+<div class="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant">Hardcover</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">416 pp</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">•</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Knopf (2022)</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline mt-1 font-mono tracking-tight text-[11px]">ISBN 978-0593321201</p>
+</div>
+</div>
+<!-- Action CTAs -->
+<div class="flex items-center gap-space-sm pt-space-md mt-space-xs">
+<button class="flex-1 h-12 flex items-center justify-center rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-lg text-label-lg" id="btn-try-again">
+          Try Again
+        </button>
+<button class="flex-[2] h-12 flex items-center justify-center gap-1.5 rounded-lg bg-primary text-on-primary hover:bg-tertiary transition-all shadow-sm font-label-lg text-label-lg" id="btn-confirm-match">
+<span>Confirm Match</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- State 2: Unsuccessful Scan Drawer (Simulated via button) -->
+<div class="hidden flex flex-col bg-surface-container-low rounded-xl p-space-md shadow-sm transition-all duration-300" id="drawer-failure">
+<div class="flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-error-container text-on-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">document_scanner</span>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-headline-sm text-headline-sm text-on-surface leading-tight">No Match Found</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            Could not clearly detect the cover art or ISBN barcode. Ensure good lighting and hold steady.
+          </p>
+</div>
+</div>
+<!-- Alternative Flow Actions -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-md">
+<button class="h-11 flex items-center justify-center gap-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-label-md text-label-md transition-colors" id="btn-search-manual">
+<span class="material-symbols-outlined text-[18px]">search</span>
+<span>Search Catalog</span>
+</button>
+<button class="h-11 flex items-center justify-center gap-1.5 rounded-lg bg-secondary text-on-secondary hover:opacity-90 font-label-md text-label-md transition-colors shadow-sm" id="btn-add-manual">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+<span>Add Manually</span>
+</button>
+</div>
+<button class="w-full mt-space-sm py-2 text-center text-primary font-label-md text-label-md hover:underline" id="btn-retry-failed">
+        Rescan Book
+      </button>
+</div>
+<!-- Secondary Contextual Quick Card: Recent Scanned Queue -->
+<div class="flex items-center justify-between p-space-sm px-space-md bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">auto_stories</span>
+<span class="font-body-sm text-body-sm text-on-surface">3 books logged today in reading shelf</span>
+</div>
+<a class="font-label-sm text-label-sm text-secondary hover:underline font-semibold" href="#">View Stack</a>
+</div>
+</div>
+</div>
+<script>
+  // Mode Toggle logic
+  const modeCover = document.getElementById('mode-cover');
+  const modeBarcode = document.getElementById('mode-barcode');
+  const scanHint = document.getElementById('scan-hint');
+  const reticleBox = document.getElementById('reticle-box');
+
+  modeCover.addEventListener('click', () => {
+    modeCover.className = 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md transition-all';
+    modeBarcode.className = 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all';
+    scanHint.textContent = 'Align the book cover within frame';
+    reticleBox.style.height = '74%';
+  });
+
+  modeBarcode.addEventListener('click', () => {
+    modeBarcode.className = 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md transition-all';
+    modeCover.className = 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all';
+    scanHint.textContent = 'Center ISBN barcode inside frame';
+    reticleBox.style.height = '46%';
+  });
+
+  // Torch Toggle micro-interaction
+  const btnTorch = document.getElementById('btn-torch');
+  const torchIcon = document.getElementById('torch-icon');
+  let torchActive = false;
+
+  btnTorch.addEventListener('click', () => {
+    torchActive = !torchActive;
+    if (torchActive) {
+      btnTorch.classList.add('bg-primary-fixed', 'text-on-primary-fixed');
+      btnTorch.classList.remove('bg-surface-container', 'text-on-surface');
+      torchIcon.style.fontVariationSettings = "'FILL' 1";
+    } else {
+      btnTorch.classList.remove('bg-primary-fixed', 'text-on-primary-fixed');
+      btnTorch.classList.add('bg-surface-container', 'text-on-surface');
+      torchIcon.style.fontVariationSettings = "'FILL' 0";
+    }
+  });
+
+  // Toggle Simulated Failure State
+  const btnToggleFail = document.getElementById('btn-toggle-fail');
+  const drawerSuccess = document.getElementById('drawer-success');
+  const drawerFailure = document.getElementById('drawer-failure');
+  const btnRetryFailed = document.getElementById('btn-retry-failed');
+  const btnTryAgain = document.getElementById('btn-try-again');
+
+  function showFailureState() {
+    drawerSuccess.classList.add('hidden');
+    drawerFailure.classList.remove('hidden');
+  }
+
+  function showSuccessState() {
+    drawerFailure.classList.add('hidden');
+    drawerSuccess.classList.remove('hidden');
+  }
+
+  btnToggleFail.addEventListener('click', () => {
+    if (drawerFailure.classList.contains('hidden')) {
+      showFailureState();
+    } else {
+      showSuccessState();
+    }
+  });
+
+  btnRetryFailed.addEventListener('click', showSuccessState);
+  btnTryAgain.addEventListener('click', () => {
+    // Visual flash on reticle
+    reticleBox.classList.add('scale-105');
+    setTimeout(() => reticleBox.classList.remove('scale-105'), 200);
+  });
+
+  // Shutter action simulation
+  const btnShutter = document.getElementById('btn-shutter');
+  btnShutter.addEventListener('click', () => {
+    reticleBox.classList.add('opacity-40');
+    setTimeout(() => {
+      reticleBox.classList.remove('opacity-40');
+      showSuccessState();
+    }, 300);
+  });
+</script></main></body></html>

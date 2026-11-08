@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary-fixed": "#b8efce", "on-secondary": "#ffffff", "on-surface": "#1c1b19", "on-tertiary-fixed-variant": "#1b5038", "secondary": "#9c4328", "inverse-surface": "#31302d", "inverse-primary": "#a1d1b4", "secondary-container": "#ff8f6e", "surface-tint": "#3a674f", "on-primary-fixed": "#002112", "tertiary": "#0b432c", "surface-dim": "#ddd9d4", "on-tertiary-container": "#9bd1b1", "secondary-fixed": "#ffdbd1", "on-secondary-fixed-variant": "#7d2c13", "surface-container": "#f2ede8", "surface": "#fdf9f3", "primary-fixed": "#bceecf", "outline": "#717973", "on-primary-fixed-variant": "#224f39", "on-background": "#1c1b19", "surface-container-highest": "#e6e2dd", "error-container": "#ffdad6", "tertiary-container": "#285b42", "background": "#fdf9f3", "surface-container-high": "#ece7e2", "on-error-container": "#93000a", "surface-container-lowest": "#ffffff", "error": "#ba1a1a", "inverse-on-surface": "#f4f0eb", "primary": "#14422d", "on-surface-variant": "#414943", "on-primary": "#ffffff", "secondary-fixed-dim": "#ffb59f", "tertiary-fixed-dim": "#9cd2b3", "surface-container-low": "#f7f3ee", "on-primary-container": "#9fcfb2", "on-secondary-fixed": "#3a0a00", "surface-bright": "#fdf9f3", "primary-container": "#2d5a43", "on-tertiary-fixed": "#002113", "outline-variant": "#c0c9c1", "on-tertiary": "#ffffff", "surface-variant": "#e6e2dd", "on-error": "#ffffff", "primary-fixed-dim": "#a1d1b4", "on-secondary-container": "#76270e" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-mobile": "0.75rem", "space-sm": "0.5rem", "gutter": "1rem", "space-md": "1rem", "space-xs": "0.25rem", "margin-tablet": "2rem", "space-xl": "2.25rem", "space-lg": "1.5rem", "margin": "1.25rem" }, fontFamily: { "quote-editorial": ["Newsreader"], "body-md": ["Plus Jakarta Sans"], "display-lg-mobile": ["Newsreader"], "label-sm": ["Plus Jakarta Sans"], "display-lg": ["Newsreader"], "headline-lg": ["Newsreader"], "body-sm": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Newsreader"], "headline-md": ["Newsreader"], "label-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"] }, fontSize: { "quote-editorial": ["18px", { lineHeight: "28px", fontWeight: "400" }], "body-md": ["15px", { lineHeight: "22px", fontWeight: "400" }], "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.015em", fontWeight: "400" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }], "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "400" }], "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "400" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "headline-sm": ["19px", { lineHeight: "26px", fontWeight: "500" }], "headline-md": ["22px", { lineHeight: "30px", letterSpacing: "-0.01em", fontWeight: "500" }], "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }], "body-lg": ["17px", { lineHeight: "26px", fontWeight: "400" }] } } } };</script><style>@layer base { html, body { min-height: 100%; margin: 0; padding: 0; background-color: #fdf9f3; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(36,35,32,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs min-w-0"><button aria-label="Back" class="w-11 h-11 -ml-space-xs flex items-center justify-center rounded-full text-on-surface hover:text-primary transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Reading Journal Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1XmpIVW6LuvbZeFkkI1L8AuaPbvGzCj0RmrWCRS2p5G3gTnnH67w3QDBJwF4AzA7uIEfpMYHRKZPNOhRaCfcNNm3kdNvyPyPo-FhN0OXiNnumu_-iCKMM5C7rPv7qywL2cxMd8H4Pgmtnk4GsFAE4955puVxn_IIkvfMFVxQUJa4LcLwAzX3tletpLhIzR2T01sgwFsSB_WoR0vHigN_GF3VaJiigluNLxIBlrcyDe0"/><div class="flex flex-col truncate"><span class="font-headline-sm text-headline-sm text-primary font-medium tracking-tight truncate leading-none">Reading Journal</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate mt-0.5">Confirm Book Details</span></div></div><div class="flex items-center gap-space-xs shrink-0"><a aria-label="Chrome Extension" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors" data-path="extension-preview" href="#"><span class="material-symbols-outlined text-[22px]">extension</span></a><a aria-label="Reader Profile" class="w-11 h-11 flex items-center justify-center rounded-full" data-path="profile-settings" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover shadow-[0_2px_6px_rgba(36,35,32,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2gRn2gEo5xLfFtLoY2ENOcPwN_ufuqFvB6ZJrZxKPxGYUN10NJ8a5aQzklOw8EDKwut4eC1AIIie-Ps5694KBQRDak2xpS3qyVW6I_kltNV6h2bngHGYXd3t2z3BkVbpG6xjhVhbCYg7MnHYHlTTiM3ao71FdTE3FpwZOo1JCmi-zR7DHji0C3otVkimAmylaERo6B6w3XX8_OzBNTysXmVPeYTYYE8pZGU1svQI"/></a></div></div></header><main class="flex-1 w-full bg-surface pt-16 pb-safe px-margin"><div class="flex flex-col w-full pb-10">
+<!-- Status / Alert Simulation Tabs (Moments of Delight: Switcher for testing edge states) -->
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-sm rounded-xl mb-space-md">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">tune</span>
+<span>Preview Simulation:</span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container p-1 rounded-lg">
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded-md bg-primary text-on-primary shadow-sm transition-all" id="sim-new" onclick="setSimState('new')">New</button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded-md text-on-surface-variant hover:text-on-surface transition-all" id="sim-existing" onclick="setSimState('existing')">Existing Copy</button>
+</div>
+</div>
+<!-- State 1: Existing Book In-Progress Notice Banner (Hidden by default, reactive) -->
+<div class="hidden flex-col bg-secondary-fixed/50 rounded-xl p-space-md mb-space-md shadow-sm transition-all duration-300" id="existing-book-banner">
+<div class="flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-secondary text-on-secondary flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-secondary text-on-secondary uppercase tracking-wider font-semibold">Already in Library</span>
+<span class="font-body-sm text-body-sm text-on-secondary-fixed-variant">Reading Shelf</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed-variant mt-1">
+          You started this physical copy on <strong class="font-semibold text-secondary">Oct 18</strong> • Currently at <strong class="font-semibold text-secondary">Page 184 (64%)</strong>.
+        </p>
+<div class="flex items-center gap-2 mt-3">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary text-on-secondary font-label-md text-label-md shadow-sm active:scale-95 transition-all" type="button">
+<span>Open Existing Journal</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg text-on-secondary-fixed-variant hover:bg-secondary-fixed font-label-md text-label-md transition-all" onclick="setSimState('new')" type="button">
+            Log Second Copy
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Book Overview Card -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-[0_2px_12px_-2px_rgba(36,35,32,0.06)] flex flex-col gap-space-md relative overflow-hidden">
+<div class="flex gap-space-md items-start">
+<!-- Tactile Book Cover with realistic spine shadow -->
+<div class="relative shrink-0 w-[100px] aspect-[2/3] rounded-lg overflow-hidden shadow-[2px_6px_16px_rgba(36,35,32,0.18)] bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Warm editorial book jacket for Four Thousand Weeks Time Management for Mortals by Oliver Burkeman resting on cream linen cloth with golden hour shadows, elegant typography, warm minimalist aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7JLzcoNy3TxnyEL8hSmxifPQyVOlcLJfoR6HFUV2PW8DwNXvs2anCNCNi41dz-JptmJCW-XGKOf0zVBHlXEuFoFfLcjscxLtdUh12fsiZV8GLID37oMPj1nX_QT58SV0fPYrLXETNf-HzXlD5wgnxXwuCThNQ_uqu3EnAbWznW4U9xx6vyJR6fyhLAAOZrvY0Om6uByxCtsYpdunFq-AtV85b34ps0hDUIp_LanI"/>
+<!-- Spine edge highlight overlay for physical presence -->
+<div class="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-r from-black/25 via-white/10 to-transparent pointer-events-none"></div>
+<div class="absolute top-1.5 right-1.5 bg-primary/80 backdrop-blur-md text-on-primary rounded-full p-0.5 flex items-center justify-center">
+<span class="material-symbols-outlined text-[13px]">verified</span>
+</div>
+</div>
+<!-- Book Editorial Details -->
+<div class="flex flex-col min-w-0 flex-1 justify-center py-0.5">
+<div class="inline-flex items-center gap-1.5 text-primary font-label-sm text-label-sm uppercase tracking-wider mb-1">
+<span class="material-symbols-outlined text-[14px]">barcode_scanner</span>
+<span>Matched ISBN-13</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface font-medium tracking-tight leading-snug line-clamp-2">
+          Four Thousand Weeks
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5 font-normal">
+          Oliver Burkeman
+        </p>
+<div class="mt-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm w-fit">
+<span class="material-symbols-outlined text-[14px] text-primary">menu_book</span>
+<span class="truncate">Paperback • Farrar, Straus &amp; Giroux (2021)</span>
+</div>
+</div>
+</div>
+<!-- Reader Editorial Guidance Callout -->
+<div class="bg-surface-container rounded-lg p-space-sm flex items-start gap-space-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-primary mt-0.5 shrink-0" style="font-variation-settings: 'FILL' 1;">info</span>
+<p class="font-body-sm text-body-sm leading-relaxed">
+        Check that the edition matches your copy so your page numbers and pacing sync accurately.
+      </p>
+</div>
+</div>
+<!-- Editable Configuration Section -->
+<div class="mt-space-lg flex flex-col gap-space-lg">
+<!-- Total Pages & Format Selector Grid -->
+<div class="grid grid-cols-1 gap-space-md">
+<!-- Total Pages Stepper Field -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-sm flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1.5" for="page-input">
+<span class="material-symbols-outlined text-[16px] text-primary">auto_stories</span>
+            Total Pages in Edition
+          </label>
+<span class="font-label-sm text-label-sm text-on-surface-variant/80">Page count sync</span>
+</div>
+<div class="flex items-center justify-between gap-space-md bg-surface rounded-lg p-1.5">
+<button aria-label="Decrease pages" class="w-10 h-10 rounded-md bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high active:scale-95 transition-all" onclick="adjustTotalPages(-5)" type="button">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<div class="flex items-baseline gap-1.5 justify-center flex-1">
+<input class="w-16 text-center font-headline-sm text-headline-sm font-semibold text-primary bg-transparent focus:outline-none focus:text-primary" id="total-pages-input" max="9999" min="1" onchange="updatePercentDisplay()" type="number" value="288"/>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">pages</span>
+<span class="material-symbols-outlined text-[14px] text-outline ml-0.5">edit</span>
+</div>
+<button aria-label="Increase pages" class="w-10 h-10 rounded-md bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high active:scale-95 transition-all" onclick="adjustTotalPages(5)" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Format Chips -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-sm flex flex-col gap-2.5">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">book</span>
+            Selected Reading Format
+          </span>
+<span class="font-label-sm text-label-sm text-primary font-medium" id="current-format-label">Paperback</span>
+</div>
+<div class="grid grid-cols-2 gap-2" id="format-options">
+<button class="format-btn flex items-center gap-2 p-2.5 rounded-lg bg-primary text-on-primary shadow-sm text-left transition-all" onclick="selectFormat(this, 'Paperback')" type="button">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">import_contacts</span>
+<span class="font-label-md text-label-md">Paperback</span>
+</button>
+<button class="format-btn flex items-center gap-2 p-2.5 rounded-lg bg-surface text-on-surface hover:bg-surface-container text-left transition-all" onclick="selectFormat(this, 'Hardcover')" type="button">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">book_4</span>
+<span class="font-label-md text-label-md">Hardcover</span>
+</button>
+<button class="format-btn flex items-center gap-2 p-2.5 rounded-lg bg-surface text-on-surface hover:bg-surface-container text-left transition-all" onclick="selectFormat(this, 'Kindle / E-book')" type="button">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">tablet_mac</span>
+<span class="font-label-md text-label-md">Kindle / E-book</span>
+</button>
+<button class="format-btn flex items-center gap-2 p-2.5 rounded-lg bg-surface text-on-surface hover:bg-surface-container text-left transition-all" onclick="selectFormat(this, 'Audiobook')" type="button">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">headphones</span>
+<span class="font-label-md text-label-md">Audiobook</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Shelf Status Selection (Segmented Pills) -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-sm flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">shelves</span>
+          Assign to Reading Shelf
+        </label>
+<span class="font-label-sm text-label-sm text-secondary font-medium" id="shelf-status-tag">In progress</span>
+</div>
+<!-- Segmented Radio Pills -->
+<div class="grid grid-cols-3 gap-1.5 bg-surface-container p-1 rounded-xl">
+<button class="shelf-pill flex flex-col items-center justify-center py-2.5 px-2 rounded-lg bg-surface text-primary shadow-sm transition-all" id="tab-reading" onclick="selectShelf('reading')" type="button">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">local_library</span>
+<span class="font-label-sm text-label-sm mt-1 font-semibold">Reading</span>
+</button>
+<button class="shelf-pill flex flex-col items-center justify-center py-2.5 px-2 rounded-lg text-on-surface-variant hover:text-on-surface transition-all" id="tab-want" onclick="selectShelf('want')" type="button">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+<span class="font-label-sm text-label-sm mt-1">Want to Read</span>
+</button>
+<button class="shelf-pill flex flex-col items-center justify-center py-2.5 px-2 rounded-lg text-on-surface-variant hover:text-on-surface transition-all" id="tab-finished" onclick="selectShelf('finished')" type="button">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+<span class="font-label-sm text-label-sm mt-1">Finished</span>
+</button>
+</div>
+<!-- Conditional Sub-section for 'Reading' -->
+<div class="flex flex-col gap-3 pt-2" id="reading-progress-section">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Where are you starting from?</span>
+<!-- Mode Toggle: Page vs % -->
+<div class="flex items-center bg-surface-container rounded-lg p-0.5 text-label-sm font-label-sm">
+<button class="px-2.5 py-0.5 rounded-md bg-surface text-primary font-semibold shadow-xs" id="mode-page-btn" onclick="toggleProgressMode('page')" type="button">Page</button>
+<button class="px-2.5 py-0.5 rounded-md text-on-surface-variant" id="mode-percent-btn" onclick="toggleProgressMode('percent')" type="button">Percentage</button>
+</div>
+</div>
+<!-- Input Container -->
+<div class="bg-surface rounded-xl p-space-md flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-secondary" id="progress-icon">bookmark_border</span>
+<span class="font-body-md text-body-md text-on-surface" id="progress-input-label">Current Page</span>
+</div>
+<div class="flex items-center gap-2">
+<input class="w-14 text-right font-headline-sm text-headline-sm font-semibold text-secondary bg-surface-container px-2 py-0.5 rounded-md focus:outline-none" id="progress-number-val" max="288" min="0" oninput="handleProgressInput(this.value)" type="number" value="45"/>
+<span class="font-body-sm text-body-sm text-on-surface-variant" id="progress-unit">of 288</span>
+</div>
+</div>
+<!-- Tactile Visual Progress Bar -->
+<div class="w-full bg-surface-container rounded-full h-2.5 overflow-hidden">
+<div class="bg-secondary h-full rounded-full transition-all duration-300" id="reading-progress-bar" style="width: 15.6%;"></div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span class="flex items-center gap-1" id="start-date-prompt">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Started today
+            </span>
+<span class="font-semibold text-secondary" id="progress-percentage-calc">15% completed</span>
+</div>
+</div>
+</div>
+<!-- Quick quote / Note micro-interaction prompt for initial reader delight -->
+<div class="flex items-start gap-2 bg-surface p-2.5 rounded-lg text-on-surface-variant" id="first-note-box">
+<span class="material-symbols-outlined text-[16px] text-secondary mt-0.5">stylus_note</span>
+<input class="bg-transparent text-body-sm font-body-sm text-on-surface placeholder:text-outline w-full focus:outline-none" placeholder="Add an opening thought or where you got it (optional)..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Primary Sticky Action Wrapper -->
+<div class="mt-space-xl flex flex-col gap-space-sm">
+<button class="w-full h-12 bg-primary text-on-primary rounded-lg font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(20,66,45,0.24)] active:scale-[0.99] hover:bg-primary-container transition-all" id="add-shelf-btn" onclick="handleAddToShelf()" type="button">
+<span class="material-symbols-outlined text-[20px]">library_add</span>
+<span id="action-btn-text">Add to Bookshelf</span>
+</button>
+<p class="text-center font-label-sm text-label-sm text-on-surface-variant">
+      Organized inside your private local archive. Instant sync.
+    </p>
+</div>
+<!-- Toast Notification Overlay (Delightful Confirmation Banner) -->
+<div class="fixed bottom-6 inset-x-margin max-w-md mx-auto hidden z-50" id="success-toast">
+<div class="bg-inverse-surface text-inverse-on-surface p-space-md rounded-xl shadow-[0_12px_32px_rgba(36,35,32,0.22)] flex items-center justify-between gap-space-sm animate-bounce-short">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-inverse-on-surface font-semibold truncate">Book added to Reading shelf!</span>
+<span class="font-body-sm text-body-sm text-inverse-on-surface/80">Page 45 of 288 logged.</span>
+</div>
+</div>
+<button class="shrink-0 px-3 py-1.5 rounded-lg bg-surface-container-highest text-inverse-surface font-label-md text-label-md active:scale-95 transition-all" onclick="history.back()" type="button">
+        Go to Bookshelf
+      </button>
+</div>
+</div>
+</div>
+<script>
+  let currentProgressMode = 'page';
+  let totalPages = 288;
+  let currentProgressVal = 45;
+  let currentShelf = 'reading';
+
+  function adjustTotalPages(delta) {
+    const input = document.getElementById('total-pages-input');
+    let val = parseInt(input.value) || 288;
+    val = Math.max(1, val + delta);
+    input.value = val;
+    totalPages = val;
+    updatePercentDisplay();
+  }
+
+  function selectFormat(btn, formatName) {
+    document.querySelectorAll('.format-btn').forEach(b => {
+      b.className = 'format-btn flex items-center gap-2 p-2.5 rounded-lg bg-surface text-on-surface hover:bg-surface-container text-left transition-all';
+      const icon = b.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.className = 'material-symbols-outlined text-[18px] text-on-surface-variant';
+        icon.style.fontVariationSettings = "'FILL' 0";
+      }
+    });
+    btn.className = 'format-btn flex items-center gap-2 p-2.5 rounded-lg bg-primary text-on-primary shadow-sm text-left transition-all';
+    const activeIcon = btn.querySelector('.material-symbols-outlined');
+    if (activeIcon) {
+      activeIcon.className = 'material-symbols-outlined text-[18px] text-on-primary';
+      activeIcon.style.fontVariationSettings = "'FILL' 1";
+    }
+    document.getElementById('current-format-label').innerText = formatName;
+  }
+
+  function selectShelf(shelf) {
+    currentShelf = shelf;
+    const tabs = {
+      reading: document.getElementById('tab-reading'),
+      want: document.getElementById('tab-want'),
+      finished: document.getElementById('tab-finished')
+    };
+
+    Object.keys(tabs).forEach(key => {
+      const el = tabs[key];
+      el.className = 'shelf-pill flex flex-col items-center justify-center py-2.5 px-2 rounded-lg text-on-surface-variant hover:text-on-surface transition-all';
+      const icon = el.querySelector('.material-symbols-outlined');
+      if (icon) icon.style.fontVariationSettings = "'FILL' 0";
+    });
+
+    const activeEl = tabs[shelf];
+    activeEl.className = 'shelf-pill flex flex-col items-center justify-center py-2.5 px-2 rounded-lg bg-surface text-primary shadow-sm transition-all';
+    const activeIcon = activeEl.querySelector('.material-symbols-outlined');
+    if (activeIcon) activeIcon.style.fontVariationSettings = "'FILL' 1";
+
+    const progressSection = document.getElementById('reading-progress-section');
+    const statusTag = document.getElementById('shelf-status-tag');
+    const firstNote = document.getElementById('first-note-box');
+
+    if (shelf === 'reading') {
+      progressSection.classList.remove('hidden');
+      firstNote.classList.remove('hidden');
+      statusTag.innerText = 'In progress';
+      statusTag.className = 'font-label-sm text-label-sm text-secondary font-medium';
+    } else if (shelf === 'want') {
+      progressSection.classList.add('hidden');
+      firstNote.classList.remove('hidden');
+      statusTag.innerText = 'Queued';
+      statusTag.className = 'font-label-sm text-label-sm text-primary font-medium';
+    } else {
+      progressSection.classList.add('hidden');
+      firstNote.classList.remove('hidden');
+      statusTag.innerText = '100% Complete';
+      statusTag.className = 'font-label-sm text-label-sm text-tertiary font-medium';
+    }
+  }
+
+  function toggleProgressMode(mode) {
+    currentProgressMode = mode;
+    const pageBtn = document.getElementById('mode-page-btn');
+    const percentBtn = document.getElementById('mode-percent-btn');
+    const label = document.getElementById('progress-input-label');
+    const unit = document.getElementById('progress-unit');
+    const numInput = document.getElementById('progress-number-val');
+
+    if (mode === 'page') {
+      pageBtn.className = 'px-2.5 py-0.5 rounded-md bg-surface text-primary font-semibold shadow-xs';
+      percentBtn.className = 'px-2.5 py-0.5 rounded-md text-on-surface-variant';
+      label.innerText = 'Current Page';
+      unit.innerText = 'of ' + totalPages;
+      numInput.value = currentProgressVal;
+      numInput.max = totalPages;
+    } else {
+      percentBtn.className = 'px-2.5 py-0.5 rounded-md bg-surface text-primary font-semibold shadow-xs';
+      pageBtn.className = 'px-2.5 py-0.5 rounded-md text-on-surface-variant';
+      label.innerText = 'Percentage Read';
+      unit.innerText = '%';
+      const pct = Math.round((currentProgressVal / totalPages) * 100);
+      numInput.value = pct;
+      numInput.max = 100;
+    }
+    updatePercentDisplay();
+  }
+
+  function handleProgressInput(val) {
+    const num = parseInt(val) || 0;
+    if (currentProgressMode === 'page') {
+      currentProgressVal = Math.min(Math.max(0, num), totalPages);
+    } else {
+      const pct = Math.min(Math.max(0, num), 100);
+      currentProgressVal = Math.round((pct / 100) * totalPages);
+    }
+    updatePercentDisplay();
+  }
+
+  function updatePercentDisplay() {
+    const totalInput = document.getElementById('total-pages-input');
+    totalPages = parseInt(totalInput.value) || 288;
+    const pct = Math.min(100, Math.round((currentProgressVal / totalPages) * 100));
+    
+    document.getElementById('reading-progress-bar').style.width = pct + '%';
+    document.getElementById('progress-percentage-calc').innerText = pct + '% completed';
+
+    if (currentProgressMode === 'page') {
+      document.getElementById('progress-unit').innerText = 'of ' + totalPages;
+    }
+  }
+
+  function setSimState(state) {
+    const existingBanner = document.getElementById('existing-book-banner');
+    const newBtn = document.getElementById('sim-new');
+    const existingBtn = document.getElementById('sim-existing');
+    const actionBtnText = document.getElementById('action-btn-text');
+
+    if (state === 'existing') {
+      existingBanner.classList.remove('hidden');
+      existingBanner.classList.add('flex');
+      existingBtn.className = 'px-2.5 py-1 text-label-sm font-label-sm rounded-md bg-secondary text-on-secondary shadow-sm transition-all';
+      newBtn.className = 'px-2.5 py-1 text-label-sm font-label-sm rounded-md text-on-surface-variant hover:text-on-surface transition-all';
+      actionBtnText.innerText = 'Update Book In Bookshelf';
+    } else {
+      existingBanner.classList.add('hidden');
+      existingBanner.classList.remove('flex');
+      newBtn.className = 'px-2.5 py-1 text-label-sm font-label-sm rounded-md bg-primary text-on-primary shadow-sm transition-all';
+      existingBtn.className = 'px-2.5 py-1 text-label-sm font-label-sm rounded-md text-on-surface-variant hover:text-on-surface transition-all';
+      actionBtnText.innerText = 'Add to Bookshelf';
+    }
+  }
+
+  function handleAddToShelf() {
+    const toast = document.getElementById('success-toast');
+    toast.classList.remove('hidden');
+    toast.classList.add('flex');
+
+    const addBtn = document.getElementById('add-shelf-btn');
+    addBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: \'FILL\' 1;">check_circle</span> Book Added';
+    addBtn.classList.add('bg-tertiary-container');
+
+    setTimeout(() => {
+      toast.classList.remove('flex');
+      toast.classList.add('hidden');
+    }, 4500);
+  }
+</script></main></body></html>

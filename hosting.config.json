@@ -1,0 +1,16 @@
+{
+  "site": "project-b00660ba-d6d4-4c9a-a05",
+  "public": "mobile/dist-web",
+  "config": {
+    "rewrites": [{ "glob": "**", "path": "/index.html" }],
+    "headers": [
+      { "glob": "**", "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "Referrer-Policy": "strict-origin-when-cross-origin"
+      } },
+      { "glob": "/manifest.webmanifest", "headers": { "Content-Type": "application/manifest+json" } }
+    ]
+  }
+}
