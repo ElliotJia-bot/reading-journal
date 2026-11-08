@@ -25,6 +25,9 @@ import { recommendations } from "./recommendations.js";
 import { catalog, publishedEbooks } from "./cloud-ebooks.js";
 import { matchingSharedEdition } from "../../shared/catalog.js";
 
+import { bookmark, bookmarkBridge } from "./bookmark.js";
+import type { BookmarkState } from "../../shared/bookmark.js";
+
 export const app = express();
 app.disable("x-powered-by");
 app.use(express.json({ limit: "32kb" }));
@@ -55,6 +58,7 @@ app.use((req, res, next) => {
 app.get("/health", (_req, res) =>
   res.json({ ok: true, service: "reading-journal" }),
 );
+app.use("/bookmark-bridge", bookmarkBridge);
 app.use("/v1", async (req, res, next) => {
   const token = req.headers.authorization?.match(/^Bearer (.+)$/)?.[1];
   if (!token) {
@@ -118,10 +122,7 @@ async function loadData(uid: string) {
 app.get("/v1/data", async (_req, res) =>
   res.json(await loadData(res.locals.uid)),
 );
-// Hardware provider boundary. No simulated connection or page detection.
-app.get("/v1/bookmark", (_req, res) =>
-  res.json({ status: "not-connected", device: null, trackingAvailable: false }),
-);
+app.use("/v1/bookmark", bookmark);
 app.put("/v1/profile", async (req, res) => {
   const profile = profileInput.parse(req.body);
   await userRef(res.locals.uid).set(profile, { merge: true });
@@ -204,10 +205,11 @@ app.put("/v1/sessions/:id", async (req, res) => {
   const sessionRef = user.collection("sessions").doc(id);
   const bookRef = user.collection("books").doc(input.bookId);
   const result = await database.runTransaction(async (tx) => {
-    const [bookSnapshot, existing, sessionSnapshots] = await Promise.all([
+    const [bookSnapshot, existing, sessionSnapshots, bookmarkSnapshot] = await Promise.all([
       tx.get(bookRef),
       tx.get(sessionRef),
       tx.get(user.collection("sessions").where("bookId", "==", input.bookId)),
+      input.source === "bookmark" ? tx.get(user.collection("bookmarkSessions").doc(id)) : Promise.resolve(null),
     ]);
     if (!bookSnapshot.exists)
       throw Object.assign(new Error("Book not found."), { status: 404 });
@@ -217,6 +219,13 @@ app.put("/v1/sessions/:id", async (req, res) => {
         { status: 400 },
       );
     const book = bookSnapshot.data() as Book;
+    const tracked = bookmarkSnapshot?.data()?.state as BookmarkState | undefined;
+    if (input.source === "bookmark") {
+      if (!tracked || tracked.status !== "ended" || tracked.bookId !== input.bookId || !tracked.endedAt || tracked.activeSeconds < 1)
+        throw Object.assign(new Error("Finish the paired bookmark session before saving."), { status: 409 });
+      Object.assign(input, { startedAt: Math.round(tracked.startedAt), endedAt: tracked.endedAt, durationSeconds: Math.floor(tracked.activeSeconds), startPosition: tracked.startPage, endPosition: tracked.currentPage, unit: "pages" });
+      tx.update(bookmarkSnapshot!.ref, { "state.savedAt": Date.now() });
+    }
     const max = book.unit === "percent" ? 100 : (book.totalPages ?? 100000);
     if (
       input.unit !== book.unit ||

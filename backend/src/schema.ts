@@ -72,7 +72,7 @@ export const sessionInput = z
     ]),
     topics: topics.default([]),
     note: z.string().trim().max(1500).default(""),
-    source: z.enum(["manual", "reader"]),
+    source: z.enum(["manual", "reader", "bookmark"]),
   })
   .strict()
   .superRefine((session, ctx) => {

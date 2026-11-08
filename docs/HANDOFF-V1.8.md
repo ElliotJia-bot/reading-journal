@@ -88,7 +88,7 @@ The owner's demo history, the cloned test account, and community demo personas c
 
 Saved sessions, book progress and synced page visits are cloud records. Active timers, personal imports, reader preferences and private margin notes are device-local. Licensed cloud ebooks download to the user's local cache; there is no separate Shared Library tab.
 
-An ebook page is a stable text section, not a print page. Timing records foreground dwell, not gaze or comprehension. There is no ADHD/dyslexia diagnosis. Kindle/Apple Books external tracking, DRM imports, a Chrome extension, physical hardware, full offline syncing, password recovery and account deletion UI remain outside the current MVP.
+An ebook page is a stable text section, not a print page. Timing records foreground dwell, not gaze or comprehension. There is no ADHD/dyslexia diagnosis. Kindle/Apple Books external tracking, DRM imports, a Chrome extension, standalone wireless hardware, full offline syncing, password recovery and account deletion UI remain outside the current MVP.
 
 ## Cloud and publishing
 
@@ -120,3 +120,7 @@ V1.7 passed TypeScript, ESLint, web export and live browser checks. Its before/a
 For the next change, verify its affected flow and the shared controls it touches. Use the test account; avoid publishing posts, altering recommendations or saving reading sessions to the owner's account during UI checks. The README contains historical feature notes and additional test/deployment commands.
 
 V1.8 release checks passed: TypeScript, ESLint, web export, matching release metadata, deployment-script syntax, and live browser sign-in, all five tabs, profile logout and backend health. The hosted identifier reports `1.8.0`.
+
+## Post-release USB bookmark integration
+
+The `release/1.8` branch adds a Pico W V2 USB bridge after the immutable `v1.8.0` tag. See [hardware/README.md](../hardware/README.md) for setup, pairing, durable queues, timing semantics and limits. The existing manual reading screen retains its timer and gains six hardware statistics. Triple-click hands off to Finish & log. Saved bookmark sessions use device-confirmed time; session insights retain individual visits and rereads. The firmware runs unchanged in RAM with `--run-v2`, without overwriting Pico files. No additional cloud service or IAM role is required.

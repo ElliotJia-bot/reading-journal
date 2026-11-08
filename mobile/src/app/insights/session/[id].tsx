@@ -5,6 +5,7 @@ import { useJournal } from "../../../lib/journal";
 import { Page, Button, styles } from "../../../components/ui";
 import { DetailFold, StatBlocks } from "../../../components/insight-blocks";
 import PaceInsights from "../../../components/pace-insights";
+import BookmarkVisits from "../../../components/bookmark-visits";
 import { finishEstimate, pagesRead } from "../../../../../shared/metrics";
 import { durationLabel } from "../../../../../shared/reading-insights";
 export default function SessionInsights() {
@@ -52,12 +53,12 @@ export default function SessionInsights() {
           { label: "How it felt", value: session.reaction || "Not recorded" },
         ]}
       />
-      <PaceInsights
+      {session.source === "bookmark" ? <BookmarkVisits sessionId={id} /> : <PaceInsights
         key={`${user?.uid}:${id}`}
         book={book}
         sessions={[session]}
         sessionId={id}
-      />
+      />}
       {(session.note || estimate) && (
         <DetailFold title="Reflection & next chapter">
           {!!session.note && <Text style={styles.quote}>{session.note}</Text>}

@@ -3,7 +3,7 @@ import { Pressable, Text, View, useWindowDimensions } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { useJournal } from "../../lib/journal";
-import { api } from "../../lib/api";
+import { bookmarkConnected } from "../../../../shared/bookmark";
 import { homeMetrics, finishEstimate } from "../../../../shared/metrics";
 import { BrandWordmark } from "../../components/brand";
 import { SurfaceFade } from "../../components/surface-fade";
@@ -21,34 +21,14 @@ export default function Home() {
   const compactHeader = width < 390;
   const logoWidth =
     width < 350 ? 106 : width < 390 ? 132 : width < 600 ? 156 : 210;
-  const { books, sessions, profile, timer, error, refresh, user } =
+  const { books, sessions, profile, timer, error, refresh } =
     useJournal();
   const [now, setNow] = useState(Date.now);
-  const [bookmark, setBookmark] = useState("Bookmark not connected");
+  const bookmark = timer?.bookmark && bookmarkConnected(timer.bookmark, now) && timer.bookmark.status !== "ended" ? "Bookmark connected" : "Bookmark not connected";
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 60000);
     return () => clearInterval(interval);
   }, []);
-  useEffect(() => {
-    if (!user) return;
-    let active = true;
-    void api<{ status: string }>("/v1/bookmark")
-      .then(
-        (r) =>
-          active &&
-          setBookmark(
-            r.status === "connected"
-              ? "Bookmark connected"
-              : "Bookmark not connected",
-          ),
-      )
-      .catch(() => {
-        if (active) setBookmark("Bookmark status unavailable");
-      });
-    return () => {
-      active = false;
-    };
-  }, [user]);
   const metrics = useMemo(
     () => homeMetrics(sessions, books, profile.timezone, now),
     [sessions, books, profile.timezone, now],

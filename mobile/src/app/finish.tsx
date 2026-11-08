@@ -47,6 +47,7 @@ function FinishForm({ params }: { params: FinishParams }) {
   const [position, setPosition] = useState(
     String(
       editing?.endPosition ??
+        active?.bookmark?.currentPage ??
         active?.reader?.endPosition ??
         book?.position ??
         0,
@@ -179,7 +180,7 @@ function FinishForm({ params }: { params: FinishParams }) {
           .map((s) => s.trim())
           .filter(Boolean),
         note,
-        source: editing?.source ?? (active?.reader ? "reader" : "manual"),
+        source: editing?.source ?? (active?.bookmark ? "bookmark" : active?.reader ? "reader" : "manual"),
       });
       if (active?.reader && user)
         clearLoggedReader(user.uid, book!.id, id, Number(position));
@@ -219,11 +220,13 @@ function FinishForm({ params }: { params: FinishParams }) {
               {Math.floor(exactDuration / 60)} min {exactDuration % 60} sec
             </Text>
             <Text style={styles.muted}>
-              {active.reader
+              {active.bookmark
+                ? "Smart bookmark · pauses excluded"
+                : active.reader
                 ? "Automatically tracked · pauses and time away excluded"
                 : "Reading time, excluding pauses"}
             </Text>
-            {active.reader && (
+            {(active.reader || active.bookmark) && (
               <Text style={styles.body}>
                 Pages {active.startPosition} → {position} ·{" "}
                 {Math.max(0, Number(position) - active.startPosition)} pages of
@@ -234,12 +237,14 @@ function FinishForm({ params }: { params: FinishParams }) {
         ) : (
           <>
             <Field
+              editable={editing?.source !== "bookmark"}
               label="Start date and time"
               value={date}
               onChangeText={setDate}
               placeholder="YYYY-MM-DD HH:mm"
             />
             <Field
+              editable={editing?.source !== "bookmark"}
               label="Duration in minutes"
               value={duration}
               onChangeText={setDuration}
@@ -250,6 +255,7 @@ function FinishForm({ params }: { params: FinishParams }) {
       </View>
       {!active && (
         <Field
+          editable={editing?.source !== "bookmark"}
           label={`Starting ${book.unit === "pages" ? "page" : "percentage"}`}
           value={startPosition}
           onChangeText={setStartPosition}
@@ -259,6 +265,7 @@ function FinishForm({ params }: { params: FinishParams }) {
       <Field
         label={`Ending ${book.unit === "pages" ? "page" : "percentage"}`}
         value={position}
+        editable={!active?.bookmark && editing?.source !== "bookmark"}
         onChangeText={setPosition}
         keyboardType="number-pad"
       />

@@ -3,6 +3,9 @@ import { Text, View } from "react-native";
 import { router, Redirect } from "expo-router";
 import { useJournal, timerSeconds } from "../lib/journal";
 import { Page, Button, Cover, styles, color, message } from "../components/ui";
+import { bookmarkConnected } from "../../../shared/bookmark";
+import SmartBookmark from "../components/smart-bookmark";
+
 export default function Session() {
   const { timer, books, updateTimer } = useJournal();
   const [, tick] = useState(0);
@@ -22,7 +25,7 @@ export default function Session() {
         />
       </Page>
     );
-  if (timer.reader) return <Redirect href="/finish" />;
+  if (timer.reader || (timer.bookmark?.status === "ended" && timer.bookmark.activeSeconds >= 1)) return <Redirect href="/finish" />;
   const seconds = timerSeconds(timer);
   const display = `${Math.floor(seconds / 3600)
     .toString()
@@ -71,7 +74,7 @@ export default function Session() {
         }}
       >
         <Text style={styles.label}>
-          {timer.runningSince ? "YOUR READING TIME" : "PAUSED"}
+          {timer.bookmark ? timer.bookmark.status === "waiting" ? "WAITING FOR BOOKMARK" : timer.bookmark.status === "paused" ? "PAUSED" : !bookmarkConnected(timer.bookmark) ? "BOOKMARK DISCONNECTED" : "BOOKMARK READING TIME" : timer.runningSince ? "YOUR READING TIME" : "PAUSED"}
         </Text>
         <Text
           style={[
@@ -82,23 +85,24 @@ export default function Session() {
           {display}
         </Text>
       </View>
-      <Text style={[styles.body, { textAlign: "center" }]}>
+      <SmartBookmark timer={timer} book={book} />
+      {!timer.bookmark && <Text style={[styles.body, { textAlign: "center" }]}>
         The timer continues while you read in Kindle, Apple Books, or on paper.
         Pause whenever you take a break.
-      </Text>
+      </Text>}
       {!!error && <Text style={styles.error}>{error}</Text>}
-      <Button
+      {!timer.bookmark && <Button
         title={timer.runningSince ? "Pause timer" : "Resume reading"}
         secondary
         busy={busy}
         onPress={() => void change()}
-      />
-      <Button
+      />}
+      {!timer.bookmark && <Button
         title="Finish & log"
         disabled={seconds < 1}
         busy={busy}
         onPress={() => void change(true)}
-      />
+      />}
     </Page>
   );
 }

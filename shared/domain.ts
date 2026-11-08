@@ -40,7 +40,7 @@ export interface ReadingSession {
   stopReason: string;
   topics: string[];
   note: string;
-  source: "manual" | "chrome" | "reader";
+  source: "manual" | "chrome" | "reader" | "bookmark";
   createdAt: number;
   updatedAt: number;
 }

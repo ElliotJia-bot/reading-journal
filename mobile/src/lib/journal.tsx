@@ -21,6 +21,8 @@ import {
   type InsightReport,
 } from "../../../shared/domain";
 
+import { bookmarkSeconds, type BookmarkState } from "../../../shared/bookmark";
+
 export type { Book, ReadingSession, InsightReport };
 export interface Timer {
   id: string;
@@ -31,6 +33,7 @@ export interface Timer {
   runningSince: number | null;
   endedAt: number | null;
   reader?: ReaderDraft;
+  bookmark?: BookmarkState;
 }
 interface JournalData {
   books: Book[];
@@ -69,6 +72,8 @@ export function JournalProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState(empty);
   const [timer, setTimer] = useState<Timer | null>(null);
   const [error, setError] = useState("");
+  const timerRef = useRef<Timer | null>(null);
+  const timerRevision = useRef(0);
   const uid = useRef<string | null>(null);
   const refreshSequence = useRef(0);
   const refresh = useCallback(async () => {
@@ -113,6 +118,8 @@ export function JournalProvider({ children }: { children: React.ReactNode }) {
         uid.current = next?.uid ?? null;
         setUser(next);
         setData(empty);
+        timerRevision.current++;
+        timerRef.current = null;
         setTimer(null);
         setError("");
         if (next) {
@@ -123,7 +130,7 @@ export function JournalProvider({ children }: { children: React.ReactNode }) {
             ]);
             if (uid.current === next.uid) {
               if (cached) setData(JSON.parse(cached));
-              if (active) setTimer(JSON.parse(active));
+              if (active) { const restored = JSON.parse(active); timerRef.current = restored; setTimer(restored); }
             }
             await refresh();
           } catch {
@@ -134,12 +141,52 @@ export function JournalProvider({ children }: { children: React.ReactNode }) {
       }),
     [refresh],
   );
+  useEffect(() => {
+    if (!user || loading) return;
+    const owner = user.uid;
+    let cancelled = false;
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    async function syncBookmark() {
+      try {
+        if (Platform.OS === "web" && document.visibilityState === "hidden") return;
+        const revision = timerRevision.current;
+        const result = await api<{ session: BookmarkState | null }>("/v1/bookmark");
+        if (cancelled || uid.current !== owner || revision !== timerRevision.current) return;
+        const current = timerRef.current;
+        if (result.session && (!current || current.id === result.session.id)) {
+          const next = bookmarkTimer(result.session);
+          await AsyncStorage.setItem(`timer:${owner}`, JSON.stringify(next));
+          if (!cancelled && uid.current === owner && revision === timerRevision.current && (!timerRef.current || timerRef.current.id === next.id)) {
+            timerRef.current = next;
+            setTimer(next);
+          }
+        } else if (!result.session && current?.bookmark) {
+          await AsyncStorage.removeItem(`timer:${owner}`);
+          if (!cancelled && uid.current === owner && revision === timerRevision.current && timerRef.current?.id === current.id) {
+            timerRef.current = null;
+            setTimer(null);
+          }
+        }
+      } catch {
+        // Existing device-confirmed data remains visible; the card's heartbeat
+        // status expires instead of inventing a live connection.
+      } finally {
+        if (!cancelled && timerRef.current?.bookmark?.status !== "ended" && timerRef.current?.bookmark)
+          timeout = setTimeout(() => void syncBookmark(), 2500);
+      }
+    }
+    void syncBookmark();
+    return () => { cancelled = true; if (timeout) clearTimeout(timeout); };
+  }, [user, loading, timer?.bookmark?.id]);
+
   async function updateTimer(next: Timer | null) {
     if (!user) return;
+    timerRevision.current++;
+    timerRef.current = next;
+    setTimer(next);
     if (next)
       await AsyncStorage.setItem(`timer:${user.uid}`, JSON.stringify(next));
     else await AsyncStorage.removeItem(`timer:${user.uid}`);
-    setTimer(next);
   }
   async function start(book: Book) {
     if (timer) throw new Error("Finish your current reading session first.");
@@ -195,5 +242,9 @@ export function useJournal() {
   return context;
 }
 export function timerSeconds(timer: Timer) {
-  return elapsedSeconds(timer);
+  return timer.bookmark ? bookmarkSeconds(timer.bookmark) : elapsedSeconds(timer);
+}
+
+export function bookmarkTimer(state: BookmarkState): Timer {
+  return { id: state.id, bookId: state.bookId, startedAt: Math.round(state.startedAt), startPosition: state.startPage, accumulatedSeconds: Math.floor(state.activeSeconds), runningSince: null, endedAt: state.endedAt, bookmark: state };
 }
