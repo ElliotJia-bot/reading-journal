@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { Page, Button, Chips, styles, message } from "../../components/ui";
+import { Page, Button, Chips, styles, message, color } from "../../components/ui";
 import { Avatar, CircleCard, LoadState } from "../../components/community";
 import { useCommunityResource } from "../../lib/community";
 import { useJournal } from "../../lib/journal";
@@ -77,7 +77,7 @@ export default function Community() {
       <View
         style={{
           borderTopWidth: 1,
-          borderTopColor: "#ded5cb",
+          borderTopColor: color.line,
           paddingTop: 24,
           gap: 8,
         }}

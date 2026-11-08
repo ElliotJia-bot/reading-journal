@@ -78,7 +78,7 @@ export default function Library() {
           accessibilityRole="button"
           disabled={opening}
           onPress={() => void open(book)}
-          style={styles.card}
+          style={[styles.card, index === 0 && (filter === "Want to Read" ? styles.cardCoral : styles.cardGreen)]}
         >
           <View style={styles.row}>
             <Cover title={book.title} uri={book.cover} />

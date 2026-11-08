@@ -73,7 +73,7 @@ export default function Insights() {
             onMetric={setMetric}
             now={now}
           />
-          <View style={[styles.card, { zIndex: 10, padding: 16, gap: 10 }]}>
+          <View style={[styles.card, styles.cardGreen, { zIndex: 10, padding: 16, gap: 10 }]}>
             <Text style={styles.heading}>Book insights</Text>
             <LibraryInsightSearch books={books} />
           </View>
@@ -107,7 +107,7 @@ export default function Insights() {
                   }))}
                 />
               </View>
-              <View style={styles.card}>
+              <View style={[styles.card, styles.cardGreen]}>
                 <Text style={styles.heading}>Places you read</Text>
                 {places.length ? (
                   places.map(([place, value]) => (
@@ -130,7 +130,7 @@ export default function Insights() {
                   </Text>
                 )}
               </View>
-              <View style={styles.card}>
+              <View style={[styles.card, styles.cardCoral]}>
                 <Text style={styles.heading}>Interests & topics</Text>
 
                 {topTopics.map(([topic, seconds]) => (
@@ -171,7 +171,7 @@ export default function Insights() {
                 />
               </View>
               {favoriteAuthor && (
-                <View style={styles.card}>
+                <View style={[styles.card, styles.cardStone]}>
                   <Text style={styles.heading}>Favorite author</Text>
                   <Text style={styles.body}>{favoriteAuthor[0]}</Text>
                   <Text style={styles.muted}>

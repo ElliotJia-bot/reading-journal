@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { color, styles } from "./ui";
+import { surfaceColors } from "../lib/theme";
 export function StatBlocks({
   items,
 }: {
@@ -8,12 +9,12 @@ export function StatBlocks({
 }) {
   return (
     <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-      {items.map((item) => (
+      {items.map((item, index) => (
         <View
           key={item.label}
           style={[
             styles.card,
-            { flexGrow: 1, flexBasis: "44%", padding: 16, gap: 5 },
+            { flexGrow: 1, flexBasis: "44%", padding: 16, gap: 5, backgroundColor: surfaceColors[index % surfaceColors.length] },
           ]}
         >
           <Text style={styles.muted}>{item.label}</Text>
@@ -60,7 +61,7 @@ export function SmallBlock({
   evidence?: string;
 }) {
   return (
-    <View style={[styles.card, { padding: 16, gap: 7 }]}>
+    <View style={[styles.card, styles.cardGreen, { padding: 16, gap: 7 }]}>
       {label && (
         <Text style={[styles.label, { marginBottom: 0 }]}>{label}</Text>
       )}

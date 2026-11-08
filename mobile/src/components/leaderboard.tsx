@@ -5,6 +5,7 @@ import { router } from "expo-router";
 import { useJournal } from "../lib/journal";
 import { Avatar } from "./community";
 import { Button, Chips, color, styles } from "./ui";
+import { surfaceColors } from "../lib/theme";
 import {
   leaderboardCategories,
   rankReaders,
@@ -65,10 +66,11 @@ export default function LeaderboardPanel({
         onChange={(value) => setTier(value as ReaderTier)}
       />
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-        {leaderboardCategories.map((c) => (
+        {leaderboardCategories.map((c, index) => (
           <Pressable
             key={c.id}
             accessibilityRole="button"
+            testID="theme-chip"
             accessibilityLabel={c.title}
             accessibilityState={{ selected: metric === c.id }}
             onPress={() => setMetric(c.id)}
@@ -79,20 +81,20 @@ export default function LeaderboardPanel({
               padding: 14,
               gap: 9,
               borderRadius: 14,
-              backgroundColor: metric === c.id ? color.green : color.card,
+              backgroundColor: metric === c.id ? color.green : surfaceColors[index % surfaceColors.length],
             }}
           >
             <Feather
               name={icons[c.id]}
               size={18}
-              color={metric === c.id ? "#fffdfa" : color.green}
+              color={metric === c.id ? color.surface : color.green}
             />
             <Text
               style={[
                 styles.label,
                 {
                   marginBottom: 0,
-                  color: metric === c.id ? "#fffdfa" : color.green,
+                  color: metric === c.id ? color.surface : color.green,
                   fontSize: 12,
                   lineHeight: 18,
                 },
@@ -124,7 +126,7 @@ export default function LeaderboardPanel({
       {!!rows.length && (
         <View
           style={{
-            backgroundColor: "#fffdfa",
+            backgroundColor: color.surface,
             borderRadius: 18,
             paddingHorizontal: 16,
           }}

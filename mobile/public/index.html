@@ -12,7 +12,7 @@
       name="description"
       content="Keep your books close. Track your reading, discover your rhythm, and find your reading circle."
     />
-    <meta name="theme-color" content="#f8f5f0" />
+    <meta name="theme-color" content="#fcfaf7" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Remarked" />
@@ -24,7 +24,7 @@
       body {
         width: 100%;
         height: 100%;
-        background: #f8f5f0;
+        background: #fcfaf7;
       }
       body {
         margin: 0;
@@ -41,8 +41,73 @@
         font-size: 16px;
       }
       :focus-visible {
-        outline: 2px solid #984d42;
+        outline: 2px solid #356c55;
         outline-offset: 3px;
+      }
+
+      /* V1.7 state colors. Color values mirror src/lib/theme.ts. */
+      :root {
+        --remarked-green: #003422;
+        --remarked-hover: #164a36;
+        --remarked-pressed: #00291b;
+        --remarked-ink: #4b3c35;
+        --remarked-on-dark: #fffdfa;
+        --remarked-soft-hover: #e4ede6;
+        --remarked-soft-pressed: #cfdfd4;
+        --remarked-disabled: #e9e2d9;
+        --remarked-muted: #6d5e55;
+        --remarked-focus: #356c55;
+        --remarked-stone: #d9cfc3;
+      }
+      input:hover:not(:disabled), textarea:hover:not(:disabled), select:hover:not(:disabled) {
+        border-color: var(--remarked-stone);
+      }
+      input:focus, textarea:focus, select:focus {
+        border-color: var(--remarked-green);
+        caret-color: var(--remarked-green);
+      }
+      input:disabled, textarea:disabled, select:disabled {
+        background-color: var(--remarked-disabled);
+        color: var(--remarked-muted);
+      }
+      input::file-selector-button {
+        background-color: #eef4ef;
+        border-color: var(--remarked-stone);
+        color: var(--remarked-green);
+      }
+      [data-testid="theme-primary"]:hover:not([aria-disabled="true"]),
+      [data-testid="theme-chip"][aria-selected="true"]:hover:not([aria-disabled="true"]) {
+        background-color: var(--remarked-hover) !important;
+      }
+      [data-testid="theme-primary"]:hover:not([aria-disabled="true"]) stop {
+        stop-color: var(--remarked-hover);
+      }
+      [data-testid="theme-primary"]:active:not([aria-disabled="true"]),
+      [data-testid="theme-chip"][aria-selected="true"]:active:not([aria-disabled="true"]) {
+        background-color: var(--remarked-pressed) !important;
+      }
+      [data-testid="theme-primary"]:active:not([aria-disabled="true"]) stop {
+        stop-color: var(--remarked-pressed);
+      }
+      [data-testid="theme-secondary"]:hover:not([aria-disabled="true"]),
+      [data-testid="theme-chip"]:not([aria-selected="true"]):hover {
+        background-color: var(--remarked-soft-hover) !important;
+      }
+      [data-testid="theme-secondary"]:active:not([aria-disabled="true"]),
+      [data-testid="theme-chip"]:not([aria-selected="true"]):active {
+        background-color: var(--remarked-soft-pressed) !important;
+      }
+      [data-testid^="theme-"][aria-disabled="true"] {
+        background-color: var(--remarked-disabled) !important;
+      }
+      [data-testid^="theme-"][aria-disabled="true"] stop {
+        stop-color: var(--remarked-disabled);
+      }
+      [data-testid^="theme-"][aria-disabled="true"] * {
+        color: var(--remarked-ink) !important;
+      }
+      [data-testid^="theme-"]:focus-visible, :focus-visible {
+        outline-color: var(--remarked-focus);
       }
     </style>
   </head>

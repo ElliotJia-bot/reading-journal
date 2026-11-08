@@ -110,7 +110,7 @@ export default function AddBook() {
     <Page title={existing ? "Edit your book" : "Find your next chapter"} back>
       {!existing && <EbookImport />}
       {!existing && (
-        <View style={styles.card}>
+        <View style={[styles.card, styles.cardGreen]}>
           <Field
             label="Search by title, author, or ISBN"
             value={query}

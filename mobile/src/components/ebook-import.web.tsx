@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { useJournal } from "../lib/journal";
 import { parseEbook, storeEbook } from "../lib/ebook.web";
-import { Button, styles, message } from "./ui";
+import { Button, styles, message, color } from "./ui";
 const sample =
   `The Lantern Library\n\nAn original demonstration story for Reading Journal.\n\n` +
   Array.from(
@@ -48,7 +48,7 @@ export default function EbookImport() {
     }
   }
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, styles.cardCoral]}>
       <Text style={styles.heading}>Read inside your journal</Text>
       <Text style={styles.body}>
         Import an unencrypted EPUB or UTF-8 TXT. Text stays on this device.
@@ -56,7 +56,7 @@ export default function EbookImport() {
         records sync.
       </Text>
       <label
-        style={{ fontSize: 16, color: "#003422", fontFamily: "sans-serif" }}
+        style={{ fontSize: 16, color: color.green, fontFamily: "sans-serif" }}
       >
         Choose EPUB or TXT
         <input

@@ -389,7 +389,7 @@ function ComposeForm({
         maxLength={draft.kind === "checkin" ? 600 : 1200}
         placeholder="A thought you’d like to share…"
       />
-      <View style={{ ...styles.card, backgroundColor: "#e3ebe5" }}>
+      <View style={{ ...styles.card, backgroundColor: color.greenSoft }}>
         <Text style={styles.heading}>Your privacy comes first</Text>
         <Text style={styles.body}>
           Only what you see in the preview will be shared with signed-in

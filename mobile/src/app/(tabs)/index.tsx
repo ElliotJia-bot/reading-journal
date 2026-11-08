@@ -225,7 +225,7 @@ export default function Home() {
             key={label}
             style={[styles.card, { width: "47%", flexGrow: 1, padding: 16 }]}
           >
-            <SurfaceFade tone={index === 0 ? "coral" : "stone"} />
+            <SurfaceFade tone={index === 0 ? "coral" : index === 1 ? "forest" : "stone"} />
             <Text style={styles.muted}>{label}</Text>
             <Text style={styles.heading}>{value}</Text>
             <Text style={styles.muted}>{detail}</Text>
@@ -237,7 +237,7 @@ export default function Home() {
         reading. Pages mean forward progress; ebook sections and print pages
         differ. Percentage logs do not add pages.
       </Text>
-      <View style={styles.card}>
+      <View style={[styles.card, styles.cardCoral]}>
         <Text style={styles.label}>A LITTLE REFLECTION</Text>
         <Text style={styles.heading}>
           Discover what helps you keep reading.

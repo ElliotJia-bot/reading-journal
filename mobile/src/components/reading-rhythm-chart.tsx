@@ -83,7 +83,7 @@ export default function ReadingRhythmChart({
                 x2={538}
                 y1={y(v)}
                 y2={y(v)}
-                stroke={v === 1 ? "#8c7c70" : "#ded5cb"}
+                stroke={v === 1 ? color.muted : color.line}
                 strokeDasharray="5 5"
               />
               <SvgText
@@ -130,7 +130,7 @@ export default function ReadingRhythmChart({
                 x2={x(line[0].end)}
                 y1={y(line[0].relative!)}
                 y2={y(line[0].relative!)}
-                stroke={line[0].relative! >= 1.5 ? color.rust : line[0].relative! <= 0.9 ? color.green : "#8c9b90"}
+                stroke={line[0].relative! >= 1.5 ? color.rust : line[0].relative! <= 0.9 ? color.green : color.greenMid}
                 strokeWidth={3}
                 strokeLinecap="round"
               />

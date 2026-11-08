@@ -270,6 +270,7 @@ function BookSheet({
               <Pressable
                 key={value}
                 accessibilityRole="button"
+                testID={value === "yes" ? "theme-primary" : "theme-secondary"}
                 accessibilityLabel={
                   value === "yes" ? "Like · add to Want to Read" : label
                 }
@@ -277,14 +278,14 @@ function BookSheet({
                 onPress={() => onVote(value)}
                 style={[
                   s.action,
-                  value === "yes" && { backgroundColor: color.green },
+                  { backgroundColor: value === "yes" ? color.green : value === "maybe" ? color.coralSoft : color.card },
                   saving && { opacity: 0.5 },
                 ]}
               >
                 <Feather
                   name={icon}
                   size={18}
-                  color={value === "yes" ? "white" : color.green}
+                  color={value === "yes" ? color.onDark : color.green}
                 />
                 <Text
                   style={[
@@ -292,7 +293,7 @@ function BookSheet({
                     {
                       marginBottom: 0,
                       fontSize: 11,
-                      color: value === "yes" ? "white" : color.green,
+                      color: value === "yes" ? color.onDark : color.green,
                     },
                   ]}
                 >
@@ -553,9 +554,9 @@ function Discovery() {
       </Page>
       {!!notice && (
         <View accessibilityLiveRegion="polite" style={s.toast}>
-          <Feather name="check" size={17} color="white" />
+          <Feather name="check" size={17} color={color.onDark} />
           <Text
-            style={[styles.body, { color: "white", flex: 1, fontSize: 12 }]}
+            style={[styles.body, { color: color.onDark, flex: 1, fontSize: 12 }]}
           >
             {notice}
           </Text>
@@ -593,7 +594,7 @@ const s = StyleSheet.create({
   jacket: {
     width: "100%",
     aspectRatio: 2 / 3,
-    backgroundColor: "#d9cfc3",
+    backgroundColor: color.stone,
     borderRadius: 3,
     overflow: "hidden",
     boxShadow: "0 6px 12px rgba(75,60,53,0.14)",
@@ -613,7 +614,7 @@ const s = StyleSheet.create({
     alignItems: "center",
   },
   sheet: {
-    backgroundColor: color.paper,
+    backgroundColor: color.surface,
     width: "100%",
     maxWidth: 600,
     maxHeight: "94%",

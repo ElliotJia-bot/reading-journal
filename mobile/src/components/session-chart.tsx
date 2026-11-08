@@ -122,9 +122,9 @@ export default function SessionChart({
                         width: 22,
                         backgroundColor:
                           index === keys.length - 1
-                            ? color.rust
+                            ? color.coral
                             : i % 2
-                              ? "#356c55"
+                              ? color.greenLift
                               : color.green,
                         borderTopWidth: 1,
                         borderColor: color.paper,
@@ -143,9 +143,9 @@ export default function SessionChart({
                   minWidth: 32,
                   borderRadius: 8,
                   borderWidth: 1,
-                  borderColor: selectedDay === key ? color.green : "#d9cfc3",
+                  borderColor: selectedDay === key ? color.green : color.stone,
                   backgroundColor:
-                    selectedDay === key ? color.green : "#e3ebe5",
+                    selectedDay === key ? color.green : color.greenSoft,
                   paddingVertical: 7,
                   minHeight: 44,
                   alignItems: "center",
@@ -158,7 +158,7 @@ export default function SessionChart({
                     styles.muted,
                     {
                       fontSize: 10,
-                      color: selectedDay === key ? "white" : color.green,
+                      color: selectedDay === key ? color.onDark : color.green,
                     },
                   ]}
                 >
@@ -173,7 +173,7 @@ export default function SessionChart({
                     {
                       fontSize: 10,
                       marginBottom: 0,
-                      color: selectedDay === key ? "white" : color.green,
+                      color: selectedDay === key ? color.onDark : color.green,
                     },
                   ]}
                 >

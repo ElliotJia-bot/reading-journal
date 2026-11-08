@@ -25,7 +25,7 @@ export function Badge({
         paddingHorizontal: 11,
         paddingVertical: 6,
         borderRadius: 20,
-        backgroundColor: accent ? "#f7e1dc" : "#e3ebe5",
+        backgroundColor: accent ? color.coralSoft : color.greenSoft,
       }}
     >
       <Text
@@ -78,7 +78,7 @@ export function CircleCard({
   onJoin: () => void;
 }) {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, circle.id === "habit" ? styles.cardCoral : styles.cardGreen]}>
       {!!reason && (
         <Text style={{ ...styles.muted, color: color.green }}>✧ {reason}</Text>
       )}
@@ -87,10 +87,10 @@ export function CircleCard({
           style={{
             width: 58,
             height: 76,
-            backgroundColor: circle.id === "habit" ? "#f7e1dc" : "#e3ebe5",
+            backgroundColor: circle.id === "habit" ? color.coralSoft : color.greenSoft,
             borderRadius: 8,
             borderLeftWidth: 4,
-            borderLeftColor: "#d9cfc3",
+            borderLeftColor: color.stone,
             alignItems: "center",
             justifyContent: "center",
           }}
@@ -150,7 +150,7 @@ export function Avatar({ name }: { name: string }) {
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: "#f7e1dc",
+        backgroundColor: color.coralSoft,
         alignItems: "center",
         justifyContent: "center",
       }}
@@ -178,7 +178,7 @@ export function PostCard({
     <View
       style={{
         ...styles.card,
-        backgroundColor: "#fffdfa",
+        backgroundColor: color.surface,
         borderWidth: 1,
         borderColor: color.line,
       }}
@@ -208,7 +208,7 @@ export function PostCard({
             ...styles.row,
             padding: 12,
             borderRadius: 12,
-            backgroundColor: color.card,
+            backgroundColor: color.greenWash,
           }}
         >
           <Cover title={post.book.title} uri={post.book.cover} />
@@ -232,7 +232,7 @@ export function PostCard({
         <View
           style={{
             borderLeftWidth: 2,
-            borderLeftColor: "#ee9c91",
+            borderLeftColor: color.coral,
             paddingLeft: 14,
             gap: 8,
           }}
@@ -247,7 +247,7 @@ export function PostCard({
         <View
           style={{
             borderLeftWidth: 3,
-            borderLeftColor: color.rust,
+            borderLeftColor: color.coral,
             paddingLeft: 14,
           }}
         >

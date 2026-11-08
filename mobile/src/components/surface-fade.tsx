@@ -15,10 +15,10 @@ export function SurfaceFade({
 }) {
   const id = `fade-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const colors: Record<FadeTone, [string, string]> = {
-    stone: [color.stone, color.paper],
-    forest: [color.greenSoft, color.surface],
-    coral: [color.coralSoft, color.surface],
-    button: ["#1d5640", color.green],
+    stone: [color.paper, color.paper],
+    forest: [color.greenSoft, color.greenWash],
+    coral: [color.coralSoft, color.coralWash],
+    button: [color.green, color.green],
     progress: [color.green, color.greenLift],
   };
   const [start, end] = colors[tone];

@@ -34,7 +34,7 @@ export default function ReadingClock({
       style={[
         styles.card,
         {
-          backgroundColor: "#f8f5f0",
+          backgroundColor: color.greenWash,
           borderWidth: 1,
           borderColor: color.line,
           gap: 12,
@@ -50,7 +50,7 @@ export default function ReadingClock({
         <View
           style={{
             alignSelf: "flex-start",
-            backgroundColor: "#e3ebe5",
+            backgroundColor: color.coralSoft,
             paddingVertical: 7,
             paddingHorizontal: 12,
             borderRadius: 20,
@@ -79,7 +79,7 @@ export default function ReadingClock({
               cx={150}
               cy={150}
               r={r}
-              stroke="#ded5cb"
+              stroke={color.line}
               strokeDasharray="3 4"
               fill="none"
             />
@@ -93,7 +93,7 @@ export default function ReadingClock({
                 fill={
                   peak && [peak.start, (peak.start + 1) % 24].includes(h.hour)
                     ? color.green
-                    : "#7b9987"
+                    : color.greenMid
                 }
               />
             ))}

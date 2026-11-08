@@ -1,7 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
 import { useJournal } from "../lib/journal";
-import { styles } from "./ui";
+import { styles, color } from "./ui";
 export default function DemoDataNotice() {
   const { sessions, books } = useJournal();
   const demo =
@@ -11,7 +11,7 @@ export default function DemoDataNotice() {
     <Text
       style={[
         styles.muted,
-        { backgroundColor: "#f0eae3", padding: 10, borderRadius: 8 },
+        { backgroundColor: color.warningSurface, padding: 10, borderRadius: 8 },
       ]}
     >
       Demo data included · Reading history contains fictional records.

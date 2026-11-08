@@ -117,7 +117,7 @@ export default function BookInsights() {
                   gap: 10,
                   borderWidth: 1,
                   borderColor: color.line,
-                  backgroundColor: "#f8f5f0",
+                  backgroundColor: color.paper,
                 },
               ]}
             >

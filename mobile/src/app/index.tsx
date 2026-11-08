@@ -43,7 +43,7 @@ export default function Welcome() {
           that help you read.
         </Text>
       </View>
-      <View style={styles.card}>
+      <View style={[styles.card, styles.cardGreen]}>
         <Chips
           values={["Create account", "Sign in"]}
           value={mode}

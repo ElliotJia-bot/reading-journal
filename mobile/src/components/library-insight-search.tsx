@@ -47,7 +47,7 @@ export default function LibraryInsightSearch({ books }: { books: Book[] }) {
           borderWidth: 1,
           borderColor: open ? color.green : color.line,
           borderRadius: 10,
-          backgroundColor: "#fffdfa",
+          backgroundColor: color.surface,
         }}
       >
         <Feather name="search" size={16} color={color.muted} />
@@ -90,7 +90,7 @@ export default function LibraryInsightSearch({ books }: { books: Book[] }) {
             borderRadius: 12,
             borderWidth: 1,
             borderColor: color.line,
-            backgroundColor: "#fffdfa",
+            backgroundColor: color.surface,
             overflow: "hidden",
             boxShadow: "0 8px 24px rgba(75,60,53,0.10)",
           }}
@@ -118,7 +118,7 @@ export default function LibraryInsightSearch({ books }: { books: Book[] }) {
                   paddingVertical: 9,
                   borderBottomWidth: 1,
                   borderBottomColor: color.line,
-                  backgroundColor: pressed ? "#e3ebe5" : "#fffdfa",
+                  backgroundColor: pressed ? color.greenSoft : color.surface,
                   gap: 2,
                 })}
               >

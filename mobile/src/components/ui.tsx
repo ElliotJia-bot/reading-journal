@@ -63,6 +63,9 @@ export const styles = StyleSheet.create({
     borderColor: color.line,
     gap: 14,
   },
+  cardGreen: { backgroundColor: color.greenSoft, borderColor: color.line },
+  cardCoral: { backgroundColor: color.coralSoft, borderColor: color.line },
+  cardStone: { backgroundColor: color.card, borderColor: color.line },
   label: {
     fontFamily: "PlusJakartaSans_600SemiBold",
     fontSize: 12,
@@ -92,11 +95,11 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontFamily: "PlusJakartaSans_600SemiBold",
     fontSize: 13,
-    color: "white",
+    color: color.onDark,
   },
   error: {
-    backgroundColor: color.coralSoft,
-    color: color.rust,
+    backgroundColor: color.errorSurface,
+    color: color.error,
     padding: 14,
     borderRadius: 10,
     fontSize: 13,
@@ -106,7 +109,7 @@ export const styles = StyleSheet.create({
     width: 86,
     height: 128,
     borderRadius: 5,
-    backgroundColor: "#d9cfc3",
+    backgroundColor: color.stone,
   },
 });
 export function Page({
@@ -181,18 +184,19 @@ export function Button({
   return (
     <Pressable
       accessibilityRole="button"
+      testID={secondary ? "theme-secondary" : "theme-primary"}
       disabled={disabled || busy}
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
-        secondary && { backgroundColor: color.card },
+        secondary && { backgroundColor: color.greenWash },
         pressed && !disabled && !busy && { opacity: 0.86 },
         (disabled || busy) && { opacity: 0.5 },
       ]}
     >
       {!secondary && <SurfaceFade tone="button" radius={14} />}
       {busy ? (
-        <ActivityIndicator color={secondary ? color.green : "white"} />
+        <ActivityIndicator color={secondary ? color.green : color.onDark} />
       ) : (
         <Text style={[styles.buttonText, secondary && { color: color.green }]}>
           {title}
@@ -207,7 +211,7 @@ export function Field({ label, ...props }: TextInputProps & { label: string }) {
       <Text style={styles.label}>{label}</Text>
       <TextInput
         accessibilityLabel={label}
-        placeholderTextColor="#706158"
+        placeholderTextColor={color.muted}
         style={styles.input}
         {...props}
       />
@@ -229,10 +233,11 @@ export function Chips({
         <Pressable
           key={item}
           accessibilityRole="button"
+          testID="theme-chip"
           accessibilityState={{ selected: value === item }}
           onPress={() => onChange(item)}
           style={{
-            backgroundColor: value === item ? color.green : color.card,
+            backgroundColor: value === item ? color.green : color.greenWash,
             borderRadius: 24,
             paddingHorizontal: 15,
             paddingVertical: 11,
@@ -242,7 +247,7 @@ export function Chips({
           <Text
             style={{
               fontFamily: "PlusJakartaSans_600SemiBold",
-              color: value === item ? "white" : color.muted,
+              color: value === item ? color.onDark : color.ink,
               fontSize: 12,
             }}
           >

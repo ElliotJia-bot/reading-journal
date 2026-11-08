@@ -113,7 +113,7 @@ export default function BookReadingRhythm({
                     padding: 18,
                     borderLeftWidth: 3,
                     borderLeftColor: accent,
-                    backgroundColor: quicker ? "#eff3ef" : "#fcf0ed",
+                    backgroundColor: quicker ? color.greenWash : color.coralWash,
                     gap: 10,
                   },
                 ]}
@@ -133,7 +133,7 @@ export default function BookReadingRhythm({
                   <Text style={styles.heading}>{rangeLabel(r.start, r.end)}</Text>
                   <View
                     style={{
-                      backgroundColor: quicker ? "#e3ebe5" : "#f7e1dc",
+                      backgroundColor: quicker ? color.greenSoft : color.coralSoft,
                       paddingHorizontal: 10,
                       paddingVertical: 5,
                       borderRadius: 20,
