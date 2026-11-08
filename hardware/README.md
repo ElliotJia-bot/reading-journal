@@ -8,6 +8,16 @@
 
 不需要新增数据库、GitHub Pages 服务或在浏览器连接 USB。电脑必须连接书签并运行桥接程序；手机可以打开同一账号查看。Pico 的 Wi-Fi 本版没有启用，不能脱离电脑独立上传。
 
+## 树莓派代码与 3D 模型
+
+- [原始 V2 固件](firmware/bookmark_v2.py)：Raspberry Pi Pico W / MicroPython，按钮接 GP15 与 GND。
+- [USB 连接程序](bookmark_bridge.py)：读取真实串口事件并同步到 Remarked。
+- [Mac 启动入口](Connect%20Bookmark.command)：双击后输入配对码。
+- [RemarkedBookmark.stl](models/RemarkedBookmark.stl)
+- [remarked-bookmark-8-pieces_1.stl](models/remarked-bookmark-8-pieces_1.stl)
+
+两个 STL 均为用户提供的原始二进制文件，保留原文件名，未缩放、修复或修改几何结构。模型与应用代码一起保存在本仓库，不包含在网页或后台部署包中。
+
 ## 首次安装
 
 在项目根目录执行（Mac / Linux，Python 3.10+）：
