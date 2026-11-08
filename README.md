@@ -9,7 +9,7 @@ The 1.0 iteration lives on `release/1.0`. The installed app, browser title and s
 1. **Record integrity.** Editing only a reflection preserves original seconds and start/end timestamps. Past logs have explicit starting/ending positions. Status transitions retain their history and drop reason. Recording a wishlist book moves it to Reading. Completion dates are recorded prospectively; unknown historical completion dates remain unknown.
 2. **Home and Library.** Home shows current reading, streak/personal best, books completed this year, this week's minutes with a comparison to the same weekdays last week, and weekly page progress. Library has four shelves, progress, time and last-read information. The bookmark endpoint is a disconnected provider boundary, not simulated hardware.
 3. **Three levels of Insights.** Overview → owned book → reading session. Time/Pages charts show all 7 or 30 calendar days, with empty days and clickable session segments. Book charts also support since-starting. Session detail includes exact recorded time, page progress, reflections, a qualified completion estimate, and available page visits. Tapping a measured ebook section opens the locally stored passage and an optional, explicitly consented Tinker analysis scoped to that session.
-4. **Discovery and community.** For You provides up to five personal catalog matches, five exploration matches, and qualifying shared-reader matches. Language filters select matching catalog editions; owned work IDs and dismissed titles are excluded. Yes adds a wishlist entry; Maybe and Not interested sync through private Firestore feedback. Maybe has a saved list. Nonfiction is a preset circle; readers can create up to three custom circles and join/leave. Optional public profiles power Beginner/Experienced rankings and peer suggestions using actual opt-in data, excluding synthetic demo records.
+4. **Discovery and community.** For You provides three cover shelves with up to six books each: personal catalog matches, exploration matches, and reader favorites with a labeled popularity fallback. Language filters select matching catalog editions; owned work IDs and dismissed titles are excluded. Like adds a wishlist entry; Maybe remains in recommendations; feedback syncs privately through Firestore. Nonfiction is a preset circle; readers can create up to three custom circles and join/leave. Optional public profiles power Beginner/Experienced rankings and peer suggestions using actual opt-in data, excluding synthetic demo records.
 
 ### For You cover shelves
 
@@ -18,6 +18,21 @@ For You loads three shelves automatically, each with up to six covers in a three
 Language is verified against a catalog edition. Style matching uses genre and subject clues, not a full-text literary assessment. Community matches use the reader’s explicitly selected experience (never a score inferred from reading speed), matching language, at least three opted-in peers and at least two supporters per book. When there are too few matches, the shelf visibly labels general Open Library popularity as a fallback; it does not invent peer counts. Existing sharing consent remains limited to explicitly liked books. Catalog requests are paced and cached; AI reasons load on opening a book with per-user and global daily quotas. No private notes or emails enter the model prompt.
 
 Run `KEEP_QA=1 python3 scripts/verify_recommendations.py` against a local backend with an isolated `COMMUNITY_NAMESPACE` for the real catalog/AI/feedback integration check. After browser QA, use `CLEAN_QA=1 python3 scripts/verify_recommendations.py` to remove the disposable account.
+
+#### Deferred: behavior-driven For You recommendations
+
+Recorded at the user's request on November 7, 2026. **Status: deferred for a later iteration.**
+
+Current implementation: candidate selection and ranking are rule-based. Up to three Reading/Finished books provide seed tags, prioritizing books with explicitly liked sessions and then recent book updates. Profile interests, selected language, catalog genre/style clues and saved feedback guide the shelves. Reading duration, per-page pace, completion rate, abandonment reasons, time of day and location do **not** currently influence For You ranking. Like/Maybe/Not for me controls library addition, retention and exclusion; it does not yet learn preference weights.
+
+Thinking Machines Tinker is called for real when a user opens book details, unless a saved explanation is reused. It receives catalog metadata, synopsis and preference summaries to explain an already selected book. AI does not currently choose or rank the books. The UI phrase **“WHY AI PICKED THIS” overstates that role**; a more accurate label would be “AI recommendation explanation.” This wording change is also deferred.
+
+Later work:
+
+- [ ] Connect relevant Insights behavior summaries to recommendation ranking, distinguishing explicit enjoyment from time spent and slow reading from difficulty.
+- [ ] Let AI rerank verified catalog candidates using the user's reading history and behavior, with reasons tied to supplied evidence; retain verified language and ownership/exclusion filters.
+- [ ] Use Like/Maybe/Not for me as a feedback loop for preference weights, while preserving their current save/retain/exclude behavior.
+- [ ] Align the recommendation wording with the model's actual role, and keep general-popularity fallbacks distinct from genuine peer evidence. Reading experience remains self-selected, not a literacy score inferred from speed.
 
 ### Insights presentation update
 
@@ -34,7 +49,7 @@ Longer dwell is highlighted at 1.5× or more than the median of at least three o
 - Finished-this-year requires a known completion timestamp. Rereading a previously completed book does not erase that completion. Estimates need at least three sessions over 3 minutes, at least ten forward pages, and a known book length.
 - Session page charts show available events from the latest 1,000 synced visits per book. Timing is foreground dwell with background, pauses and 90-second inactivity excluded. A slower section does not establish confusion, attention level or a diagnosis. AI explanations are hypotheses tied to the supplied passage.
 - Public profiles are **off by default**. Opt-in discloses only chosen name/group, aggregate totals, and catalog books/topics explicitly liked. Raw timestamps, private notes, location and email are not shared. Turning sharing off removes the public snapshot. Bilateral user blocks apply to discovery as well as conversations.
-- Rankings are self-recorded, not verified achievements. They use up to 50 profiles updated within 24 hours. Books use the UTC calendar year; pages, longest sessions and growth use seven UTC calendar days. Peer suggestions need at least three other topic/language-matched readers, and two likes per recommended book. Sparse groups show an honest empty state.
+- Rankings are self-recorded, not verified achievements. They use up to 50 profiles updated within 24 hours. Books use the UTC calendar year; pages, longest sessions and growth use seven UTC calendar days. For You peer suggestions need at least three other experience/language-matched readers, and two likes per recommended book. Sparse groups use explicitly labeled general catalog popularity.
 - Full ebook files and margin notes still live on their importing device. Books, saved reading sessions, synced visits, preferences and recommendation feedback follow the account. Reimport the same unencrypted edition on another device to analyze its text there.
 - Recommendation catalog descriptions/reviews come from Open Library, not fabricated model reviews. Catalog page counts are edition estimates; adding a recommendation leaves the user's edition length unconfirmed. Password recovery, account deletion, native iOS distribution, paid-book DRM import, physical bookmark and Chrome extension remain outside this iteration.
 
