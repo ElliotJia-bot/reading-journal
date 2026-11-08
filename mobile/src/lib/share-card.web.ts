@@ -129,7 +129,7 @@ export async function createShareCards(
         "#a99f89",
         sans,
       );
-      drawLines(["Reading Journal"], left, 1251, 22, 30, "#a99f89", sans);
+      drawLines(["Remarked"], left, 1251, 22, 30, "#a99f89", sans);
       if (layout.pages.length > 1) {
         ctx.textAlign = "right";
         drawLines(
@@ -154,7 +154,7 @@ export async function createShareCards(
           "image/png",
         ),
       );
-      const file = new File([blob], `reading-journal-${index + 1}.png`, {
+      const file = new File([blob], `remarked-${index + 1}.png`, {
         type: "image/png",
       });
       images.push({ file, url: URL.createObjectURL(blob) });

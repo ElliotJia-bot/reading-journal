@@ -1,45 +1,116 @@
 import React, { useEffect, useState } from "react";
-import { Linking, Pressable, ScrollView, Text, View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Linking, Text, View } from "react-native";
+import { router } from "expo-router";
 import { useJournal } from "../../lib/journal";
+import { api } from "../../lib/api";
 import { findBookRecommendations } from "../../lib/book-recommendations";
 import {
   sameBook,
+  diverseMatches,
   type BookMatch,
 } from "../../../../shared/book-recommendations";
+import {
+  peerMatches,
+  type PublicReader,
+  type DiscoveryVote,
+} from "../../../../shared/discovery";
 import {
   Page,
   Button,
   Chips,
   Cover,
   styles,
-  color,
   message,
 } from "../../components/ui";
 
-export default function ForYou() {
-  const { user } = useJournal();
-  return <BookDiscovery key={user?.uid ?? "signed-out"} />;
+function BookDetails({ book }: { book: BookMatch }) {
+  const [open, setOpen] = useState(false),
+    [text, setText] = useState(""),
+    [busy, setBusy] = useState(false),
+    [error, setError] = useState("");
+  async function load() {
+    setOpen(true);
+    if (text) return;
+    setBusy(true);
+    setError("");
+    try {
+      const r = await fetch(`https://openlibrary.org/works/${book.id}.json`, {
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!r.ok) throw new Error("Book details are temporarily unavailable.");
+      const data = await r.json();
+      setText(
+        (typeof data.description === "string"
+          ? data.description
+          : data.description?.value
+        )?.slice(0, 1600) || "No synopsis is available in the catalog yet.",
+      );
+    } catch (e) {
+      setError(message(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <>
+      <Button
+        title={open ? "Hide book details" : "Why this book? · Details"}
+        secondary
+        busy={busy}
+        onPress={() => (open ? setOpen(false) : void load())}
+      />
+      {open && (
+        <>
+          <Text style={styles.label}>WHY IT APPEARS</Text>
+          <Text style={styles.body}>{book.reason}</Text>
+          <Text style={styles.label}>CATALOG SYNOPSIS</Text>
+          <Text style={styles.body}>{text}</Text>
+          {!!error && <Text style={styles.error}>{error}</Text>}
+          <Button
+            title="Catalog & reader reviews ↗"
+            secondary
+            onPress={() =>
+              void Linking.openURL(
+                `https://openlibrary.org/works/${book.id}`,
+              ).catch((e) => setError(message(e)))
+            }
+          />
+          <Text style={styles.muted}>
+            Book descriptions and any available reviews are from Open Library.
+            Reviews open on its website.
+          </Text>
+        </>
+      )}
+    </>
+  );
 }
-function BookDiscovery() {
+export default function ForYou() {
+  const { user, profile } = useJournal();
+  return (
+    <Discovery key={`${user?.uid ?? "guest"}:${profile.language ?? "eng"}`} />
+  );
+}
+function Discovery() {
   const { user, books, sessions, profile, saveBook } = useJournal();
-  const liked = new Set(
-    sessions.filter((s) => s.reaction === "Liked it").map((s) => s.bookId),
-  );
-  const seeds = [...books].sort(
-    (a, b) =>
-      Number(liked.has(b.id)) - Number(liked.has(a.id)) ||
-      Number(b.status === "Reading") - Number(a.status === "Reading") ||
-      b.updatedAt - a.updatedAt,
-  );
-  const [seedId, setSeedId] = useState<string | null>(null);
-  const seed =
-    seedId === ""
-      ? undefined
-      : (seeds.find((b) => b.id === seedId) ?? seeds[0]);
-  const [topic, setTopic] = useState("");
-  const selectedTopic = topic || profile.topics[0] || "Fiction";
-  const topicChoices = [
+  const [votes, setVotes] = useState<Record<string, DiscoveryVote>>({}),
+    [ready, setReady] = useState(false),
+    [busy, setBusy] = useState(false),
+    [saving, setSaving] = useState(""),
+    [error, setError] = useState(""),
+    [notice, setNotice] = useState("");
+  const [group, setGroup] = useState("Likely to enjoy"),
+    [topic, setTopic] = useState(""),
+    [seedId, setSeedId] = useState<string | null>(null),
+    [results, setResults] = useState<{
+      personal: BookMatch[];
+      explore: BookMatch[];
+      peers: BookMatch[];
+      peerCount: number;
+      exploreTopic: string;
+    } | null>(null);
+  const [savedMaybe, setSavedMaybe] = useState<BookMatch[]>([]);
+  const [generation, setGeneration] = useState(0);
+  const choices = [
     ...new Set([
       ...profile.topics,
       "Fiction",
@@ -51,286 +122,352 @@ function BookDiscovery() {
       "Philosophy",
     ]),
   ].slice(0, 12);
-  const [results, setResults] = useState<BookMatch[] | null>(null);
-  const [basis, setBasis] = useState("");
-  const [dismissed, setDismissed] = useState<string[]>([]);
-  const [ready, setReady] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [saving, setSaving] = useState("");
-  const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
-  const preferenceKey = `book-discovery-hidden:${user?.uid}`;
+  const liked = new Set(
+    sessions.filter((s) => s.reaction === "Liked it").map((s) => s.bookId),
+  );
+  const seeds = books
+    .filter((b) => b.status !== "Dropped" && b.status !== "Want to Read")
+    .sort(
+      (a, b) =>
+        Number(liked.has(b.id)) - Number(liked.has(a.id)) ||
+        b.updatedAt - a.updatedAt,
+    );
+  const seed =
+      seedId === ""
+        ? undefined
+        : (seeds.find((b) => b.id === seedId) ?? seeds[0]),
+    selectedTopic = topic || profile.topics[0] || "Fiction";
   useEffect(() => {
-    let cancelled = false;
-    AsyncStorage.getItem(preferenceKey)
-      .then((raw) => {
-        if (cancelled) return;
-        const values = raw ? JSON.parse(raw) : [];
-        if (Array.isArray(values))
-          setDismissed(values.filter((id) => typeof id === "string"));
+    let active = true;
+    void api<{ votes: Record<string, DiscoveryVote>; saved: BookMatch[] }>(
+      "/v1/discovery/feedback",
+    )
+      .then((r) => {
+        if (active) {
+          setVotes(r.votes);
+          setSavedMaybe(r.saved);
+          setReady(true);
+        }
       })
-      .catch(() => {})
-      .finally(() => {
-        if (!cancelled) setReady(true);
+      .catch((e) => {
+        if (active) setError(message(e));
       });
     return () => {
-      cancelled = true;
+      active = false;
     };
-  }, [preferenceKey]);
-  function choose(id: string, nextTopic = topic) {
-    if (busy) return;
-    setSeedId(id);
-    setTopic(nextTopic);
-    setResults(null);
-    setError("");
-    setNotice("");
-  }
+  }, [generation]);
   async function discover() {
     setBusy(true);
     setError("");
     setNotice("");
-    setResults(null);
-    setBasis(seed ? `Inspired by ${seed.title}` : `Exploring ${selectedTopic}`);
     try {
-      const response = await findBookRecommendations(
-        seed,
-        selectedTopic,
-        books,
-        dismissed,
+      const hidden = Object.keys(votes).filter(
+        (id) => votes[id] === "no" || votes[id] === "yes",
       );
-      setResults(response.matches);
+      const usual = new Set(
+        [
+          ...profile.topics,
+          ...books
+            .filter((b) => b.status !== "Dropped")
+            .flatMap((b) => b.topics),
+        ].map((t) => t.toLowerCase()),
+      );
+      const exploreTopic =
+        ["History", "Science", "Poetry", "Travel", "Art", "Biography"].find(
+          (t) => !usual.has(t.toLowerCase()),
+        ) ?? "Nature";
+      const [personal, explore, community] = await Promise.all([
+        findBookRecommendations(
+          seed,
+          selectedTopic,
+          books,
+          hidden,
+          profile.language ?? "eng",
+        ),
+        findBookRecommendations(
+          undefined,
+          exploreTopic,
+          books,
+          hidden,
+          profile.language ?? "eng",
+        ),
+        api<{ readers: PublicReader[] }>("/v1/discovery/readers"),
+      ]);
+      const peers = peerMatches(
+        community.readers,
+        user!.uid,
+        [...profile.topics, ...seeds.flatMap((b) => b.topics)],
+        profile.language ?? "eng",
+        books,
+        hidden,
+      );
+      const selected = diverseMatches(personal.matches);
+      setResults({
+        personal: selected,
+        explore: diverseMatches(
+          explore.matches.filter((b) => !selected.some((p) => p.id === b.id)),
+        ),
+        peers: peers.matches,
+        peerCount: peers.peerCount,
+        exploreTopic,
+      });
     } catch (e) {
       setError(message(e));
     } finally {
       setBusy(false);
     }
   }
-  async function add(book: BookMatch) {
-    if (books.some((b) => sameBook(book, b))) return;
+  async function vote(book: BookMatch, value: DiscoveryVote) {
     setSaving(book.id);
     setError("");
     setNotice("");
     try {
-      await saveBook(`ol-${book.id}`, {
-        title: book.title.slice(0, 240),
-        author: book.authors.join(", ").slice(0, 160),
-        cover: book.cover,
-        isbn: "",
-        totalPages: null,
-        unit: "pages",
-        baselinePosition: 0,
-        status: "Want to Read",
-        topics: book.matchedTopics.slice(0, 8),
+      if (value === "yes" && !books.some((b) => sameBook(book, b)))
+        await saveBook(`ol-${book.id}`, {
+          title: book.title.slice(0, 240),
+          author: book.authors.join(", ").slice(0, 160),
+          cover: book.cover,
+          isbn: "",
+          totalPages: null,
+          unit: "pages",
+          baselinePosition: 0,
+          status: "Want to Read",
+          topics: book.matchedTopics.slice(0, 8),
+          catalogId: book.id,
+          language: profile.language ?? "eng",
+        });
+      await api(`/v1/discovery/feedback/${book.id}`, "PUT", {
+        value,
+        book: {
+          title: book.title.slice(0, 240),
+          authors: book.authors.slice(0, 10).map((a) => a.slice(0, 160)),
+          cover: book.cover,
+          subjects: book.matchedTopics.slice(0, 8).map((s) => s.slice(0, 80)),
+          language: profile.language ?? "eng",
+          pageCount: book.pageCount ?? null,
+        },
       });
-      setNotice(`${book.title} is in Want to Read.`);
+      setSavedMaybe((previous) =>
+        value === "maybe"
+          ? [...previous.filter((b) => b.id !== book.id), book]
+          : previous.filter((b) => b.id !== book.id),
+      );
+      setVotes((v) => ({ ...v, [book.id]: value }));
+      setNotice(
+        value === "yes"
+          ? "Added to Want to Read. Confirm your edition’s page count when you begin."
+          : value === "maybe"
+            ? "Saved as Maybe. This choice follows your account."
+            : "Preference saved. We’ll leave this title out of future suggestions.",
+      );
     } catch (e) {
       setError(message(e));
     } finally {
       setSaving("");
     }
   }
-  async function hide(book: BookMatch) {
-    try {
-      const next = [...new Set([...dismissed, book.id])].slice(-200);
-      await AsyncStorage.setItem(preferenceKey, JSON.stringify(next));
-      setDismissed(next);
-      setNotice("We’ll leave this book out on this device.");
-    } catch {
-      setError("Could not save your preference. Please try again.");
-    }
-  }
-  const visible = results
-    ?.filter((book) => !dismissed.includes(book.id))
-    .slice(0, 6);
+  const visible = (
+    group === "Saved for later"
+      ? savedMaybe
+      : group === "Likely to enjoy"
+        ? results?.personal
+        : group === "Explore something new"
+          ? results?.explore
+          : results?.peers
+  )?.filter((b) => votes[b.id] !== "no");
   return (
     <Page title="Your next good book">
-      <Text style={styles.body}>
-        More stories, ideas, and authors to get lost in.
-      </Text>
-      {!results && (
-        <View style={styles.card}>
-          <Text style={styles.label}>
-            {seeds.length
-              ? "START WITH A BOOK IN YOUR LIBRARY"
-              : "WHAT WOULD YOU LIKE TO EXPLORE?"}
-          </Text>
-          {seeds.length > 0 && (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ gap: 10, paddingBottom: 6 }}
-            >
-              {seeds.map((book) => (
-                <Pressable
-                  key={book.id}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Similar to ${book.title}`}
-                  accessibilityState={{
-                    selected: seed?.id === book.id,
-                    disabled: busy,
-                  }}
-                  disabled={busy}
-                  onPress={() => choose(book.id)}
-                  style={{
-                    padding: 14,
-                    borderRadius: 12,
-                    borderWidth: 1,
-                    borderColor:
-                      seed?.id === book.id ? color.green : color.line,
-                    backgroundColor:
-                      seed?.id === book.id ? "#e4ecdf" : color.paper,
-                    width: 180,
-                    gap: 5,
-                  }}
-                >
-                  <Text numberOfLines={2} style={styles.body}>
-                    {book.title}
-                  </Text>
-                  <Text numberOfLines={1} style={styles.muted}>
-                    {liked.has(book.id)
-                      ? "You marked a session Liked it"
-                      : book.author || "From your library"}
-                  </Text>
-                </Pressable>
-              ))}
-            </ScrollView>
-          )}
-          {seeds.length > 0 && (
-            <Text style={styles.muted}>Or explore a topic</Text>
-          )}
+      <Text style={styles.body}>Three ways to discover your next chapter.</Text>
+      <View style={styles.card}>
+        <Text style={styles.heading}>Start with your taste</Text>
+        <Text style={styles.muted}>
+          {seed
+            ? `${liked.has(seed.id) ? "You liked a reading session in" : "Based on your library’s"} ${seed.title}. Themes and authors guide these matches; longer reading time alone does not mean you enjoyed a book.`
+            : `Based on your selected topic: ${selectedTopic}.`}
+        </Text>
+        <Chips
+          values={["My reading", "Choose a topic"]}
+          value={seed ? "My reading" : "Choose a topic"}
+          onChange={(v) => {
+            if (busy) return;
+            setSeedId(v === "My reading" ? null : "");
+            setResults(null);
+          }}
+        />
+        {seed ? (
+          <>
+            <Text style={styles.muted}>Change the starting book</Text>
+            {seeds.slice(0, 4).map((b) => (
+              <Button
+                key={b.id}
+                title={`${b.id === seed.id ? "✓ " : ""}${b.title}`}
+                secondary
+                disabled={busy}
+                onPress={() => {
+                  setSeedId(b.id);
+                  setResults(null);
+                }}
+              />
+            ))}
+          </>
+        ) : (
           <Chips
-            values={topicChoices}
-            value={seed ? "" : selectedTopic}
-            onChange={(value) => choose("", value)}
+            values={choices}
+            value={selectedTopic}
+            onChange={(v) => {
+              if (busy) return;
+              setTopic(v);
+              setResults(null);
+            }}
           />
-          <Button
-            title={
-              busy
-                ? "Finding your next chapter…"
-                : seed
-                  ? "Find similar books"
-                  : "Find books for me"
-            }
-            busy={busy}
-            disabled={!ready || !!saving}
-            onPress={() => void discover()}
-          />
-          <Text style={styles.muted}>
-            Searches Open Library using the selected title, author or topics.
-            Your reading times and private notes stay private.
-          </Text>
-        </View>
+        )}
+        <Button
+          title={results ? "Refresh suggestions" : "Find my next books"}
+          busy={busy}
+          disabled={!ready || !!saving}
+          onPress={() => void discover()}
+        />
+        <Text style={styles.muted}>
+          We search Open Library with the chosen title, author or topics. Your
+          private notes and reading times are not sent to the catalog.
+        </Text>
+        <Button
+          title="Change recommendation language"
+          secondary
+          onPress={() => router.push("/settings")}
+        />
+      </View>
+      {!!error && (
+        <>
+          <Text style={styles.error}>{error}</Text>
+          {!ready && (
+            <Button
+              title="Retry loading preferences"
+              secondary
+              onPress={() => setGeneration(generation + 1)}
+            />
+          )}
+        </>
       )}
-      {!!error && <Text style={styles.error}>{error}</Text>}
       {!!notice && (
         <Text accessibilityLiveRegion="polite" style={styles.body}>
           {notice}
         </Text>
       )}
-      {results && (
-        <>
-          <Text style={styles.heading}>{basis}</Text>
-          <Button
-            title="Change book or topic"
-            secondary
-            disabled={!!saving}
-            onPress={() => {
-              setResults(null);
-              setNotice("");
-            }}
-          />
-          <Text style={styles.muted}>
-            Matches by catalog themes and author. These are starting points to
-            explore, not a prediction of what you’ll love.
+      <Chips
+        values={[
+          "Likely to enjoy",
+          "Explore something new",
+          "Readers like you",
+        ]}
+        value={group}
+        onChange={setGroup}
+      />
+      <Button
+        title={`Saved for later · ${savedMaybe.length}`}
+        secondary
+        onPress={() => setGroup("Saved for later")}
+      />
+      <Text style={styles.label}>
+        {group === "Saved for later" ? "YOUR MAYBE LIST" : "UP TO 5 NEW BOOKS"}
+      </Text>
+      {group === "Readers like you" && (
+        <View style={styles.card}>
+          <Text style={styles.body}>
+            Books explicitly liked by readers who opted in and share a topic
+            with you.
           </Text>
-          {!visible?.length && (
-            <View style={styles.card}>
-              <Text style={styles.heading}>A different starting point?</Text>
-              <Text style={styles.body}>
-                No new matches for this selection. Try another book or topic.
+          <Text style={styles.muted}>
+            At least 3 other matching readers are needed; each suggested book
+            must be liked by at least 2.{" "}
+            {results
+              ? `${results.peerCount} matching readers available.`
+              : "Find books above to check the current community."}
+          </Text>
+          <Button
+            title="Community sharing preferences"
+            secondary
+            onPress={() => router.push("/community/leaderboard")}
+          />
+        </View>
+      )}
+      {group === "Explore something new" && results && (
+        <Text style={styles.body}>
+          Try {results.exploreTopic}: a topic outside your recorded interests.
+        </Text>
+      )}
+      {!results && group !== "Saved for later" && (
+        <Text style={styles.muted}>
+          Choose a starting point above to load your suggestions.
+        </Text>
+      )}
+      {(results || group === "Saved for later") && !visible?.length && (
+        <View style={styles.card}>
+          <Text style={styles.heading}>
+            {group === "Readers like you"
+              ? "This shelf is growing."
+              : "No new matches this time."}
+          </Text>
+          <Text style={styles.body}>
+            {group === "Readers like you"
+              ? "There isn’t enough shared reading evidence yet. Your personal suggestions are still available."
+              : "Try another topic or starting book. Books already in your library and titles you dismissed are excluded."}
+          </Text>
+        </View>
+      )}
+      {visible?.map((book) => (
+        <View key={book.id} style={styles.card}>
+          <View style={[styles.row, { alignItems: "flex-start" }]}>
+            <Cover title={book.title} uri={book.cover} />
+            <View style={{ flex: 1, gap: 6 }}>
+              <Text style={styles.heading}>{book.title}</Text>
+              <Text style={styles.muted}>
+                {book.authors.join(", ") || "Author not listed"}
+              </Text>
+              <Text style={styles.label}>
+                {book.matchedTopics.slice(0, 2).join(" · ")}
+              </Text>
+              <Text style={styles.muted}>
+                {book.pageCount
+                  ? `About ${book.pageCount} pages · catalog edition estimate`
+                  : "Page count varies by edition"}
               </Text>
             </View>
-          )}
-          {visible?.map((book) => {
-            const onShelf = books.some((b) => sameBook(book, b));
-            return (
-              <View key={book.id} style={styles.card}>
-                <View style={[styles.row, { alignItems: "flex-start" }]}>
-                  <Cover title={book.title} uri={book.cover} />
-                  <View style={{ flex: 1, gap: 6 }}>
-                    <Text style={styles.heading}>{book.title}</Text>
-                    <Text style={styles.muted}>
-                      {book.authors.join(", ") || "Author not listed"}
-                    </Text>
-                    <Text style={[styles.body, { fontSize: 12 }]}>
-                      {book.reason}
-                    </Text>
-                  </View>
-                </View>
-                <Button
-                  title={
-                    onShelf ? "In your library ✓" : "＋ Add to Want to Read"
-                  }
-                  busy={saving === book.id}
-                  disabled={onShelf || !!saving}
-                  onPress={() => void add(book)}
-                />
-                <View style={styles.between}>
-                  <Pressable
-                    accessibilityRole="link"
-                    accessibilityLabel={`View ${book.title} on Open Library`}
-                    onPress={() =>
-                      void Linking.openURL(
-                        `https://openlibrary.org/works/${book.id}`,
-                      ).catch((e) => setError(message(e)))
-                    }
-                    style={{ paddingVertical: 10 }}
-                  >
-                    <Text
-                      style={[
-                        styles.muted,
-                        { textDecorationLine: "underline" },
-                      ]}
-                    >
-                      About this book ↗
-                    </Text>
-                  </Pressable>
-                  {!onShelf && (
-                    <Pressable
-                      accessibilityRole="button"
-                      accessibilityLabel={`Not for me: ${book.title}`}
-                      disabled={!!saving}
-                      onPress={() => void hide(book)}
-                      style={{ paddingVertical: 10 }}
-                    >
-                      <Text style={styles.muted}>Not for me</Text>
-                    </Pressable>
-                  )}
-                </View>
-              </View>
-            );
-          })}
-          {!!dismissed.length && (
-            <Button
-              title="Reset hidden suggestions"
-              secondary
-              onPress={() => {
-                void AsyncStorage.removeItem(preferenceKey)
-                  .then(() => {
-                    setDismissed([]);
-                    setNotice(
-                      "Hidden suggestions reset. Search again to include them.",
-                    );
-                  })
-                  .catch(() => setError("Please try again."));
-              }}
-            />
-          )}
-        </>
-      )}
+          </View>
+          <Text style={styles.body}>{book.reason}</Text>
+          <BookDetails book={book} />
+          <Button
+            title={
+              books.some((b) => sameBook(book, b))
+                ? "In your library ✓"
+                : "Yes · Add to Want to Read"
+            }
+            disabled={!!saving || books.some((b) => sameBook(book, b))}
+            busy={saving === book.id}
+            onPress={() => void vote(book, "yes")}
+          />
+          <Button
+            title={
+              votes[book.id] === "maybe"
+                ? "Maybe · saved ✓"
+                : "Maybe · Save for later"
+            }
+            secondary
+            disabled={!!saving}
+            onPress={() => void vote(book, "maybe")}
+          />
+          <Button
+            title="Not interested"
+            secondary
+            disabled={!!saving}
+            onPress={() => void vote(book, "no")}
+          />
+        </View>
+      ))}
       <Text style={styles.muted}>
-        Book information from Open Library. Adding a title saves it to your
-        wishlist; it does not import the ebook.
+        Adding a title creates a library entry; it does not import an ebook.
+        Maybe and Not interested are saved to your account. Public catalog
+        metadata can be incomplete.
       </Text>
     </Page>
   );

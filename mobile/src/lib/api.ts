@@ -28,7 +28,11 @@ export async function api<T>(
   } finally {
     clearTimeout(timeout);
   }
-  const result = await response.json();
+  const result = await response.json().catch(() => {
+    throw new Error(
+      "This action is unavailable right now. Refresh the app and try again.",
+    );
+  });
   if (!response.ok)
     throw new Error(
       result.error || "Could not complete the request. Please try again.",

@@ -1,6 +1,22 @@
 import type { Book, ReadingSession } from "./domain.js";
 
-export const circles = [
+export interface CircleDefinition {
+  id: string;
+  name: string;
+  description: string;
+  tags: string[];
+  icon: "book-open" | "sunrise" | "feather";
+  creatorId?: string;
+}
+export const circles: CircleDefinition[] = [
+  {
+    id: "nonfiction",
+    name: "Nonfiction & New Ideas",
+    description:
+      "Discover the world through history, science and lived experience.",
+    tags: ["Nonfiction", "Ideas"],
+    icon: "book-open",
+  },
   {
     id: "fiction",
     name: "Quiet Fiction Club",
@@ -26,7 +42,7 @@ export const circles = [
     icon: "feather" as const,
   },
 ];
-export type Circle = (typeof circles)[number] & {
+export type Circle = CircleDefinition & {
   joined: boolean;
   memberCount: number;
 };

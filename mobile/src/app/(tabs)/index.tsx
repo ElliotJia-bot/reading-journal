@@ -1,50 +1,99 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { useJournal } from "../../lib/journal";
+import { api } from "../../lib/api";
+import { homeMetrics, finishEstimate } from "../../../../shared/metrics";
 import {
   Page,
   Button,
-  Chips,
   Cover,
   Progress,
   styles,
   color,
 } from "../../components/ui";
-export default function Library() {
-  const { books, sessions, timer, error, refresh } = useJournal();
-  const [filter, setFilter] = useState("Reading");
-  const visible = books
-    .filter((book) => book.status === filter)
-    .sort((a, b) => b.updatedAt - a.updatedAt);
+
+export default function Home() {
+  const { books, sessions, profile, timer, error, refresh, user } =
+    useJournal();
+  const [now, setNow] = useState(Date.now);
+  const [bookmark, setBookmark] = useState("Bookmark not connected");
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 60000);
+    return () => clearInterval(interval);
+  }, []);
+  useEffect(() => {
+    if (!user) return;
+    let active = true;
+    void api<{ status: string }>("/v1/bookmark")
+      .then(
+        (r) =>
+          active &&
+          setBookmark(
+            r.status === "connected"
+              ? "Bookmark connected"
+              : "Bookmark not connected",
+          ),
+      )
+      .catch(() => {
+        if (active) setBookmark("Bookmark status unavailable");
+      });
+    return () => {
+      active = false;
+    };
+  }, [user]);
+  const metrics = useMemo(
+    () => homeMetrics(sessions, books, profile.timezone, now),
+    [sessions, books, profile.timezone, now],
+  );
+  const reading = books
+    .filter((b) => b.status === "Reading")
+    .sort((a, b) => {
+      const last = (id: string) =>
+        Math.max(
+          0,
+          ...sessions.filter((s) => s.bookId === id).map((s) => s.endedAt),
+        );
+      return last(b.id) - last(a.id) || b.updatedAt - a.updatedAt;
+    });
+  const current = reading[0],
+    estimate = current ? finishEstimate(current, sessions) : null;
+  const hour = Number(
+    new Intl.DateTimeFormat("en", {
+      timeZone: profile.timezone,
+      hour: "numeric",
+      hourCycle: "h23",
+    }).format(now),
+  );
   return (
     <Page>
       <View style={styles.between}>
-        <Text style={styles.title}>My Library</Text>
+        <Text style={styles.muted}>
+          {hour < 12
+            ? "Good morning"
+            : hour < 18
+              ? "Good afternoon"
+              : "Good evening"}
+        </Text>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Settings"
           onPress={() => router.push("/settings")}
-          style={{ padding: 12 }}
+          style={{ padding: 10 }}
         >
-          <Feather name="settings" size={20} color={color.green} />
+          <Feather name="settings" size={21} color={color.green} />
         </Pressable>
       </View>
-      <Chips
-        values={["Reading", "Want to Read", "Finished"]}
-        value={filter}
-        onChange={setFilter}
-      />
-      {error ? (
-        <View style={{ gap: 10 }}>
+      <Text style={[styles.title, { fontSize: 38, lineHeight: 43 }]}>
+        Ready to turn the page?
+      </Text>
+      <Text style={styles.muted}>○ {bookmark}</Text>
+      {!!error && (
+        <View>
           <Text style={styles.error}>{error}</Text>
           <Button title="Retry sync" secondary onPress={() => void refresh()} />
         </View>
-      ) : (
-        <Text style={styles.muted}>
-          Your personal reading journal · Saved to your account
-        </Text>
       )}
       {timer && (
         <Button
@@ -56,55 +105,120 @@ export default function Library() {
           onPress={() => router.push(timer.endedAt ? "/finish" : "/session")}
         />
       )}
-      {visible.map((book, index) => (
-        <Pressable
-          key={book.id}
-          accessibilityRole="button"
-          onPress={() =>
-            router.push({ pathname: "/book/[id]", params: { id: book.id } })
-          }
-          style={styles.card}
+      {current ? (
+        <View
+          style={[styles.card, { backgroundColor: "#e5ebdf", padding: 24 }]}
         >
+          <Text style={styles.label}>CURRENTLY READING</Text>
           <View style={styles.row}>
-            <Cover title={book.title} uri={book.cover} />
+            <Cover title={current.title} uri={current.cover} />
             <View style={{ flex: 1, gap: 8 }}>
-              <Text style={styles.heading}>{book.title}</Text>
-              <Text style={styles.muted}>
-                {book.author || "Your next chapter"}
-              </Text>
-              <Text style={styles.muted}>
-                {Math.round(
-                  sessions
-                    .filter((s) => s.bookId === book.id)
-                    .reduce((sum, s) => sum + s.durationSeconds, 0) / 60,
-                )}{" "}
-                min logged
-              </Text>
+              <Text style={styles.heading}>{current.title}</Text>
+              <Text style={styles.muted}>{current.author}</Text>
             </View>
           </View>
           <Progress
-            position={book.position}
-            total={book.totalPages}
-            unit={book.unit}
+            position={current.position}
+            total={current.totalPages}
+            unit={current.unit}
           />
-          {index === 0 && filter === "Reading" && (
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>Continue Reading</Text>
-            </View>
+          {estimate && (
+            <Text style={styles.muted}>
+              About {estimate.minutes} minutes left · based on {estimate.sample}{" "}
+              sessions
+            </Text>
           )}
-        </Pressable>
-      ))}
-      {!visible.length && (
+          <Button
+            title="Continue reading"
+            onPress={() =>
+              router.push({
+                pathname: current.reader ? "/reader/[id]" : "/book/[id]",
+                params: { id: current.id },
+              })
+            }
+          />
+          {reading.length > 1 && (
+            <Button
+              title={`View all ${reading.length} books in progress`}
+              secondary
+              onPress={() => router.push("/(tabs)/library")}
+            />
+          )}
+        </View>
+      ) : (
         <View style={styles.card}>
-          <Feather name="book" size={32} color={color.green} />
-          <Text style={styles.heading}>Make room for a good book.</Text>
+          <Text style={styles.heading}>Your next chapter starts here.</Text>
           <Text style={styles.body}>
-            Add a book you’re reading, or save something you’d like to read
-            next.
+            Add a book, import an ebook, or discover something that catches your
+            eye.
           </Text>
+          <Button
+            title="Add your first book"
+            onPress={() => router.push("/add-book")}
+          />
+          <Button
+            title="Find a book for me"
+            secondary
+            onPress={() => router.push("/(tabs)/for-you")}
+          />
         </View>
       )}
-      <Button title="＋ Add Book" onPress={() => router.push("/add-book")} />
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
+        {[
+          [
+            `${metrics.currentStreak} ${metrics.currentStreak === 1 ? "day" : "days"}`,
+            "Current streak",
+            `Personal best: ${metrics.bestStreak} ${metrics.bestStreak === 1 ? "day" : "days"}`,
+          ],
+          [
+            String(metrics.booksThisYear),
+            "Books this year",
+            metrics.undatedFinished
+              ? `${metrics.undatedFinished} earlier completion dates unknown`
+              : "Completed books with a recorded date",
+          ],
+          [
+            `${metrics.minutes} min`,
+            "Minutes this week",
+            metrics.changePercent === null
+              ? "No reading in the matching period last week"
+              : `${metrics.changePercent >= 0 ? "+" : ""}${metrics.changePercent}% vs the same days last week`,
+          ],
+          [
+            String(metrics.pages),
+            "Pages this week",
+            `Personal best: ${metrics.bestWeeklyPages} in a week`,
+          ],
+        ].map(([value, label, detail]) => (
+          <View
+            key={label}
+            style={[styles.card, { width: "47%", flexGrow: 1, padding: 16 }]}
+          >
+            <Text style={styles.muted}>{label}</Text>
+            <Text style={styles.heading}>{value}</Text>
+            <Text style={styles.muted}>{detail}</Text>
+          </View>
+        ))}
+      </View>
+      <Text style={styles.muted}>
+        Weeks start Monday. A streak day includes more than 3 minutes of saved
+        reading. Pages mean forward progress; ebook sections and print pages
+        differ. Percentage logs do not add pages.
+      </Text>
+      <View style={styles.card}>
+        <Text style={styles.label}>A LITTLE REFLECTION</Text>
+        <Text style={styles.heading}>
+          Discover what helps you keep reading.
+        </Text>
+        <Text style={styles.body}>
+          Explore your rhythm, a book, or a single reading session.
+        </Text>
+        <Button
+          title="Explore Insights"
+          secondary
+          onPress={() => router.push("/(tabs)/insights")}
+        />
+      </View>
     </Page>
   );
 }

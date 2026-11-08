@@ -1,7 +1,14 @@
-export type BookStatus = "Reading" | "Want to Read" | "Finished";
+export type BookStatus = "Reading" | "Want to Read" | "Finished" | "Dropped";
 export type PositionUnit = "pages" | "percent";
 export interface Book {
   reader?: { documentId: string; pageCount: number };
+  catalogId?: string;
+  language?: string;
+  completedAt?: number | null;
+  droppedAt?: number | null;
+  dropReason?: string;
+  statusHistory?: { status: BookStatus; at: number; reason: string }[];
+  demoData?: { synthetic?: boolean; batchId?: string };
   id: string;
   title: string;
   author: string;
@@ -18,6 +25,7 @@ export interface Book {
   updatedAt: number;
 }
 export interface ReadingSession {
+  demoData?: { synthetic?: boolean; batchId?: string };
   id: string;
   bookId: string;
   startedAt: number;
@@ -36,9 +44,28 @@ export interface ReadingSession {
   updatedAt: number;
 }
 export interface Profile {
+  language?: string;
   goal: string;
   timezone: string;
   topics: string[];
+}
+export function editableBook(book: Book, changes: Partial<Book> = {}) {
+  const b = { ...book, ...changes };
+  return {
+    title: b.title,
+    author: b.author,
+    cover: b.cover,
+    isbn: b.isbn,
+    totalPages: b.totalPages,
+    unit: b.unit,
+    baselinePosition: b.baselinePosition,
+    status: b.status,
+    topics: b.topics,
+    reader: b.reader,
+    catalogId: b.catalogId,
+    language: b.language,
+    dropReason: b.dropReason,
+  };
 }
 export interface InsightCard {
   kind: "habit" | "interest" | "suggestion";

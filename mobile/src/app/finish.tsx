@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { randomUUID } from "expo-crypto";
 import { api } from "../lib/api";
+import { editedTiming } from "../../../shared/metrics";
 import { clearLoggedReader } from "../lib/reader-draft";
 import { useJournal, timerSeconds } from "../lib/journal";
 import { Page, Button, Field, Chips, styles, message } from "../components/ui";
@@ -51,6 +52,9 @@ function FinishForm({ params }: { params: FinishParams }) {
         0,
     ),
   );
+  const [startPosition, setStartPosition] = useState(
+    String(editing?.startPosition ?? active?.startPosition ?? 0),
+  );
   const [location, setLocation] = useState(
     editing?.location ?? active?.reader?.location ?? "",
   );
@@ -73,8 +77,13 @@ function FinishForm({ params }: { params: FinishParams }) {
           updated.
         </Text>
         <Button
-          title="View Insights"
-          onPress={() => router.replace("/(tabs)/insights")}
+          title="View session Insights"
+          onPress={() =>
+            router.replace({
+              pathname: "/insights/session/[id]",
+              params: { id },
+            })
+          }
         />
         <View style={styles.card}>
           <Text style={styles.heading}>Share a little progress</Text>
@@ -95,7 +104,7 @@ function FinishForm({ params }: { params: FinishParams }) {
         <Button
           title="Keep it private · Back to Library"
           secondary
-          onPress={() => router.replace("/(tabs)")}
+          onPress={() => router.replace("/(tabs)/library")}
         />
       </Page>
     );
@@ -110,7 +119,7 @@ function FinishForm({ params }: { params: FinishParams }) {
       >
         <Button
           title="Go to Library"
-          onPress={() => router.replace("/(tabs)")}
+          onPress={() => router.replace("/(tabs)/library")}
         />
       </Page>
     );
@@ -119,7 +128,7 @@ function FinishForm({ params }: { params: FinishParams }) {
       <Page title="Choose a book first" back>
         <Button
           title="Go to Library"
-          onPress={() => router.replace("/(tabs)")}
+          onPress={() => router.replace("/(tabs)/library")}
         />
       </Page>
     );
@@ -127,17 +136,22 @@ function FinishForm({ params }: { params: FinishParams }) {
     setBusy(true);
     setError("");
     try {
-      const seconds = active
-        ? exactDuration
-        : Math.round(Number(duration) * 60);
-      const startedAt =
-        active?.startedAt ?? new Date(date.replace(" ", "T")).getTime();
-      const endedAt = active?.endedAt ?? startedAt + seconds * 1000;
+      const edited = editedTiming(
+        editing,
+        duration,
+        date,
+        (exactDuration / 60).toFixed(1),
+        localDate,
+      );
+      const seconds = active ? exactDuration : edited.durationSeconds;
+      const startedAt = active?.startedAt ?? edited.startedAt;
+      const endedAt = active?.endedAt ?? edited.endedAt;
       if (
         !Number.isFinite(startedAt) ||
         !Number.isFinite(seconds) ||
         seconds < 1 ||
-        !Number.isInteger(Number(position))
+        !Number.isInteger(Number(position)) ||
+        !Number.isInteger(Number(startPosition))
       )
         throw new Error("Check the date, duration, and ending position.");
       if (active?.reader) {
@@ -154,8 +168,7 @@ function FinishForm({ params }: { params: FinishParams }) {
         startedAt,
         endedAt,
         durationSeconds: seconds,
-        startPosition:
-          editing?.startPosition ?? active?.startPosition ?? book!.position,
+        startPosition: active?.startPosition ?? Number(startPosition),
         endPosition: Number(position),
         unit: book!.unit,
         location,
@@ -194,7 +207,9 @@ function FinishForm({ params }: { params: FinishParams }) {
     <Page
       title={editing ? "Edit session" : "Finish and log"}
       back
-      onBack={active?.reader ? () => router.replace("/(tabs)") : undefined}
+      onBack={
+        active?.reader ? () => router.replace("/(tabs)/library") : undefined
+      }
     >
       <View style={styles.card}>
         <Text style={styles.heading}>{book.title}</Text>
@@ -233,13 +248,21 @@ function FinishForm({ params }: { params: FinishParams }) {
           </>
         )}
       </View>
+      {!active && (
+        <Field
+          label={`Starting ${book.unit === "pages" ? "page" : "percentage"}`}
+          value={startPosition}
+          onChangeText={setStartPosition}
+          keyboardType="number-pad"
+        />
+      )}
       <Field
         label={`Ending ${book.unit === "pages" ? "page" : "percentage"}`}
         value={position}
         onChangeText={setPosition}
         keyboardType="number-pad"
       />
-      {active?.reader && Number(position) === book.totalPages && (
+      {book.status !== "Finished" && (
         <Chips
           values={["I finished this book"]}
           value={finishBook ? "I finished this book" : ""}
@@ -300,7 +323,7 @@ function FinishForm({ params }: { params: FinishParams }) {
           title="Save later · Back to Library"
           secondary
           disabled={busy}
-          onPress={() => router.replace("/(tabs)")}
+          onPress={() => router.replace("/(tabs)/library")}
         />
       )}
     </Page>

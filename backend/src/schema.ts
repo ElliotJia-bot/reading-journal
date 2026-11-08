@@ -4,7 +4,13 @@ export const identifier = z.string().regex(/^[A-Za-z0-9_-]{1,128}$/);
 export const topics = z.array(z.string().trim().min(1).max(60)).max(8);
 export const bookInput = z
   .object({
-    reader: z.object({ documentId: z.string().regex(/^[a-f0-9]{64}$/), pageCount: z.number().int().min(1).max(10000) }).strict().optional(),
+    reader: z
+      .object({
+        documentId: z.string().regex(/^[a-f0-9]{64}$/),
+        pageCount: z.number().int().min(1).max(10000),
+      })
+      .strict()
+      .optional(),
     title: z.string().trim().min(1).max(240),
     author: z.string().trim().max(160).default(""),
     cover: z
@@ -16,11 +22,22 @@ export const bookInput = z
     totalPages: z.number().int().min(1).max(100000).nullable().default(null),
     unit: z.enum(["pages", "percent"]),
     baselinePosition: z.number().int().nonnegative().max(100000),
-    status: z.enum(["Reading", "Want to Read", "Finished"]),
+    status: z.enum(["Reading", "Want to Read", "Finished", "Dropped"]),
+    dropReason: z.string().trim().max(300).optional(),
+    catalogId: z
+      .string()
+      .regex(/^OL\d+W$/)
+      .optional(),
+    language: z.enum(["eng", "chi", "fre", "spa", "ger", "jpn"]).optional(),
     topics: topics.default([]),
   })
   .strict()
   .superRefine((book, ctx) => {
+    if (book.status === "Dropped" && !book.dropReason)
+      ctx.addIssue({
+        code: "custom",
+        message: "Choose a reason for setting this book aside.",
+      });
     const max = book.unit === "percent" ? 100 : (book.totalPages ?? 100000);
     if (book.baselinePosition > max)
       ctx.addIssue({
@@ -76,6 +93,7 @@ export const sessionInput = z
   });
 export const profileInput = z
   .object({
+    language: z.enum(["eng", "chi", "fre", "spa", "ger", "jpn"]).optional(),
     goal: z.string().trim().max(200),
     topics: topics.default([]),
     timezone: z

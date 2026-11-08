@@ -3,12 +3,14 @@ import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { aggregate } from "../../../../shared/domain";
 import { useJournal } from "../../lib/journal";
-import { Page, Button, Chips, styles } from "../../components/ui";
-import ReadingWeekChart from "../../components/reading-week-chart";
+import { Page, Button, Chips, Field, styles } from "../../components/ui";
+import SessionChart from "../../components/session-chart";
 import ReadingCoach from "../../components/reading-coach";
 
 export default function Insights() {
   const { books, sessions, profile, error, refresh } = useJournal();
+  const [query, setQuery] = useState("");
+  const [metric, setMetric] = useState<"Time" | "Pages">("Time");
   const [section, setSection] = useState("Overview");
   const [range, setRange] = useState("Last 7 Days");
   const [now, setNow] = useState(Date.now);
@@ -20,10 +22,6 @@ export default function Insights() {
   const stats = useMemo(
     () => aggregate(sessions, books, days, profile.timezone, now),
     [sessions, books, days, profile.timezone, now],
-  );
-  const week = useMemo(
-    () => aggregate(sessions, books, 7, profile.timezone, now),
-    [sessions, books, profile.timezone, now],
   );
   const places = Object.entries(stats.locations).sort(
     (a, b) => b[1].averageMinutes - a[1].averageMinutes,
@@ -39,13 +37,6 @@ export default function Insights() {
         onChange={setSection}
       />
       {!!error && <Text style={styles.error}>{error}</Text>}
-      {section === "Overview" && (
-        <ReadingWeekChart
-          daily={week.daily}
-          timezone={profile.timezone}
-          now={now}
-        />
-      )}
       <Text style={styles.label}>
         {section === "Overview" ? "EXPLORE YOUR HABITS" : "READING SUGGESTIONS"}
       </Text>
@@ -54,6 +45,47 @@ export default function Insights() {
         value={range}
         onChange={setRange}
       />
+      {section === "Overview" && (
+        <>
+          <SessionChart
+            sessions={sessions}
+            timezone={profile.timezone}
+            days={days}
+            metric={metric}
+            onMetric={setMetric}
+            now={now}
+          />
+          <View style={styles.card}>
+            <Text style={styles.heading}>Explore a book</Text>
+            <Field
+              label="Search your library"
+              value={query}
+              onChangeText={setQuery}
+              placeholder="Title or author"
+            />
+            {books
+              .filter((b) =>
+                `${b.title} ${b.author}`
+                  .toLowerCase()
+                  .includes(query.toLowerCase()),
+              )
+              .slice(0, 5)
+              .map((b) => (
+                <Button
+                  key={b.id}
+                  title={b.title}
+                  secondary
+                  onPress={() =>
+                    router.push({
+                      pathname: "/insights/book/[id]",
+                      params: { id: b.id },
+                    })
+                  }
+                />
+              ))}
+          </View>
+        </>
+      )}
       {section === "Reading coach" ? (
         <ReadingCoach
           key={days}
@@ -71,7 +103,7 @@ export default function Insights() {
               </Text>
               <Button
                 title="Go to Library"
-                onPress={() => router.push("/(tabs)")}
+                onPress={() => router.push("/(tabs)/library")}
               />
             </View>
           ) : (
@@ -207,7 +239,8 @@ export default function Insights() {
               {books.filter((b) => b.status === "Finished").length} finished ·{" "}
               {books.filter((b) => b.status === "Reading").length} in progress ·{" "}
               {books.filter((b) => b.status === "Want to Read").length} on your
-              wishlist
+              wishlist · {books.filter((b) => b.status === "Dropped").length}{" "}
+              set aside
             </Text>
             <Text style={styles.muted}>
               Library totals across all time. You decide when a book is

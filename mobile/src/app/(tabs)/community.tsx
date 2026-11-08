@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { Page, Button, Chips, styles, message } from "../../components/ui";
@@ -53,6 +54,16 @@ export default function Community() {
         retry={() => void resource.refresh()}
       />
       {!!error && <Text style={styles.error}>{error}</Text>}
+      <Button
+        title="Community reading milestones"
+        secondary
+        onPress={() => router.push("/community/leaderboard")}
+      />
+      <Button
+        title="Create a circle"
+        secondary
+        onPress={() => router.push("/community/create")}
+      />
       <Text style={styles.heading}>
         My Circles {joined.length ? `· ${joined.length}` : ""}
       </Text>
@@ -80,7 +91,17 @@ export default function Community() {
         </Text>
       </View>
       <Chips
-        values={["All Topics", "Fiction", "Daily Habit", "Philosophy"]}
+        values={[
+          "All Topics",
+          ...new Set(
+            resource.data?.circles.flatMap((c) => c.tags) ?? [
+              "Fiction",
+              "Daily Habit",
+              "Nonfiction",
+              "Philosophy",
+            ],
+          ),
+        ].slice(0, 12)}
         value={filter}
         onChange={setFilter}
       />

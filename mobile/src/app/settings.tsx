@@ -5,10 +5,21 @@ import { EmailAuthProvider, linkWithCredential, signOut } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { api } from "../lib/api";
 import { useJournal } from "../lib/journal";
-import { Page, Button, Field, styles, message } from "../components/ui";
+import { Page, Button, Chips, Field, styles, message } from "../components/ui";
 export default function Settings() {
   const { user, profile, refresh } = useJournal();
-  const [draft, setDraft] = useState<{ goal: string; topics: string } | null>(null);
+  const [draft, setDraft] = useState<{ goal: string; topics: string } | null>(
+    null,
+  );
+  const [language, setLanguage] = useState<string | null>(null);
+  const languages: Record<string, string> = {
+    English: "eng",
+    中文: "chi",
+    Français: "fre",
+    Español: "spa",
+    Deutsch: "ger",
+    日本語: "jpn",
+  };
   const goal = draft?.goal ?? profile.goal;
   const topics = draft?.topics ?? profile.topics.join(", ");
   const [email, setEmail] = useState("");
@@ -19,6 +30,7 @@ export default function Settings() {
     setBusy(true);
     try {
       await api("/v1/profile", "PUT", {
+        language: language ?? profile.language ?? "eng",
         goal,
         topics: topics
           .split(",")
@@ -72,6 +84,16 @@ export default function Settings() {
       <Text style={styles.muted}>
         Reading times are grouped in {profile.timezone}.
       </Text>
+      <Text style={styles.label}>Book recommendation language</Text>
+      <Chips
+        values={Object.keys(languages)}
+        value={
+          Object.keys(languages).find(
+            (k) => languages[k] === (language ?? profile.language ?? "eng"),
+          ) ?? "English"
+        }
+        onChange={(v) => setLanguage(languages[v])}
+      />
       <Button
         title="Save preferences"
         busy={busy}

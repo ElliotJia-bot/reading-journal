@@ -71,7 +71,10 @@ reader.post("/books/:bookId/analyze", async (req, res) => {
     .get();
   const visits = docs.docs.map((d) => d.data()) as PageVisit[];
   const matching = visits.filter(
-    (v) => v.page === input.page && v.textHash === hash,
+    (v) =>
+      v.page === input.page &&
+      v.textHash === hash &&
+      (!input.sessionId || v.sessionId === input.sessionId),
   );
   if (!matching.length)
     throw fail("Record and sync this page before requesting an analysis.");
@@ -87,6 +90,7 @@ reader.post("/books/:bookId/analyze", async (req, res) => {
   const baseline =
     rates.length >= 3 ? rates[Math.floor(rates.length / 2)] : null;
   const evidence = {
+    sessionId: input.sessionId ?? null,
     page: input.page + 1,
     ...metrics,
     foregroundSeconds: Math.round(page.activeMs / 1000),
@@ -103,7 +107,7 @@ reader.post("/books/:bookId/analyze", async (req, res) => {
       "Foreground dwell only. Background and 90-second inactivity excluded. Visits can include rereading; not verified reading speed.",
   };
   const fingerprint = createHash("sha256")
-    .update(JSON.stringify({ hash, evidence }))
+    .update(JSON.stringify({ hash, evidence, promptVersion: "remarked-1" }))
     .digest("hex");
   const reportRef = ref.collection("readerReports").doc(fingerprint);
   const cached = await reportRef.get();

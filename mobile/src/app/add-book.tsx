@@ -4,6 +4,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { randomUUID } from "expo-crypto";
 import { useJournal } from "../lib/journal";
 import { Page, Button, Field, Chips, styles, message } from "../components/ui";
+import { searchCatalog } from "../lib/book-recommendations";
 import EbookImport from "../components/ebook-import";
 type SearchBook = {
   id: string;
@@ -15,7 +16,7 @@ type SearchBook = {
 };
 export default function AddBook() {
   const { id: existingId } = useLocalSearchParams<{ id?: string }>();
-  const { books, saveBook } = useJournal();
+  const { books, saveBook, profile } = useJournal();
   const existing = books.find((book) => book.id === existingId);
   const id = useRef(existing?.id ?? randomUUID());
   const [title, setTitle] = useState(existing?.title ?? "");
@@ -26,8 +27,10 @@ export default function AddBook() {
   );
   const [unit, setUnit] = useState(existing?.unit ?? "pages");
   const [status, setStatus] = useState<string>(existing?.status ?? "Reading");
+  const [dropReason, setDropReason] = useState(existing?.dropReason ?? "");
   const [topics, setTopics] = useState(existing?.topics.join(", ") ?? "");
   const [cover, setCover] = useState(existing?.cover ?? "");
+  const [catalogId, setCatalogId] = useState(existing?.catalogId);
   const [isbn, setIsbn] = useState(existing?.isbn ?? "");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchBook[]>([]);
@@ -37,32 +40,19 @@ export default function AddBook() {
     setBusy(true);
     setError("");
     try {
-      const response = await fetch(
-        `https://openlibrary.org/search.json?q=${encodeURIComponent(query.trim())}&limit=5&lang=en&fields=key,title,author_name,cover_i`,
-        { signal: AbortSignal.timeout(15000) },
+      const matches = await searchCatalog(
+        query.trim(),
+        5,
+        profile.language ?? "eng",
       );
-      if (!response.ok)
-        throw new Error(
-          "Book search is temporarily unavailable. You can enter the details below.",
-        );
-      const payload = await response.json();
-      const items = (payload.docs ?? []).map(
-        (item: {
-          key: string;
-          title: string;
-          author_name?: string[];
-          cover_i?: number;
-        }) => ({
-          id: item.key,
-          title: item.title,
-          author: item.author_name?.join(", ") ?? "",
-          totalPages: null,
-          cover: item.cover_i
-            ? `https://covers.openlibrary.org/b/id/${item.cover_i}-M.jpg`
-            : "",
-          isbn: "",
-        }),
-      );
+      const items: SearchBook[] = matches.map((book) => ({
+        id: book.id,
+        title: book.title,
+        author: book.authors.join(", "),
+        totalPages: null,
+        cover: book.cover,
+        isbn: "",
+      }));
       setResults(items);
       if (!items.length)
         setError("No matches found. Add the book details below.");
@@ -82,6 +72,14 @@ export default function AddBook() {
         Number(position) < 0
       )
         throw new Error("Enter a title and a valid starting position.");
+      if (
+        !existing &&
+        catalogId &&
+        books.some(
+          (b) => b.catalogId === catalogId || b.id === `ol-${catalogId}`,
+        )
+      )
+        throw new Error("This book is already in your library.");
       if (!existing && isbn && books.some((book) => book.isbn === isbn))
         throw new Error("This edition is already in your library.");
       await saveBook(id.current, {
@@ -97,6 +95,9 @@ export default function AddBook() {
           .filter(Boolean),
         cover,
         isbn,
+        catalogId,
+        language: existing?.language ?? profile.language ?? "eng",
+        dropReason,
       });
       router.replace({ pathname: "/book/[id]", params: { id: id.current } });
     } catch (error) {
@@ -137,6 +138,7 @@ export default function AddBook() {
                 setTotal(book.totalPages?.toString() ?? "");
                 setCover(book.cover);
                 setIsbn(book.isbn);
+                setCatalogId(book.id);
                 setResults([]);
               }}
             />
@@ -174,10 +176,18 @@ export default function AddBook() {
         placeholder="Fiction, Design, Psychology"
       />
       <Chips
-        values={["Reading", "Want to Read", "Finished"]}
+        values={["Reading", "Want to Read", "Finished", "Dropped"]}
         value={status}
         onChange={setStatus}
       />
+      {status === "Dropped" && (
+        <Field
+          label="Why are you setting this book aside?"
+          value={dropReason}
+          onChangeText={setDropReason}
+          maxLength={300}
+        />
+      )}
       {!!error && <Text style={styles.error}>{error}</Text>}
       <Button
         title={existing ? "Save changes" : "Add to Library"}

@@ -1,11 +1,33 @@
-# Reading Journal
+# Remarked
 
 Functional hackathon MVP based on the supplied Stitch prototype. Expo/React Native client, Firebase Authentication and Firestore, Express backend, and Thinking Machines Tinker insights. The UI is English.
+
+## Remarked 1.0
+
+The 1.0 iteration lives on `release/1.0`. The installed app, browser title and social card use **Remarked**. In-app screens lead with their purpose rather than a product-name header. Existing Firebase IDs, application identifiers and device-storage keys are intentionally retained so existing journals and imported ebooks continue working.
+
+1. **Record integrity.** Editing only a reflection preserves original seconds and start/end timestamps. Past logs have explicit starting/ending positions. Status transitions retain their history and drop reason. Recording a wishlist book moves it to Reading. Completion dates are recorded prospectively; unknown historical completion dates remain unknown.
+2. **Home and Library.** Home shows current reading, streak/personal best, books completed this year, this week's minutes with a comparison to the same weekdays last week, and weekly page progress. Library has four shelves, progress, time and last-read information. The bookmark endpoint is a disconnected provider boundary, not simulated hardware.
+3. **Three levels of Insights.** Overview → owned book → reading session. Time/Pages charts show all 7 or 30 calendar days, with empty days and clickable session segments. Book charts also support since-starting. Session detail includes exact recorded time, page progress, reflections, a qualified completion estimate, and available page visits. Tapping a measured ebook section opens the locally stored passage and an optional, explicitly consented Tinker analysis scoped to that session.
+4. **Discovery and community.** For You provides up to five personal catalog matches, five exploration matches, and qualifying shared-reader matches. Language filters select matching catalog editions; owned work IDs and dismissed titles are excluded. Yes adds a wishlist entry; Maybe and Not interested sync through private Firestore feedback. Maybe has a saved list. Nonfiction is a preset circle; readers can create up to three custom circles and join/leave. Optional public profiles power Beginner/Experienced rankings and peer suggestions using actual opt-in data, excluding synthetic demo records.
+
+### Metric and privacy boundaries
+
+- A streak day has **more than 3 minutes** of saved reading. Home weeks start Monday in the profile timezone. Comparison uses the same elapsed weekdays in the preceding week; zero baseline displays no percentage.
+- Page progress is `max(0, ending − starting)`. It is not unique pages or comprehension; rereads may count again. Percentage logs do not add pages. Ebook pages are stable text sections for an imported edition, so they are not interchangeable with printed pages.
+- Finished-this-year requires a known completion timestamp. Rereading a previously completed book does not erase that completion. Estimates need at least three sessions over 3 minutes, at least ten forward pages, and a known book length.
+- Session page charts show available events from the latest 1,000 synced visits per book. Timing is foreground dwell with background, pauses and 90-second inactivity excluded. A slower section does not establish confusion, attention level or a diagnosis. AI explanations are hypotheses tied to the supplied passage.
+- Public profiles are **off by default**. Opt-in discloses only chosen name/group, aggregate totals, and catalog books/topics explicitly liked. Raw timestamps, private notes, location and email are not shared. Turning sharing off removes the public snapshot. Bilateral user blocks apply to discovery as well as conversations.
+- Rankings are self-recorded, not verified achievements. They use up to 50 profiles updated within 24 hours. Books use the UTC calendar year; pages, longest sessions and growth use seven UTC calendar days. Peer suggestions need at least three other topic/language-matched readers, and two likes per recommended book. Sparse groups show an honest empty state.
+- Full ebook files and margin notes still live on their importing device. Books, saved reading sessions, synced visits, preferences and recommendation feedback follow the account. Reimport the same unencrypted edition on another device to analyze its text there.
+- Recommendation catalog descriptions/reviews come from Open Library, not fabricated model reviews. Catalog page counts are edition estimates; adding a recommendation leaves the user's edition length unconfirmed. Password recovery, account deletion, native iOS distribution, paid-book DRM import, physical bookmark and Chrome extension remain outside this iteration.
+
+For an isolated 1.0 integration check, build the backend, run it with `COMMUNITY_NAMESPACE=community_test_v1 PORT=8082 python3 scripts/run_backend.py`, then run `COMMUNITY_NAMESPACE=community_test_v1 python3 scripts/verify_v1.py`. The script creates and removes disposable accounts. `KEEP_QA=1` deliberately retains one account and its local credential file for browser checks; remove that fixture and its test documents afterward. Existing community regression checks also refuse to publish unless the server reports its test namespace.
 
 ## Current status
 
 - Email/password and guest sign-in are enabled. Guests can link an email account in Settings without losing their journal.
-- Search books via Open Library or enter them manually. Track pages or percentages, reading/wishlist/finished status, and topic labels.
+- Search books via Open Library or enter them manually. Track pages or percentages, Reading / Want to Read / Finished / Dropped shelves, and topic labels.
 - Start, pause, resume, and finish reading sessions; the timer survives app reloads. Manually log past sessions; edit/delete sessions and recalculate progress.
 - Optional location, reaction, stop reason, topic tags, and private notes.
 - Web ebook reader: import unencrypted EPUB or UTF-8 TXT, read without a dashboard, open a hidden bottom tool sheet, bookmark, change font/size/theme, record foreground dwell, write margin notes, and save a reading session to the journal.
@@ -14,7 +36,7 @@ Functional hackathon MVP based on the supplied Stitch prototype. Expo/React Nati
 - Tinker produces three evidence-linked cards: habit, interest, and suggestion. Reports and feedback persist in Firestore; unchanged evidence reuses a cached report.
 - Real backend tests passed for authentication, save/retry deduplication, cross-user isolation, direct-write denial, statistics, model output, caching, feedback, and progress recalculation. Disposable test users are removed afterward.
 - Community includes interest circles, membership, reading check-ins, questions, book recommendations, encouragement, comments, reporting, blocking/unblocking, and author-only post removal.
-- Browser flow verified with disposable test journals and original test text. Twenty-two automated tests pass. The web bundle exports successfully; this is **not** a signed or device-tested iOS binary. The ebook reader currently runs in the web/Safari version; native builds show a web-reader notice.
+- Browser flow verified with disposable test journals and original test text. Thirty-one automated tests pass. The web bundle exports successfully; this is **not** a signed or device-tested iOS binary. The ebook reader currently runs in the web/Safari version; native builds show a web-reader notice.
 
 Cloud Run is **deployed and verified** in `us-central1` as of November 7, 2026. The app uses <https://reading-journal-api-au6vfycphq-uc.a.run.app>. The service allows the hosted frontend origins; the latest deployed revision is recorded locally after each deployment. Cloud checks cover reading records, Tinker, cross-user isolation, community membership, feeds, and ebook event deduplication/consent. The frontend is published on Firebase Hosting at <https://project-b00660ba-d6d4-4c9a-a05.web.app>.
 
@@ -26,7 +48,7 @@ Sign in with the same email on each device. To retain a guest journal from local
 
 The in-app **Install & testing guide** is at `/install`. Test: add a book, start/pause/resume, reload to restore the timer, finish and enter an ending page, save, open Insights → Reading coach to generate habit suggestions, use For You to discover books, then visit Community. Sharing is opt-in. Internet is required for login, cloud saves, and analysis. No service worker or general offline write queue is installed. The ebook reader locally retains unsynced page events for retry, but the app is not a fully offline application.
 
-For ebooks choose **Add Book → Read inside your journal**, select a file or **Try a sample ebook**, to enter reading. The foreground timer starts automatically when the reader opens. Tap the bottom **Reading tools (☰)** button, then **Insights** to review recorded timing, optionally consent to passage analysis, and save the session with a location/reaction. Imported titles have an **Open Ebook Reader** button on their detail page. The included sample and `docs/reader-fixtures/` contain original demonstration text.
+For ebooks choose **Add Book → Read inside your journal**, select a file or **Try a sample ebook**, to enter reading. The foreground timer starts automatically when the reader opens. Tap the bottom **Reading tools (☰)** button, then **Insights** to review recorded timing, optionally consent to passage analysis, and save the session with a location/reaction. Imported titles have a **Continue reading** button on their detail page. The included sample and `docs/reader-fixtures/` contain original demonstration text.
 
 Browser QA covers 390×844 and 1280×900 layouts. A disposable registered account completed the timer and save flow; an independent sign-in read the exact book, page progress, duration, and location. A real Tinker call returned three cards. Community navigation was verified from Insights through the circle view. Testing on an actual physical iPhone remains for the user.
 

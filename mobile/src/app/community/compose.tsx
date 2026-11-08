@@ -419,7 +419,7 @@ function ComposeForm({
         secondary
         disabled={busy}
         onPress={() =>
-          params.sessionId ? router.replace("/(tabs)") : router.back()
+          params.sessionId ? router.replace("/(tabs)/library") : router.back()
         }
       />
     </Page>

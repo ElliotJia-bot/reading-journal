@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { identifier } from "./schema.js";
-export const circleIdInput = z.enum(["fiction", "habit", "philosophy"]);
+export const circleIdInput = identifier;
+export const circleInput = z
+  .object({
+    name: z.string().trim().min(3).max(60),
+    description: z.string().trim().min(10).max(300),
+    tags: z.array(z.string().trim().min(1).max(30)).min(1).max(3),
+  })
+  .strict();
 export const displayNameInput = z.string().trim().min(1).max(40);
 const base = { circleId: circleIdInput, displayName: displayNameInput };
 export const communityPostInput = z.discriminatedUnion("kind", [

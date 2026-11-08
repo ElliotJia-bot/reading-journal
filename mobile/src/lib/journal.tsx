@@ -109,6 +109,7 @@ export function JournalProvider({ children }: { children: React.ReactNode }) {
   useEffect(
     () =>
       onAuthStateChanged(auth, async (next) => {
+        setLoading(true);
         uid.current = next?.uid ?? null;
         setUser(next);
         setData(empty);

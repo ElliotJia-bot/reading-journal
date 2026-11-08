@@ -10,11 +10,13 @@ import {
   circles,
   sharedCheckin,
   type CommunityPost,
+  type CircleDefinition,
   type CommunityComment,
 } from "../../shared/community.js";
 import type { Book, ReadingSession } from "../../shared/domain.js";
 import {
   circleIdInput,
+  circleInput,
   communityPostInput,
   commentInput,
   stateInput,
@@ -119,16 +121,30 @@ async function viewPost(circle: string, id: string, uid: string) {
 export const community = Router();
 community.get("/", async (_req, res) => {
   const uid = res.locals.uid as string;
+  const custom = await collection.orderBy("createdAt", "desc").limit(50).get();
+  const definitions: CircleDefinition[] = [
+    ...circles,
+    ...custom.docs
+      .filter((d) => d.data().kind === "custom")
+      .map((d) => ({
+        id: d.id,
+        name: d.data().name,
+        description: d.data().description,
+        tags: d.data().tags,
+        icon: "book-open" as const,
+        creatorId: d.data().creatorId,
+      })),
+  ];
   const [docs, members, profile, blocks] = await Promise.all([
-    database.getAll(...circles.map((c) => circleRef(c.id))),
+    database.getAll(...definitions.map((c) => circleRef(c.id))),
     database.getAll(
-      ...circles.map((c) => circleRef(c.id).collection("members").doc(uid)),
+      ...definitions.map((c) => circleRef(c.id).collection("members").doc(uid)),
     ),
     profileRef(uid).get(),
     userRef(uid).collection(`${namespace}_blocks`).get(),
   ]);
   res.json({
-    circles: circles.map((c, i) => ({
+    circles: definitions.map((c, i) => ({
       ...c,
       memberCount: docs[i].data()?.memberCount ?? 0,
       joined: members[i].exists,
@@ -140,6 +156,44 @@ community.get("/", async (_req, res) => {
       name: doc.data().displayName || "Reader",
     })),
   });
+});
+async function requireCircle(id: unknown) {
+  const value = circleIdInput.parse(id);
+  if (circles.some((c) => c.id === value)) return;
+  if ((await circleRef(value).get()).data()?.kind !== "custom")
+    fail("Circle not found.", 404);
+}
+community.put("/circles/:circle", async (req, res) => {
+  const id = circleIdInput.parse(req.params.circle),
+    uid = res.locals.uid as string,
+    input = circleInput.parse(req.body);
+  if (circles.some((c) => c.id === id)) fail("Choose a new circle ID.", 409);
+  await database.runTransaction(async (tx) => {
+    const ref = circleRef(id),
+      control = userRef(uid).collection("private").doc(`${namespace}_circles`);
+    const [old, quota] = await tx.getAll(ref, control);
+    if (old.exists) {
+      if (old.data()?.creatorId !== uid)
+        fail("This circle already exists.", 409);
+      return;
+    }
+    if ((quota.data()?.count ?? 0) >= 3)
+      fail("You can create up to 3 circles for now.", 429);
+    tx.create(ref, {
+      ...input,
+      kind: "custom",
+      creatorId: uid,
+      createdAt: Date.now(),
+      memberCount: 1,
+    });
+    tx.set(ref.collection("members").doc(uid), { joinedAt: Date.now() });
+    tx.set(control, { count: (quota.data()?.count ?? 0) + 1 });
+  });
+  res.json({ ok: true, id });
+});
+community.use("/circles/:circle", async (req, _res, next) => {
+  await requireCircle(req.params.circle);
+  next();
 });
 community.put("/circles/:circle/membership", async (req, res) => {
   const ref = circleRef(req.params.circle);
@@ -194,6 +248,7 @@ community.put("/posts/:id", async (req, res) => {
   const uid = res.locals.uid as string;
   const id = identifier.parse(req.params.id);
   const input = communityPostInput.parse(req.body);
+  await requireCircle(input.circleId);
   const ref = postRef(input.circleId, id);
   await database.runTransaction(async (tx) => {
     await canInteract(tx, uid, input.circleId);

@@ -78,7 +78,7 @@ def main():
         list(pool.map(upload, populated.get('uploadRequiredHashes', [])))
     api(base + name + '?updateMask=status', {'status': 'FINALIZED'}, 'PATCH')
     release = api(base + f'sites/{site}/releases?versionName=' + name,
-                  {'message': 'Reading Journal: iPhone home-screen and web app'}, 'POST')
+                  {'message': 'Remarked 1.0: reading insights, discovery and community'}, 'POST')
     result = {'url': f'https://{site}.web.app', 'version': name,
               'release': release['name'], 'files': len(files)}
     (ROOT / '.local/hosting-release.json').write_text(json.dumps(result, indent=2))

@@ -7,19 +7,41 @@ export interface CatalogBook {
   authors: string[];
   subjects: string[];
   cover: string;
+  language?: string;
+  pageCount?: number | null;
 }
 export interface BookMatch extends CatalogBook {
   reason: string;
   matchedTopics: string[];
   score: number;
 }
+export function diverseMatches(matches: BookMatch[], limit = 5) {
+  const authors = new Map<string, number>();
+  return matches
+    .filter((book) => {
+      const key = normalized(book.authors.join(", ")) || book.id;
+      const count = authors.get(key) ?? 0;
+      if (count >= 2) return false;
+      authors.set(key, count + 1);
+      return true;
+    })
+    .slice(0, limit);
+}
 export const normalized = (text: string) =>
   text
-    .normalize("NFKC")
+    .normalize("NFKD")
+    .replace(/\p{M}/gu, "")
     .toLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim();
-export function catalogBooks(payload: unknown): CatalogBook[] {
+const titleKeys = (title: string) =>
+  title
+    .split(/[\/|]/)
+    .map((part) => normalized(part).replace(/^(the|a|an) /, ""));
+export function catalogBooks(
+  payload: unknown,
+  language?: string,
+): CatalogBook[] {
   const docs = (payload as { docs?: unknown[] })?.docs;
   if (!Array.isArray(docs))
     throw new Error(
@@ -40,10 +62,26 @@ export function catalogBooks(payload: unknown): CatalogBook[] {
     const editionDocs = (v.editions as { docs?: unknown[] } | undefined)?.docs;
     const edition =
       Array.isArray(editionDocs) &&
-      editionDocs[0] &&
-      typeof editionDocs[0] === "object"
-        ? (editionDocs[0] as Record<string, unknown>)
+      editionDocs.find(
+        (e) =>
+          e &&
+          typeof e === "object" &&
+          (!language ||
+            strings((e as Record<string, unknown>).language).includes(
+              language,
+            )),
+      )
+        ? (editionDocs.find(
+            (e) =>
+              e &&
+              typeof e === "object" &&
+              (!language ||
+                strings((e as Record<string, unknown>).language).includes(
+                  language,
+                )),
+          ) as Record<string, unknown>)
         : undefined;
+    if (language && !edition) return [];
     return [
       {
         id: match[1],
@@ -52,6 +90,12 @@ export function catalogBooks(payload: unknown): CatalogBook[] {
             ? edition.title.trim()
             : v.title.trim(),
         catalogTitle: v.title.trim(),
+        language,
+        pageCount:
+          typeof v.number_of_pages_median === "number" &&
+          v.number_of_pages_median > 0
+            ? Math.round(v.number_of_pages_median)
+            : null,
         authors: strings(v.author_name),
         subjects: strings(v.subject),
         cover:
@@ -66,12 +110,15 @@ export function catalogBooks(payload: unknown): CatalogBook[] {
 }
 export function sameBook(
   candidate: CatalogBook,
-  owned: Pick<Book, "title" | "author" | "id">,
+  owned: Pick<Book, "title" | "author" | "id" | "catalogId">,
 ) {
-  if (owned.id === `ol-${candidate.id}`) return true;
+  if (owned.id === `ol-${candidate.id}` || owned.catalogId === candidate.id)
+    return true;
   if (
     ![candidate.title, candidate.catalogTitle].some(
-      (title) => title && normalized(title) === normalized(owned.title),
+      (title) =>
+        title &&
+        titleKeys(title).some((key) => titleKeys(owned.title).includes(key)),
     )
   )
     return false;
@@ -90,9 +137,10 @@ export function usefulSubjects(subjects: string[]) {
           (s) =>
             s.length >= 3 &&
             s.length <= 60 &&
-            !/^(accessible book|protected daisy|in library|large type books|translations|reading level|nyt:|lcc:|ddc:)/i.test(
+            !/^(accessible book|protected daisy|in library|large type books|translations|reading level|nyt:|lcc:|ddc:|texts?$|language$|juvenile literature$)/i.test(
               s,
-            ),
+            ) &&
+            !/\blanguage\b|\btranslations?\b|\btextbooks?\b/i.test(s),
         )
         .map((s) => [normalized(s), s]),
     ).values(),
@@ -123,6 +171,12 @@ export function rankBookMatches(
         seen.has(identity) ||
         dismissed.includes(book.id) ||
         basis.seed?.id === book.id ||
+        (basis.seed &&
+          sameBook(book, {
+            id: basis.seed.id,
+            title: basis.seed.catalogTitle ?? basis.seed.title,
+            author: basis.seed.authors.join(", "),
+          })) ||
         owned.some((b) => sameBook(book, b))
       )
         return [];

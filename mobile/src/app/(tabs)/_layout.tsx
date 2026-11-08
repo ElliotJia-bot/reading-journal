@@ -3,11 +3,12 @@ import { Redirect, Tabs } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useJournal } from "../../lib/journal";
-import { color } from "../../components/ui";
+import { color, Page } from "../../components/ui";
 export default function TabsLayout() {
   const { user, loading } = useJournal();
   const insets = useSafeAreaInsets();
-  if (!loading && !user) return <Redirect href="/" />;
+  if (loading) return <Page title="Opening your journal…" />;
+  if (!user) return <Redirect href="/" />;
   return (
     <Tabs
       screenOptions={{
@@ -31,6 +32,19 @@ export default function TabsLayout() {
     >
       <Tabs.Screen
         name="index"
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color: tint }) => (
+            <Feather
+              name="home"
+              size={20}
+              color={typeof tint === "string" ? tint : color.green}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="library"
         options={{
           title: "Library",
           tabBarIcon: ({ color }) => (

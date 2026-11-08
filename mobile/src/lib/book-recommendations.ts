@@ -1,7 +1,7 @@
 import type { Book } from "../../../shared/domain";
 import {
   catalogBooks,
-  normalized,
+  sameBook,
   rankBookMatches,
   usefulSubjects,
   type CatalogBook,
@@ -11,8 +11,12 @@ const cache = new Map<string, { at: number; books: CatalogBook[] }>();
 let requestQueue: Promise<unknown> = Promise.resolve();
 let lastRequest = 0;
 const quote = (s: string) => `"${s.replace(/["\\]/g, " ")}"`;
-async function search(query: string, limit: number) {
-  const key = `${query}:${limit}`;
+export async function searchCatalog(
+  query: string,
+  limit: number,
+  language = "eng",
+) {
+  const key = `${query}:${limit}:${language}`;
   const cached = cache.get(key);
   if (cached && Date.now() - cached.at < 30 * 60000) return cached.books;
   // Small, user-triggered lookups; respect the public catalog's 1 req/s limit.
@@ -23,11 +27,21 @@ async function search(query: string, limit: number) {
       if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait));
       lastRequest = Date.now();
       const params = new URLSearchParams({
-        q: query,
+        q: `(${query}) AND language:${language}`,
         limit: String(limit),
-        lang: "en",
+        lang:
+          (
+            {
+              eng: "en",
+              chi: "zh",
+              fre: "fr",
+              spa: "es",
+              ger: "de",
+              jpn: "ja",
+            } as Record<string, string>
+          )[language] ?? "en",
         fields:
-          "key,title,author_name,subject,cover_i,editions,editions.title,editions.language",
+          "key,title,author_name,subject,cover_i,language,number_of_pages_median,editions,editions.title,editions.language",
       });
       const response = await fetch(
         `https://openlibrary.org/search.json?${params}`,
@@ -37,7 +51,7 @@ async function search(query: string, limit: number) {
         throw new Error(
           "The book catalog is unavailable right now. Try again in a moment.",
         );
-      const books = catalogBooks(await response.json());
+      const books = catalogBooks(await response.json(), language);
       if (cache.size >= 30) cache.delete(cache.keys().next().value!);
       cache.set(key, { at: Date.now(), books });
       return books;
@@ -50,23 +64,16 @@ export async function findBookRecommendations(
   topic: string,
   owned: Book[],
   dismissed: string[],
+  language = "eng",
 ) {
   let resolved: CatalogBook | undefined;
   if (seed) {
     const query = `title:${quote(seed.title)}${seed.author ? ` AND author:${quote(seed.author)}` : ""}`;
-    const matches = await search(query, 5);
-    resolved = matches.find(
-      (b) =>
-        [b.title, b.catalogTitle].some(
-          (title) => title && normalized(title) === normalized(seed.title),
-        ) &&
-        (!seed.author ||
-          b.authors.some((a) => normalized(a) === normalized(seed.author)) ||
-          normalized(b.authors.join(", ")) === normalized(seed.author)),
-    );
+    const matches = await searchCatalog(query, 5, language);
+    resolved = matches.find((b) => sameBook(b, seed));
   }
   const topics = seed
-    ? usefulSubjects([...(resolved?.subjects ?? []), ...seed.topics])
+    ? usefulSubjects([...seed.topics, ...(resolved?.subjects ?? [])])
     : [topic];
   const authors = resolved?.authors ?? (seed?.author ? [seed.author] : []);
   if (!topics.length && !authors.length)
@@ -77,7 +84,7 @@ export async function findBookRecommendations(
     ...topics.map((s) => `subject:${quote(s)}`),
     ...authors.slice(0, 1).map((s) => `author:${quote(s)}`),
   ].join(" OR ");
-  const candidates = await search(`(${query})`, 40);
+  const candidates = await searchCatalog(`(${query})`, 40, language);
   return {
     matches: rankBookMatches(
       candidates,

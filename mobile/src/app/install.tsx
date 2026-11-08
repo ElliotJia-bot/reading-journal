@@ -7,8 +7,8 @@ export default function Install() {
   return (
     <Page title="Your journal, wherever you read." back>
       <Text style={styles.body}>
-        Use Reading Journal on your phone or computer. Sign in with the same
-        email on each device to see your saved books, sessions, and insights.
+        Use Remarked on your phone or computer. Sign in with the same email on
+        each device to see your saved books, sessions, and insights.
       </Text>
       <View style={styles.card}>
         <Text style={styles.heading}>Add to your iPhone</Text>
@@ -18,7 +18,7 @@ export default function Install() {
           3. If shown, turn on Open as Web App, then tap Add.
         </Text>
         <Text style={styles.body}>
-          4. Open Reading Journal from your Home Screen and sign in.
+          4. Open Remarked from your Home Screen and sign in.
         </Text>
         <Text style={styles.muted}>
           This is the web app. No App Store download is needed. An internet

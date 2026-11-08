@@ -18,7 +18,7 @@ export default function Session() {
       <Page title="Ready when you are" back>
         <Button
           title="Go to Library"
-          onPress={() => router.replace("/(tabs)")}
+          onPress={() => router.replace("/(tabs)/library")}
         />
       </Page>
     );

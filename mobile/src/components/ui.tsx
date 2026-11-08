@@ -24,6 +24,12 @@ export const color = {
   rust: "#9c4328",
 };
 export const styles = StyleSheet.create({
+  quote: {
+    fontFamily: "Newsreader_400Regular",
+    fontSize: 19,
+    lineHeight: 28,
+    color: color.ink,
+  },
   body: {
     fontFamily: "PlusJakartaSans_400Regular",
     fontSize: 14,
@@ -129,37 +135,27 @@ export function Page({
           paddingBottom: 44,
         }}
       >
-        <View style={styles.between}>
-          <View style={styles.row}>
-            {back && (
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Go back"
-                onPress={
-                  onBack ??
-                  (() =>
-                    router.canGoBack() ? router.back() : router.replace("/"))
-                }
-                style={{ padding: 10 }}
-              >
-                <Feather name="arrow-left" size={20} color={color.green} />
-              </Pressable>
-            )}
-            <View>
-              <Text
-                style={{
-                  fontFamily: "Newsreader_400Regular",
-                  fontSize: 20,
-                  color: color.green,
-                }}
-              >
-                Reading Journal
-              </Text>
-              <Text style={styles.muted}>A little time, a new chapter.</Text>
+        {back && (
+          <View style={styles.between}>
+            <View style={styles.row}>
+              {back && (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Go back"
+                  onPress={
+                    onBack ??
+                    (() =>
+                      router.canGoBack() ? router.back() : router.replace("/"))
+                  }
+                  style={{ padding: 10 }}
+                >
+                  <Feather name="arrow-left" size={20} color={color.green} />
+                </Pressable>
+              )}
             </View>
+            <Feather name="book-open" size={22} color={color.green} />
           </View>
-          <Feather name="book-open" size={22} color={color.green} />
-        </View>
+        )}
         {title && <Text style={styles.title}>{title}</Text>}
         {children}
       </ScrollView>

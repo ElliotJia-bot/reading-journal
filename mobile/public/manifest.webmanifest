@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "Reading Journal",
-  "short_name": "Reading Journal",
+  "name": "Remarked",
+  "short_name": "Remarked",
   "description": "A little time, a new chapter. Your personal reading journal.",
   "start_url": "/",
   "scope": "/",

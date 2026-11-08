@@ -1,0 +1,14 @@
+import React from "react";
+import { Text } from "react-native";
+import { styles } from "./ui";
+export default function PassageAnalysis(_props: {
+  bookId: string;
+  page: number;
+  sessionId: string;
+}) {
+  return (
+    <Text style={styles.body}>
+      Open the web reader on the device with your ebook to analyze this passage.
+    </Text>
+  );
+}

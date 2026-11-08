@@ -304,7 +304,13 @@ export default function EbookReader() {
     },
     [ebook, timer, commit],
   );
-  async function sync() {
+  const syncQueue = useRef<Promise<void>>(Promise.resolve());
+  function sync() {
+    const request = syncQueue.current.catch(() => {}).then(flushVisits);
+    syncQueue.current = request;
+    return request;
+  }
+  async function flushVisits() {
     const pending = core.current?.pending ?? [];
     for (const visit of pending) {
       const { id: visitId, ...body } = visit;
@@ -346,7 +352,9 @@ export default function EbookReader() {
     setNotice("");
     await resume(next);
     // Events are saved locally before the upload; failed sync can be retried.
-    await sync();
+    void sync().catch(() =>
+      setNotice("Saved on this device. Open reading tools to retry syncing."),
+    );
   }
   async function finish() {
     if (!core.current || !book || handingOff.current) return;

@@ -65,7 +65,24 @@ export default function CircleDetail() {
       setBusy(false);
     }
   }
-  if (!definition) return <Page title="Circle not found" back />;
+  if (!definition)
+    return (
+      <Page
+        title={home.loading ? "Opening your circle…" : "Circle unavailable"}
+        back
+      >
+        <LoadState
+          loading={home.loading}
+          error={home.error}
+          retry={() => void home.refresh()}
+        />
+        {!home.loading && !home.error && (
+          <Text style={styles.body}>
+            This circle is unavailable. Return to Community to find another.
+          </Text>
+        )}
+      </Page>
+    );
   return (
     <Page back>
       <View style={styles.card}>
@@ -80,7 +97,8 @@ export default function CircleDetail() {
           ))}
         </View>
         <Text style={styles.muted}>
-          {circle?.memberCount ?? 0} {circle?.memberCount === 1 ? "reader" : "readers"} ·{" "}
+          {circle?.memberCount ?? 0}{" "}
+          {circle?.memberCount === 1 ? "reader" : "readers"} ·{" "}
           {circle?.joined ? "You’re part of this circle" : "Beginners welcome"}
         </Text>
         <Button

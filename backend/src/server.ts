@@ -20,6 +20,7 @@ import {
 import { generateInsights } from "./tinker.js";
 import { community } from "./community.js";
 import { reader } from "./reader.js";
+import { discovery, refreshPublicReader } from "./discovery.js";
 
 export const app = express();
 app.disable("x-powered-by");
@@ -62,7 +63,12 @@ app.use("/v1", async (req, res, next) => {
     res.locals.uid = decoded.uid;
     next();
   } catch (error) {
-    console.error(JSON.stringify({ event: "authentication_failed", code: (error as { code?: string }).code ?? (error as Error).name }));
+    console.error(
+      JSON.stringify({
+        event: "authentication_failed",
+        code: (error as { code?: string }).code ?? (error as Error).name,
+      }),
+    );
     res
       .status(401)
       .json({ error: "Your session expired. Please sign in again." });
@@ -71,6 +77,7 @@ app.use("/v1", async (req, res, next) => {
 
 app.use("/v1/community", community);
 app.use("/v1/reader", reader);
+app.use("/v1/discovery", discovery);
 
 async function loadData(uid: string) {
   const user = userRef(uid);
@@ -102,9 +109,16 @@ async function loadData(uid: string) {
 app.get("/v1/data", async (_req, res) =>
   res.json(await loadData(res.locals.uid)),
 );
+// Hardware provider boundary. No simulated connection or page detection.
+app.get("/v1/bookmark", (_req, res) =>
+  res.json({ status: "not-connected", device: null, trackingAvailable: false }),
+);
 app.put("/v1/profile", async (req, res) => {
   const profile = profileInput.parse(req.body);
   await userRef(res.locals.uid).set(profile, { merge: true });
+  await refreshPublicReader(res.locals.uid).catch(() =>
+    console.error("public_summary_refresh_failed"),
+  );
   res.json(profile);
 });
 app.put("/v1/books/:id", async (req, res) => {
@@ -139,6 +153,7 @@ app.put("/v1/books/:id", async (req, res) => {
         { status: 400 },
       );
     const book: Book = {
+      ...existing.data(),
       id,
       ...input,
       position: input.baselinePosition,
@@ -147,12 +162,30 @@ app.put("/v1/books/:id", async (req, res) => {
       updatedAt: Date.now(),
     };
     if (existing.data()?.reader) book.reader = existing.data()!.reader;
-    if (book.reader && (book.unit !== "pages" || book.totalPages !== book.reader.pageCount))
-      throw Object.assign(new Error("Keep the ebook's original reading-page count and unit."), { status: 400 });
+    if (!existing.exists || existing.data()?.status !== input.status) {
+      const at = Date.now();
+      book.statusHistory = [
+        ...(existing.data()?.statusHistory ?? []),
+        { status: input.status, at, reason: input.dropReason ?? "" },
+      ].slice(-100);
+      if (input.status === "Finished") book.completedAt = at;
+      if (input.status === "Dropped") book.droppedAt = at;
+    }
+    if (
+      book.reader &&
+      (book.unit !== "pages" || book.totalPages !== book.reader.pageCount)
+    )
+      throw Object.assign(
+        new Error("Keep the ebook's original reading-page count and unit."),
+        { status: 400 },
+      );
     Object.assign(book, deriveProgress(book, items));
     tx.set(ref, book);
     return book;
   });
+  await refreshPublicReader(res.locals.uid).catch(() =>
+    console.error("public_summary_refresh_failed"),
+  );
   res.json(result);
 });
 app.put("/v1/sessions/:id", async (req, res) => {
@@ -185,6 +218,7 @@ app.put("/v1/sessions/:id", async (req, res) => {
         status: 400,
       });
     const session = {
+      ...existing.data(),
       id,
       ...input,
       createdAt: existing.data()?.createdAt ?? Date.now(),
@@ -197,9 +231,25 @@ app.put("/v1/sessions/:id", async (req, res) => {
     tx.update(bookRef, {
       ...deriveProgress(book, [...all, session]),
       updatedAt: Date.now(),
+      ...(book.status === "Want to Read"
+        ? {
+            status: "Reading",
+            statusHistory: [
+              ...(book.statusHistory ?? []),
+              {
+                status: "Reading",
+                at: Date.now(),
+                reason: "First saved reading session",
+              },
+            ].slice(-100),
+          }
+        : {}),
     });
     return session;
   });
+  await refreshPublicReader(res.locals.uid).catch(() =>
+    console.error("public_summary_refresh_failed"),
+  );
   res.json(result);
 });
 app.delete("/v1/sessions/:id", async (req, res) => {
@@ -230,6 +280,9 @@ app.delete("/v1/sessions/:id", async (req, res) => {
         updatedAt: Date.now(),
       });
   });
+  await refreshPublicReader(res.locals.uid).catch(() =>
+    console.error("public_summary_refresh_failed"),
+  );
   res.json({ ok: true });
 });
 app.get("/v1/stats", async (req, res) => {
@@ -263,7 +316,10 @@ app.post("/v1/insights", async (req, res) => {
       }),
     },
     { id: "locations", text: JSON.stringify(stats.locations) },
-    { id: "times", text: JSON.stringify({ sessionCountsByStartTime: stats.times }) },
+    {
+      id: "times",
+      text: JSON.stringify({ sessionCountsByStartTime: stats.times }),
+    },
     {
       id: "topics",
       text: JSON.stringify({
@@ -308,7 +364,9 @@ app.post("/v1/insights", async (req, res) => {
     const globalCount = globalState?.day === day ? globalState.count : 0;
     if (globalCount >= 50)
       throw Object.assign(
-        new Error("Today's demo insight limit is reached. Reading records and statistics remain available."),
+        new Error(
+          "Today's demo insight limit is reached. Reading records and statistics remain available.",
+        ),
         { status: 429 },
       );
     tx.set(globalControl, { day, count: globalCount + 1 });
@@ -375,13 +433,11 @@ app.use(
         code: modelError ? error.message.slice(0, 60) : error.name,
       }),
     );
-    res
-      .status(modelError ? 503 : 500)
-      .json({
-        error: modelError
-          ? "Reading insights are temporarily unavailable. Your records are saved. Please try again later."
-          : "Unable to complete this request. Please try again.",
-      });
+    res.status(modelError ? 503 : 500).json({
+      error: modelError
+        ? "Reading insights are temporarily unavailable. Your records are saved. Please try again later."
+        : "Unable to complete this request. Please try again.",
+    });
   },
 );
 app.listen(Number(process.env.PORT || 8080), "0.0.0.0", () =>
